@@ -155,3 +155,10 @@ go
 insert into DichVu
 values
 	('DV001', N'Bỏ qua', 'LDV01');
+Go
+--Select * from DichVu;
+CREATE PROCEDURE sp_LayDanhSachDichVu
+AS
+BEGIN
+    SELECT * FROM DichVu
+END
