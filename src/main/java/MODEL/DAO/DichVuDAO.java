@@ -41,9 +41,15 @@ public class DichVuDAO {
         return listDICHVU;
     }
 
-    // public DichVu getDichVu(String maDichvu){
+    public DichVu getDichVu(String maDichvu){
+        return listDICHVU.get(maDichvu);
+    }
 
-    // }
+    public int themDichVu(DichVu dv){
+
+    }
+
+
 
     public static void main(String[] args) {
         new DichVuDAO();
