@@ -193,6 +193,7 @@ AS
 BEGIN
     DELETE FROM DichVu WHERE maDichVu = @maDichVu
 END
+<<<<<<< Updated upstream
 GO
 -------------Loai dich vu------------------
 --insert
@@ -236,3 +237,6 @@ BEGIN
     SELECT * FROM LoaiDichVu
 END
 GO
+=======
+--------------
+>>>>>>> Stashed changes
