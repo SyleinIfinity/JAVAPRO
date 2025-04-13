@@ -193,7 +193,6 @@ AS
 BEGIN
     DELETE FROM DichVu WHERE maDichVu = @maDichVu
 END
-<<<<<<< Updated upstream
 GO
 -------------Loai dich vu------------------
 --insert
@@ -237,6 +236,99 @@ BEGIN
     SELECT * FROM LoaiDichVu
 END
 GO
-=======
---------------
->>>>>>> Stashed changes
+
+--------------Nguoi Dung-----------------
+--insert
+CREATE PROCEDURE sp_ThemNguoiDung
+    @maNguoiDung CHAR(5),
+    @tenNguoiDung NVARCHAR(100),
+    @ngaySinh VARCHAR(15),
+    @SDT VARCHAR(10),
+    @email NVARCHAR(100),
+    @matKhau NVARCHAR(255),
+    @soDuTaiKhoan DECIMAL(20,2),
+    @maVaiTro CHAR(5)
+AS
+BEGIN
+    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro)
+END
+GO
+--update
+CREATE PROCEDURE sp_CapNhatNguoiDung
+    @maNguoiDung CHAR(5),
+    @tenNguoiDung NVARCHAR(100),
+    @ngaySinh VARCHAR(15),
+    @SDT VARCHAR(10),
+    @email NVARCHAR(100),
+    @matKhau NVARCHAR(255),
+    @soDuTaiKhoan DECIMAL(20,2),
+    @maVaiTro CHAR(5)
+AS
+BEGIN
+    UPDATE NguoiDung
+    SET tenNguoiDung = @tenNguoiDung,
+        ngaySinh = @ngaySinh,
+        SDT = @SDT,
+        email = @email,
+        matKhau = @matKhau,
+        soDuTaiKhoan = @soDuTaiKhoan,
+        maVaiTro = @maVaiTro
+    WHERE maNguoiDung = @maNguoiDung
+END
+GO
+--delete    
+CREATE PROCEDURE sp_XoaNguoiDung
+    @maNguoiDung CHAR(5)
+AS
+BEGIN
+    DELETE FROM NguoiDung WHERE maNguoiDung = @maNguoiDung
+END
+GO
+--select
+CREATE PROCEDURE sp_LayDanhSachNguoiDung
+AS
+BEGIN
+    SELECT * FROM NguoiDung
+END
+GO
+
+----------------Vai Tro------------------
+--insert
+CREATE PROCEDURE sp_ThemVaiTro
+    @maVaiTro CHAR(5),
+    @tenVaiTro NVARCHAR(50),
+    @moTa NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO VaiTro 
+    VALUES (@maVaiTro, @tenVaiTro, @moTa)
+END
+GO
+--update
+CREATE PROCEDURE sp_CapNhatVaiTro
+    @maVaiTro CHAR(5),
+    @tenVaiTro NVARCHAR(50),
+    @moTa NVARCHAR(255)
+AS
+BEGIN
+    UPDATE VaiTro
+    SET tenVaiTro = @tenVaiTro,
+        moTa = @moTa
+    WHERE maVaiTro = @maVaiTro
+END
+GO  
+--delete
+CREATE PROCEDURE sp_XoaVaiTro
+    @maVaiTro CHAR(5)
+AS
+BEGIN
+    DELETE FROM VaiTro WHERE maVaiTro = @maVaiTro
+END
+GO
+--select
+CREATE PROCEDURE sp_LayDanhSachVaiTro
+AS
+BEGIN
+    SELECT * FROM VaiTro
+END
+GO
