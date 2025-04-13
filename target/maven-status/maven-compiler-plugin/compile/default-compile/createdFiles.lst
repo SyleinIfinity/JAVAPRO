@@ -1,4 +1,13 @@
+MODEL\ENTITY\LoaiPhong.class
 CONTROLLER\SERVLET\doLOGIN.class
+MODEL\ENTITY\DatPhong.class
+Application\Application.class
+MODEL\ENTITY\Phong.class
 UTILS\CONNECTIONDATA\CONNECTIONSQLSERVER.class
 UTILS\CONNECTIONDATA\IConnector.class
-Application\Application.class
+MODEL\ENTITY\LoaiDichVu.class
+MODEL\ENTITY\NguoiDung.class
+MODEL\ENTITY\VaiTro.class
+MODEL\ENTITY\ChiNhanhKhachSan.class
+MODEL\ENTITY\DichVu.class
+MODEL\ENTITY\HoaDon.class

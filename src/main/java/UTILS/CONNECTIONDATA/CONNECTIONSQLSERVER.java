@@ -22,7 +22,7 @@ public class CONNECTIONSQLSERVER implements IConnector {
     {
         try{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=dbQUANLYSHOPCAPHE;encrypt=true;trustServerCertificate=true";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=quanlykhachsan;encrypt=true;trustServerCertificate=true";
             this.UserName = "sa";
             this.PassWord = "12345";
             this.cnn = DriverManager.getConnection(url, this.UserName, this.PassWord);
