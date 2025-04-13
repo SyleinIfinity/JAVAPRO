@@ -193,4 +193,46 @@ AS
 BEGIN
     DELETE FROM DichVu WHERE maDichVu = @maDichVu
 END
---------------
+GO
+-------------Loai dich vu------------------
+--insert
+CREATE PROCEDURE sp_ThemLoaiDichVu
+    @maLoaiDichVu CHAR(5),
+    @tenLoaiDichVu NVARCHAR(255),
+    @giaDichVu DECIMAL(15,2),
+    @moTa NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO LoaiDichVu VALUES (@maLoaiDichVu, @tenLoaiDichVu, @giaDichVu, @moTa)
+END
+GO
+--update
+CREATE PROCEDURE sp_CapNhatLoaiDichVu
+    @maLoaiDichVu CHAR(5),
+    @tenLoaiDichVu NVARCHAR(255),
+    @giaDichVu DECIMAL(15,2),
+    @moTa NVARCHAR(255)
+AS
+BEGIN
+    UPDATE LoaiDichVu
+    SET tenLoaiDichVu = @tenLoaiDichVu,
+        giaDichVu = @giaDichVu,
+        moTa = @moTa
+    WHERE maLoaiDichVu = @maLoaiDichVu
+END
+GO
+--delete
+CREATE PROCEDURE sp_XoaLoaiDichVu
+    @maLoaiDichVu CHAR(5)
+AS
+BEGIN
+    DELETE FROM LoaiDichVu WHERE maLoaiDichVu = @maLoaiDichVu
+END
+GO
+--select
+CREATE PROCEDURE sp_LayDanhSachLoaiDichVu
+AS
+BEGIN
+    SELECT * FROM LoaiDichVu
+END
+GO
