@@ -7,7 +7,7 @@ public class NguoiDung {
     public String SDT;
     public String email;
     public String matKhau;
-    public String soDuTaiKhoan;
+    public Double soDuTaiKhoan;
     public String maVaiTro;
 
     public NguoiDung(){
@@ -15,7 +15,7 @@ public class NguoiDung {
     }
 
     public NguoiDung(String maNguoiDung, String tenNguoiDung, String ngaySinh, String sDT, String email, String matKhau,
-            String soDuTaiKhoan, String maVaiTro) {
+            Double soDuTaiKhoan, String maVaiTro) {
         this.maNguoiDung = maNguoiDung;
         this.tenNguoiDung = tenNguoiDung;
         this.ngaySinh = ngaySinh;
@@ -74,11 +74,11 @@ public class NguoiDung {
         this.matKhau = matKhau;
     }
 
-    public String getSoDuTaiKhoan() {
+    public Double getSoDuTaiKhoan() {
         return soDuTaiKhoan;
     }
 
-    public void setSoDuTaiKhoan(String soDuTaiKhoan) {
+    public void setSoDuTaiKhoan(Double soDuTaiKhoan) {
         this.soDuTaiKhoan = soDuTaiKhoan;
     }
 

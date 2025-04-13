@@ -95,10 +95,10 @@ public class DichVuDAO {
         // DichVu dv = new DichVu("DV003","Nope","LDV01");
 
         // try {
-        //     // int row = dvD.themDichVu(dv);
-        //     // if (row > 0) {
-        //     //     System.out.println("Thành công");
-        //     // }
+        //     int row = dvD.themDichVu(dv);
+        //     if (row > 0) {
+        //         System.out.println("Thành công");
+        //     }
 
 
         //     int row1 = dvD.xoaDichVu("DV003");
@@ -110,7 +110,6 @@ public class DichVuDAO {
         //     // TODO Auto-generated catch block
         //     e.printStackTrace();
         // }
-
 
     }
 

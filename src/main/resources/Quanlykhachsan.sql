@@ -144,9 +144,9 @@ values
 go
 insert into NguoiDung
 values
-	('KH001', N'Khanh', '05/04/2005', '0123456789','a@gmail.com'  ,'khanh123',0,'R003'),
-	('KH002', N'Hoang', '05/04/2004', '0123888789','abc@gmail.com','hoang123',0,'R002'),
-	('KH003', N'Nom'  , '05/04/2006', '0123456975','ada@gmail.com','Nom123'  ,0,'R001');
+	('ND001', N'Khanh', '05/04/2005', '0123456789','a@gmail.com'  ,'khanh123',0,'R003'),
+	('ND002', N'Hoang', '05/04/2004', '0123888789','abc@gmail.com','hoang123',0,'R002'),
+	('ND003', N'Nom'  , '05/04/2006', '0123456975','ada@gmail.com','Nom123'  ,0,'R001');
 go
 insert into LoaiDichVu
 values
