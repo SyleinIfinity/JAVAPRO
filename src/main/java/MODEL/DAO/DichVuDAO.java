@@ -45,48 +45,73 @@ public class DichVuDAO {
         return listDICHVU.get(maDichvu);
     }
 
-    public ResultSet themDichVu(DichVu dv){
+    public int themDichVu(DichVu dv){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemDichVu}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemDichVu(?,?,?)}");
             stmt.setString(1, dv.getMaDichVu());
             stmt.setString(2, dv.getTenDichVu());
             stmt.setString(3, dv.getMaLoaiDichVu());
 
-            ResultSet rs = stmt.executeQuery();
-            return rs;
+            int row = stmt.executeUpdate();
+            return row;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return -1;
         }
     }
 
-    public ResultSet capNhatDichVu(DichVu dv){
+    public int capNhatDichVu(DichVu dv){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatDichVu}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatDichVu(?,?,?)}");
             stmt.setString(1, dv.getMaDichVu());
             stmt.setString(2, dv.getTenDichVu());
             stmt.setString(3, dv.getMaLoaiDichVu());
 
-            ResultSet rs = stmt.executeQuery();
-            return rs;
+            int row = stmt.executeUpdate();
+
+            return row;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return -1;
         }
     }
 
-    public ResultSet xoaDichVu(DichVu dv){
+    public int xoaDichVu(String maDichVu){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_XoaDichVu}");
-            stmt.setString(1, dv.getMaDichVu());
+            CallableStatement stmt = conn.prepareCall("{Call sp_XoaDichVu(?)}");
+            stmt.setString(1, maDichVu);
 
-            ResultSet rs = stmt.executeQuery();
-            return rs;
+            int row = stmt.executeUpdate();
+            return row;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return -1;
         }
     }
 
     public static void main(String[] args) {
-        new DichVuDAO();
+        DichVuDAO dvD = new DichVuDAO();
+
+        // DichVu dv = new DichVu("DV003","Nope","LDV01");
+
+        // try {
+        //     // int row = dvD.themDichVu(dv);
+        //     // if (row > 0) {
+        //     //     System.out.println("Thành công");
+        //     // }
+
+
+        //     int row1 = dvD.xoaDichVu("DV003");
+        //     if (row1 > 0) {
+        //         System.out.println("Thành công");
+        //     }
+
+        // } catch (Exception e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+
+
     }
 
 }
