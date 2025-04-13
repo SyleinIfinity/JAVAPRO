@@ -45,11 +45,45 @@ public class DichVuDAO {
         return listDICHVU.get(maDichvu);
     }
 
-    public int themDichVu(DichVu dv){
+    public ResultSet themDichVu(DichVu dv){
+        try {
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemDichVu}");
+            stmt.setString(1, dv.getMaDichVu());
+            stmt.setString(2, dv.getTenDichVu());
+            stmt.setString(3, dv.getMaLoaiDichVu());
 
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
+    public ResultSet capNhatDichVu(DichVu dv){
+        try {
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatDichVu}");
+            stmt.setString(1, dv.getMaDichVu());
+            stmt.setString(2, dv.getTenDichVu());
+            stmt.setString(3, dv.getMaLoaiDichVu());
 
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public ResultSet xoaDichVu(DichVu dv){
+        try {
+            CallableStatement stmt = conn.prepareCall("{Call sp_XoaDichVu}");
+            stmt.setString(1, dv.getMaDichVu());
+
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public static void main(String[] args) {
         new DichVuDAO();
