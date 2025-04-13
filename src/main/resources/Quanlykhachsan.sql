@@ -162,3 +162,35 @@ AS
 BEGIN
     SELECT * FROM DichVu
 END
+GO
+--insert
+CREATE PROCEDURE sp_ThemDichVu
+    @maDichVu CHAR(5),
+    @tenDichVu NVARCHAR(255),
+    @maLoaiDichVu CHAR(5)
+AS
+BEGIN
+    INSERT INTO DichVu VALUES (@maDichVu, @tenDichVu, @maLoaiDichVu)
+END
+go
+--update
+CREATE PROCEDURE sp_CapNhatDichVu
+    @maDichVu CHAR(5),
+    @tenDichVu NVARCHAR(255),
+    @maLoaiDichVu CHAR(5)
+AS
+BEGIN
+    UPDATE DichVu
+    SET tenDichVu = @tenDichVu,
+        maLoaiDichVu = @maLoaiDichVu
+    WHERE maDichVu = @maDichVu
+END
+go
+--delete
+CREATE PROCEDURE sp_XoaDichVu
+    @maDichVu CHAR(5)
+AS
+BEGIN
+    DELETE FROM DichVu WHERE maDichVu = @maDichVu
+END
+--------------
