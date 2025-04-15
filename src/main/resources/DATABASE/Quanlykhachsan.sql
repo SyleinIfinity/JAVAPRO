@@ -156,7 +156,7 @@ insert into DichVu
 values
 	('DV001', N'Bỏ qua', 'LDV01');
 Go
---Select * from DichVu;
+-------------Dich Vu-------------------
 CREATE PROCEDURE sp_LayDanhSachDichVu
 AS
 BEGIN
@@ -332,3 +332,263 @@ BEGIN
     SELECT * FROM VaiTro
 END
 GO
+
+------Chi Nhanh Khach San ----------
+--insert
+CREATE PROCEDURE sp_ThemChiNhanhKhachSan
+    @maChiNhanh CHAR(5),
+    @tenChiNhanh NVARCHAR(100),
+    @diaChi NVARCHAR(255),
+    @SDT VARCHAR(10)
+AS
+BEGIN
+    INSERT INTO ChiNhanhKhachSan VALUES (@maChiNhanh, @tenChiNhanh, @diaChi, @SDT)
+END
+GO
+
+--update
+CREATE PROCEDURE sp_CapNhatChiNhanhKhachSan
+    @maChiNhanh CHAR(5),
+    @tenChiNhanh NVARCHAR(100),
+    @diaChi NVARCHAR(255),
+    @SDT VARCHAR(10)
+AS
+BEGIN
+    UPDATE ChiNhanhKhachSan
+    SET tenChiNhanh = @tenChiNhanh,
+        diaChi = @diaChi,
+        SDT = @SDT
+    WHERE maChiNhanh = @maChiNhanh
+END
+GO
+
+--delete
+CREATE PROCEDURE sp_XoaChiNhanhKhachSan
+    @maChiNhanh CHAR(5)
+AS
+BEGIN
+    DELETE FROM ChiNhanhKhachSan WHERE maChiNhanh = @maChiNhanh
+END
+GO
+
+--select
+CREATE PROCEDURE sp_LayDanhSachChiNhanh
+AS
+BEGIN
+    SELECT * FROM ChiNhanhKhachSan
+END
+GO
+--------Loai Phong----------
+
+--insert
+CREATE PROCEDURE sp_ThemLoaiPhong
+    @maLoaiPhong CHAR(5),
+    @tenLoaiPhong NVARCHAR(50),
+    @soLuongToiDa INT,
+    @moTa NVARCHAR(255),
+    @giaPhong DECIMAL(15,2)
+AS
+BEGIN
+    INSERT INTO LoaiPhong VALUES (@maLoaiPhong, @tenLoaiPhong, @soLuongToiDa, @moTa, @giaPhong)
+END
+GO
+
+--update
+CREATE PROCEDURE sp_CapNhatLoaiPhong
+    @maLoaiPhong CHAR(5),
+    @tenLoaiPhong NVARCHAR(50),
+    @soLuongToiDa INT,
+    @moTa NVARCHAR(255),
+    @giaPhong DECIMAL(15,2)
+AS
+BEGIN
+    UPDATE LoaiPhong
+    SET tenLoaiPhong = @tenLoaiPhong,
+        soLuongToiDa = @soLuongToiDa,
+        moTa = @moTa,
+        giaPhong = @giaPhong
+    WHERE maLoaiPhong = @maLoaiPhong
+END
+GO
+
+--delete
+CREATE PROCEDURE sp_XoaLoaiPhong
+    @maLoaiPhong CHAR(5)
+AS
+BEGIN
+    DELETE FROM LoaiPhong WHERE maLoaiPhong = @maLoaiPhong
+END
+GO
+
+--select
+CREATE PROCEDURE sp_LayDanhSachLoaiPhong
+AS
+BEGIN
+    SELECT * FROM LoaiPhong
+END
+GO
+
+-----------Phong-------------
+--insert
+CREATE PROCEDURE sp_ThemPhong
+    @maPhong CHAR(5),
+    @soPhong VARCHAR(10),
+    @maLoaiPhong CHAR(5),
+    @soTang INT,
+    @maChiNhanh CHAR(5),
+    @trangThai NVARCHAR(20)
+AS
+BEGIN
+    INSERT INTO Phong VALUES (@maPhong, @soPhong, @maLoaiPhong, @soTang, @maChiNhanh, @trangThai)
+END
+GO
+
+--update
+CREATE PROCEDURE sp_CapNhatPhong
+    @maPhong CHAR(5),
+    @soPhong VARCHAR(10),
+    @maLoaiPhong CHAR(5),
+    @soTang INT,
+    @maChiNhanh CHAR(5),
+    @trangThai NVARCHAR(20)
+AS
+BEGIN
+    UPDATE Phong
+    SET soPhong = @soPhong,
+        maLoaiPhong = @maLoaiPhong,
+        soTang = @soTang,
+        maChiNhanh = @maChiNhanh,
+        trangThai = @trangThai
+    WHERE maPhong = @maPhong
+END
+GO
+
+--delete
+CREATE PROCEDURE sp_XoaPhong
+    @maPhong CHAR(5)
+AS
+BEGIN
+    DELETE FROM Phong WHERE maPhong = @maPhong
+END
+GO
+
+--select
+CREATE PROCEDURE sp_LayDanhSachPhong
+AS
+BEGIN
+    SELECT * FROM Phong
+END
+GO
+
+-------------------Dat Phong---------------------------
+--insert
+CREATE PROCEDURE sp_ThemDatPhong
+    @maDatPhong CHAR(5),
+    @maNguoiDung CHAR(5),
+    @maPhong CHAR(5),
+    @soNguoi INT,
+    @dichVuSuDung CHAR(5),
+    @ngayThuePhong VARCHAR(15),
+    @ngayTraPhong VARCHAR(15),
+    @trangThai NVARCHAR(20)
+AS
+BEGIN
+    INSERT INTO DatPhong 
+    VALUES (@maDatPhong, @maNguoiDung, @maPhong, @soNguoi, @dichVuSuDung, @ngayThuePhong, @ngayTraPhong, @trangThai)
+END
+GO
+
+--Update
+CREATE PROCEDURE sp_CapNhatDatPhong
+    @maDatPhong CHAR(5),
+    @maNguoiDung CHAR(5),
+    @maPhong CHAR(5),
+    @soNguoi INT,
+    @dichVuSuDung CHAR(5),
+    @ngayThuePhong VARCHAR(15),
+    @ngayTraPhong VARCHAR(15),
+    @trangThai NVARCHAR(20)
+AS
+BEGIN
+    UPDATE DatPhong
+    SET maNguoiDung = @maNguoiDung,
+        maPhong = @maPhong,
+        soNguoi = @soNguoi,
+        dichVuSuDung = @dichVuSuDung,
+        ngayThuePhong = @ngayThuePhong,
+        ngayTraPhong = @ngayTraPhong,
+        trangThai = @trangThai
+    WHERE maDatPhong = @maDatPhong
+END
+GO
+
+--Delete
+CREATE PROCEDURE sp_XoaDatPhong
+    @maDatPhong CHAR(5)
+AS
+BEGIN
+    DELETE FROM DatPhong WHERE maDatPhong = @maDatPhong
+END
+GO
+
+--Lấy danh sách
+CREATE PROCEDURE sp_LayDanhSachDatPhong
+AS
+BEGIN
+    SELECT * FROM DatPhong
+END
+GO
+
+----------------------Hóa Đơn------------------------------------
+--insert
+CREATE PROCEDURE sp_ThemHoaDon
+    @maHoaDon CHAR(5),
+    @maDatPhong CHAR(5),
+    @maDichVu CHAR(5),
+    @nhanVienPhuTrach CHAR(5),
+    @tongTien DECIMAL(15,2),
+    @phuongThucThanhToan NVARCHAR(20)
+AS
+BEGIN
+    INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, phuongThucThanhToan)
+    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien, @phuongThucThanhToan)
+END
+GO
+
+--Update
+CREATE PROCEDURE sp_CapNhatHoaDon
+    @maHoaDon CHAR(5),
+    @maDatPhong CHAR(5),
+    @maDichVu CHAR(5),
+    @nhanVienPhuTrach CHAR(5),
+    @tongTien DECIMAL(15,2),
+    @phuongThucThanhToan NVARCHAR(20)
+AS
+BEGIN
+    UPDATE HoaDon
+    SET maDatPhong = @maDatPhong,
+        maDichVu = @maDichVu,
+        nhanVienPhuTrach = @nhanVienPhuTrach,
+        tongTien = @tongTien,
+        phuongThucThanhToan = @phuongThucThanhToan
+    WHERE maHoaDon = @maHoaDon
+END
+GO
+
+--Delete
+CREATE PROCEDURE sp_XoaHoaDon
+    @maHoaDon CHAR(5)
+AS
+BEGIN
+    DELETE FROM HoaDon WHERE maHoaDon = @maHoaDon
+END
+GO
+
+--Lấy danh sách
+CREATE PROCEDURE sp_LayDanhSachHoaDon
+AS
+BEGIN
+    SELECT * FROM HoaDon
+END
+GO
+
