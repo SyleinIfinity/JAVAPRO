@@ -156,13 +156,15 @@ insert into DichVu
 values
 	('DV001', N'Bỏ qua', 'LDV01');
 Go
+
 -------------Dich Vu-------------------
 CREATE PROCEDURE sp_LayDanhSachDichVu
 AS
 BEGIN
     SELECT * FROM DichVu
-END
+END;
 GO
+
 --insert
 CREATE PROCEDURE sp_ThemDichVu
     @maDichVu CHAR(5),
@@ -171,8 +173,9 @@ CREATE PROCEDURE sp_ThemDichVu
 AS
 BEGIN
     INSERT INTO DichVu VALUES (@maDichVu, @tenDichVu, @maLoaiDichVu)
-END
+END;
 go
+
 --update
 CREATE PROCEDURE sp_CapNhatDichVu
     @maDichVu CHAR(5),
