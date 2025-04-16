@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 import MODEL.ENTITY.LoaiPhong;
-import UTILS.CONNECTIONLoaiA.CONNECTIONSQLSERVER;
+import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
 
 public class LoaiPhongDAO {
     HashMap <String, LoaiPhong> listLOAIPHONG;
@@ -58,7 +58,7 @@ public class LoaiPhongDAO {
             stmt.setString(4, lp.getMoTa());
             stmt.setDouble(5, lp.getGiaTien());
 
-            int row = stmt.executeUpLoaie();
+            int row = stmt.executeUpdate();
             return row;
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class LoaiPhongDAO {
             stmt.setString(4, lp.getMoTa());
             stmt.setDouble(5, lp.getGiaTien());
 
-            int row = stmt.executeUpLoaie();
+            int row = stmt.executeUpdate();
 
             return row;
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class LoaiPhongDAO {
             CallableStatement stmt = conn.prepareCall("{Call sp_XoaLoaiPhong(?)}");
             stmt.setString(1, maLoaiPhong);
 
-            int row = stmt.executeUpLoaie();
+            int row = stmt.executeUpdate();
             return row;
         } catch (Exception e) {
             e.printStackTrace();
