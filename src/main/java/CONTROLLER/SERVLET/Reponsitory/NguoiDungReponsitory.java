@@ -13,6 +13,7 @@ import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
 
 public class NguoiDungReponsitory {
   Connection conn = null;
+  List<NguoiDung> users;
 
   public NguoiDungReponsitory() {
     conn = CONNECTIONSQLSERVER.getConnection();
@@ -22,7 +23,7 @@ public class NguoiDungReponsitory {
   }
 
    public List<NguoiDung> getUserByEmailAndPassword(String email, String pass) {
-        List<NguoiDung> users = new ArrayList<>();
+        users = new ArrayList<>();
         String query = "SELECT maNguoiDung, tenNguoiDung, ngaySinh, SDT, email, soDuTaiKhoan, maVaiTro " +
                        "FROM NguoiDung " +
                        "WHERE email=? AND matKhau=? AND (maVaiTro = 'R002' OR maVaiTro = 'R003')";
@@ -50,26 +51,26 @@ public class NguoiDungReponsitory {
         return users;
     }
 
-    // public static void main(String[] args) {
-    //     NguoiDungReponsitory ndgh = new NguoiDungReponsitory();
+    public static void main(String[] args) {
+        NguoiDungReponsitory ndgh = new NguoiDungReponsitory();
     
-    //     List<NguoiDung> list = ndgh.getUserByEmailAndPassword("a@gmail.com", "khanh123");
+        List<NguoiDung> list = ndgh.getUserByEmailAndPassword("a@gmail.com", "khanh123");
     
-    //     if (list.isEmpty()) {
-    //         System.out.println("Không tìm thấy người dùng.");
-    //     } else {
-    //         for (NguoiDung user : list) {
-    //             System.out.println("Mã người dùng: " + user.getMaNguoiDung());
-    //             System.out.println("Tên: " + user.getTenNguoiDung());
-    //             System.out.println("Ngày sinh: " + user.getNgaySinh());
-    //             System.out.println("SĐT: " + user.getSDT());
-    //             System.out.println("Email: " + user.getEmail());
-    //             System.out.println("Số dư: " + user.getSoDuTaiKhoan());
-    //             System.out.println("Vai trò: " + user.getMaVaiTro());
-    //             System.out.println("-----------");
-    //         }
-    //     }
-    // }
+        if (list.isEmpty()) {
+            System.out.println("Không tìm thấy người dùng.");
+        } else {
+            for (NguoiDung user : list) {
+                System.out.println("Mã người dùng: " + user.getMaNguoiDung());
+                System.out.println("Tên: " + user.getTenNguoiDung());
+                System.out.println("Ngày sinh: " + user.getNgaySinh());
+                System.out.println("SĐT: " + user.getSDT());
+                System.out.println("Email: " + user.getEmail());
+                System.out.println("Số dư: " + user.getSoDuTaiKhoan());
+                System.out.println("Vai trò: " + user.getMaVaiTro());
+                System.out.println("-----------");
+            }
+        }
+    }
     
 
 }

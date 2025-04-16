@@ -16,30 +16,34 @@ public class CONNECTIONSQLSERVER {
     private static Connection cnn=null;
     private static Statement stm=null;
 
-    // public CONNECTIONSQLSERVER()
-    // {
-    //     try{
-    //         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    //         String url = "jdbc:sqlserver://localhost:1433;databaseName=quanlykhachsan;encrypt=true;trustServerCertificate=true";
-    //         // this.UserName = "sa";
-    //         // this.PassWord = "12345";
-    //         this.cnn = DriverManager.getConnection(url, this.UserName, this.PassWord);
-    //         System.out.println("Connect Success!");
-    //     } catch(Exception ex)
-    //     {
-    //         System.out.println("Error" + ex.getMessage());
-    //         ex.printStackTrace();
-    //     }
-    // }
+    public CONNECTIONSQLSERVER()
+    {
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=quanlykhachsan;encrypt=true;trustServerCertificate=true";
+            // this.UserName = "sa";
+            // this.PassWord = "12345";
+            this.cnn = DriverManager.getConnection(url, this.UserName, this.PassWord);
+            System.out.println("Connect Success!");
+        } catch(Exception ex)
+        {
+            System.out.println("Error" + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(url, UserName, PassWord);
+            if (cnn == null || cnn.isClosed()) {
+                cnn = DriverManager.getConnection(url, UserName, PassWord);
+            }
+            return cnn;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
+    
 
     public static void main(String[] args) {
         Connection conn = getConnection();
