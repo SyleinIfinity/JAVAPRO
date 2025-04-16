@@ -17,7 +17,7 @@ public class ChiNhanhKhachSanDAO {
         try {
             conn = CONNECTIONSQLSERVER.getConnection();
 
-            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachChiNhanhKhachSan}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachChiNhanh}");
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
