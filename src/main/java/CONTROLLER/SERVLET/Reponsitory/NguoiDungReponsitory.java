@@ -1,0 +1,48 @@
+package CONTROLLER.SERVLET.Reponsitory;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import MODEL.ENTITY.NguoiDung;
+import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
+
+public class NguoiDungReponsitory {
+  Connection conn = null;
+
+  public NguoiDungReponsitory() {
+  }
+
+   public List<NguoiDung> getUserByEmailAndPassword(String email, String pass) {
+        List<NguoiDung> users = new ArrayList<>();
+        String query = "SELECT maNguoiDung, tenNguoiDung, ngaySinh, SDT, email, soDuTaiKhoan, maVaiTro " +
+                       "FROM NguoiDung " +
+                       "WHERE email=? AND matKhau=? AND (maVaiTro = 'R002' OR maVaiTro = 'R003')";
+        try (Connection conn = CONNECTIONSQLSERVER.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setString(1, email);
+            pstmt.setString(2, pass);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    NguoiDung user = new NguoiDung();
+                    user.setMaNguoiDung(rs.getString("maNguoiDung"));
+                    user.setTenNguoiDung(rs.getString("tenNguoiDung"));
+                    user.setNgaySinh(rs.getString("ngaySinh"));
+                    user.setSDT(rs.getString("SDT"));
+                    user.setEmail(rs.getString("email"));
+                    user.setSoDuTaiKhoan(rs.getDouble("soDuTaiKhoan"));
+                    user.setMaVaiTro(rs.getString("maVaiTro"));
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+}

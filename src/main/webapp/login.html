@@ -19,11 +19,9 @@
     a {
       list-style: none;
     }
-
     input {
       border: none;
     }
-
     .login-card {
       width: 400px;
       padding: 20px;
@@ -31,7 +29,6 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       background: white;
     }
-
     .login-card .form-item>input {
       border: 1px solid rgba(95, 95, 243, 0.752);
       border-radius: 5px;
@@ -39,20 +36,21 @@
       font-size: 14px;
       width: 250px;
     }
-
     .login-card input:focus {
       border: 1px solid rgba(95, 95, 243, 0.752);
       outline: none;
     }
-
     .text-center {
       text-align: center;
     }
-
     .logo {
       width: 15%;
     }
-
+    .col-6{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .space {
       display: flex;
       justify-content: space-between;
@@ -86,7 +84,7 @@
             <h3>Log in to your account</h3>
             <p>Welcome back! Please enter your details.</p>
           </div>
-          <form action="/auth/login" method="post">
+          <form action="http://localhost:8080/GITHUB/login" method="post">
             <div class="form-item mb-3 space">
               <label for="email">Email</label>
               <input id="email" name="email" type="email" placeholder="Enter your email" required maxlength="100" />
@@ -111,7 +109,7 @@
               <button type="submit" style="border-radius:6px;width: 100%; height:30px">Login</button>
             </div>
             <div class="mt-4 text-center">
-              <p>Don't have an account? <a href="../sign-up">Sign up</a></p>
+              <p>Don't have an account? <a href="/sign-up">Sign up</a></p>
             </div>
           </form>
         </div>
