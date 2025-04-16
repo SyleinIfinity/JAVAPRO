@@ -15,7 +15,7 @@ public class ChiNhanhKhachSanDAO {
     public ChiNhanhKhachSanDAO(){
         listCHINHANHKHACHSAN = new HashMap<>();
         try {
-            conn = CONNECTIONSQLSERVER.GetConnection();
+            conn = CONNECTIONSQLSERVER.getConnection();
 
             CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachChiNhanhKhachSan}");
 

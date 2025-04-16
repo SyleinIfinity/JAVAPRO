@@ -15,7 +15,7 @@ public class LoaiDichVuDAO {
     public LoaiDichVuDAO(){
         listLOAIDICHVU = new HashMap<>();
         try {
-            conn = CONNECTIONSQLSERVER.GetConnection();
+            conn = CONNECTIONSQLSERVER.getConnection();
 
             CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachLoaiDichVu}");
 
