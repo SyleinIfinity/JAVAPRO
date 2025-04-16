@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import CONTROLLER.SERVLET.doLOGIN;
 import MODEL.ENTITY.HoaDon;
 import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
 
@@ -24,7 +25,7 @@ public class HoaDonDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                NguoiDung nd = new HoaDon(
+                HoaDon hd = new HoaDon(
                     rs.getString("maHoaDon"),
                     rs.getString("maDatPhong"),
                     rs.getString("maDichVu"),
@@ -33,7 +34,7 @@ public class HoaDonDAO {
                     rs.getString("ngayGiaoDich"),
                     rs.getString("phuongThucThanhToan")
                 );
-                listHOADON.put(nd.getMaHoaDon(), nd);
+                listHOADON.put(hd.getMaHoaDon(), hd);
             }
             System.out.println("Load thành công");
 
@@ -53,7 +54,7 @@ public class HoaDonDAO {
 
     public int themHoaDon(HoaDon hd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemHoaDon(?,?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemHoaDon(?,?,?,?,?,?,?)}");
             stmt.setString(1, hd.getMaHoaDon());
             stmt.setString(2, hd.getMaDatPhong());
             stmt.setString(3, hd.getMaDichVu());
@@ -72,7 +73,7 @@ public class HoaDonDAO {
 
     public int capNhatHoaDon(HoaDon hd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatHoaDon(?,?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatHoaDon(?,?,?,?,?,?,?)}");
             stmt.setString(1, hd.getMaHoaDon());
             stmt.setString(2, hd.getMaDatPhong());
             stmt.setString(3, hd.getMaDichVu());
@@ -107,5 +108,12 @@ public class HoaDonDAO {
         HoaDonDAO hdD = new HoaDonDAO();
     
     }
+// doLOGINd
+// dichVuSuDungd
+// d
 
+// dichVuSuDungd
+// d
+
+// dichVuSuDung
 }

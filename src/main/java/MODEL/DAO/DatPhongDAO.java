@@ -31,7 +31,7 @@ public class DatPhongDAO {
                     rs.getString("soNguoi"),
                     rs.getString("dichVuSuDung"),
                     rs.getString("ngayThuePhong"),
-                    rs.getDouble("ngayTraPhong"),
+                    rs.getString("ngayTraPhong"),
                     rs.getString("trangThai")
                 );
                 listDATPHONG.put(dp.getMaDatPhong(), dp);
@@ -61,7 +61,7 @@ public class DatPhongDAO {
             stmt.setString(4, dp.getSoNguoi());
             stmt.setString(5, dp.getDichVuSuDung());
             stmt.setString(6, dp.getNgayThuePhong());
-            stmt.setDouble( 7, dp.getNgayTraPhong());
+            stmt.setString( 7, dp.getNgayTraPhong());
             stmt.setString(8, dp.getTrangThai());
 
             int row = stmt.executeUpdate();
@@ -81,7 +81,7 @@ public class DatPhongDAO {
             stmt.setString(4, dp.getSoNguoi());
             stmt.setString(5, dp.getDichVuSuDung());
             stmt.setString(6, dp.getNgayThuePhong());
-            stmt.setDouble( 7, dp.getNgayTraPhong());
+            stmt.setString( 7, dp.getNgayTraPhong());
             stmt.setString(8, dp.getTrangThai());
 
             int row = stmt.executeUpdate();
