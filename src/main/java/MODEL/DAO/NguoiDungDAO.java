@@ -18,7 +18,7 @@ public class NguoiDungDAO {
 
 
         try {
-            conn = CONNECTIONSQLSERVER.GetConnection();
+            conn = CONNECTIONSQLSERVER.getConnection();
 
             CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachNguoiDung}");
 

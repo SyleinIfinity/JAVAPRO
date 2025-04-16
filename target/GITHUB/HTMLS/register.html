@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/antd/dist/antd.min.css" rel="stylesheet" />
+  <title>Register</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f2f5;
+    }
+
+    input {
+      border: none;
+    }
+
+    .login-card {
+      width: 450px;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+
+    .login-card .form-item>input {
+      border: 1px solid rgba(95, 95, 243, 0.752);
+      border-radius: 5px;
+      padding: 5px 5px 5px 15px;
+      font-size: 14px;
+      width: 250px;
+    }
+
+    .login-card input:focus {
+      border: 1px solid rgba(95, 95, 243, 0.752);
+      outline: none;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .logo {
+      width: 15%;
+    }
+
+    .space {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .logo-main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo-main img {
+      margin-right: 5rem;
+      width: 15rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-6 logo-main">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/kanban-7ef41.appspot.com/o/Logo.png?alt=media&token=96306259-6d1d-41d0-a1a4-a483b31a373c"
+          alt="logo-kanban" />
+      </div>
+      <div class="col-6">
+        <div class="login-card">
+          <div class="text-center">
+            <img class="logo"
+              src="https://firebasestorage.googleapis.com/v0/b/kanban-7ef41.appspot.com/o/Logo.png?alt=media&token=96306259-6d1d-41d0-a1a4-a483b31a373c"
+              alt="logo-kanban" />
+            <h3>Create your account</h3>
+            <p>Sign up to get started!</p>
+          </div>
+          <form action="doREGISTER" method="post">
+            <div class="form-item mb-3 space">
+              <label for="fullname">Full Name</label>
+              <input id="fullname" name="fullname" type="text" placeholder="Enter your full name" required maxlength="100" />
+            </div>
+            <div class="form-item mb-3 space">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="Enter your email" required maxlength="100" />
+            </div>
+            <div class="form-item mb-3 space">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="Enter your password" required maxlength="100" />
+            </div>
+            <div class="form-item mb-3 space">
+              <label for="confirmPassword">Confirm</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password" required maxlength="100" />
+            </div>
+            <div class="mt-4 mb-3">
+              <button type="submit" style="border-radius:6px;width: 100%; height:30px">Register</button>
+            </div>
+            <div class="mt-4 text-center">
+              <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/antd/dist/antd.min.js"></script>
+</body>
+
+</html>

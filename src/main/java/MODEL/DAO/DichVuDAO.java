@@ -15,7 +15,7 @@ public class DichVuDAO {
     public DichVuDAO(){
         listDICHVU = new HashMap<>();
         try {
-            conn = CONNECTIONSQLSERVER.GetConnection();
+            conn = CONNECTIONSQLSERVER.getConnection();
 
             CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachDichVu}");
 
