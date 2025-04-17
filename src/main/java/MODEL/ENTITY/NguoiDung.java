@@ -1,14 +1,14 @@
 package MODEL.ENTITY;
 
 public class NguoiDung {
-    public String maNguoiDung;
-    public String tenNguoiDung;
-    public String ngaySinh;
-    public String SDT;
-    public String email;
-    public String matKhau;
-    public Double soDuTaiKhoan;
-    public String maVaiTro;
+    private String maNguoiDung;
+    private String tenNguoiDung;
+    private String ngaySinh;
+    private String SDT;
+    private String email;
+    private String matKhau;
+    private Double soDuTaiKhoan;
+    private String maVaiTro;
 
     public NguoiDung(){
 

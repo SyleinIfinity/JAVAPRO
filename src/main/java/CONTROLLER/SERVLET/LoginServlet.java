@@ -9,6 +9,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+// import javax.servlet.ServletException;
+// import javax.servlet.annotation.WebServlet;
+// import javax.servlet.http.HttpServlet;
+// import javax.servlet.http.HttpServletRequest;
+// import javax.servlet.http.HttpServletResponse;
+// import javax.servlet.http.HttpSession;
 
 import CONTROLLER.SERVLET.Reponsitory.NguoiDungReponsitory;
 import MODEL.ENTITY.NguoiDung;
@@ -51,25 +57,24 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    // public static void main(String[] args) {
-    //     NguoiDungReponsitory user = new NguoiDungReponsitory();
-    //     LoginServlet lg = new LoginServlet();
-    //     lg.users = user.getUserByEmailAndPassword("a@gmail.com", "khanh123");
+    public static void main(String[] args) {
+        NguoiDungReponsitory user = new NguoiDungReponsitory();
+        LoginServlet lg = new LoginServlet();
+        lg.users = user.getUserByEmailAndPassword("a@gmail.com", "khanh123");
 
-    //     if (lg.users.isEmpty()) {
-    //         System.out.println("Không tìm thấy người dùng.");
-    //     } else {
-    //         for (NguoiDung users : lg.users) {
-    //             System.out.println("Mã người dùng: " + users.getMaNguoiDung());
-    //             System.out.println("Tên: " + users.getTenNguoiDung());
-    //             System.out.println("Ngày sinh: " + users.getNgaySinh());
-    //             System.out.println("SĐT: " + users.getSDT());
-    //             System.out.println("Email: " + users.getEmail());
-    //             System.out.println("Số dư: " + users.getSoDuTaiKhoan());
-    //             System.out.println("Vai trò: " + users.getMaVaiTro());
-    //             System.out.println("-----------");
-    //         }
-    //     }
-    // }
-
+        if (lg.users.isEmpty()) {
+            System.out.println("Không tìm thấy người dùng.");
+        } else {
+            for (NguoiDung users : lg.users) {
+                System.out.println("Mã người dùng: " + users.getMaNguoiDung());
+                System.out.println("Tên: " + users.getTenNguoiDung());
+                System.out.println("Ngày sinh: " + users.getNgaySinh());
+                System.out.println("SĐT: " + users.getSDT());
+                System.out.println("Email: " + users.getEmail());
+                System.out.println("Số dư: " + users.getSoDuTaiKhoan());
+                System.out.println("Vai trò: " + users.getMaVaiTro());
+                System.out.println("-----------");
+            }
+        }
+    }
 }

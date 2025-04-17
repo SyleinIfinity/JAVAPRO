@@ -1,13 +1,13 @@
 package MODEL.ENTITY;
 
 public class HoaDon {
-    public String maHoaDon;
-    public String maDatPhong;
-    public String maDichVu;
-    public String nhanVienPhuTrach;
-    public Double tongTien;
-    public String ngayGiaoDich;
-    public String phuongThucThanhToan;
+    private String maHoaDon;
+    private String maDatPhong;
+    private String maDichVu;
+    private String nhanVienPhuTrach;
+    private Double tongTien;
+    private String ngayGiaoDich;
+    private String phuongThucThanhToan;
 
     public HoaDon(){
 

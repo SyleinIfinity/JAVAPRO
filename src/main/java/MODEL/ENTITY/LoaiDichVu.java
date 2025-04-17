@@ -1,10 +1,10 @@
 package MODEL.ENTITY;
 
 public class LoaiDichVu {
-    public String maLoaiDichVu;
-    public String tenLoaiDichVu;
-    public Double giaDichVu;
-    public String moTa;
+    private String maLoaiDichVu;
+    private String tenLoaiDichVu;
+    private Double giaDichVu;
+    private String moTa;
 
     public LoaiDichVu(){
 

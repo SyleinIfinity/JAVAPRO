@@ -1,9 +1,9 @@
 package MODEL.ENTITY;
 
 public class DichVu {
-    public String maDichVu;    
-    public String tenDichVu;
-    public String maLoaiDichVu;
+    private String maDichVu;    
+    private String tenDichVu;
+    private String maLoaiDichVu;
 
     public DichVu(){
 

@@ -1,11 +1,11 @@
 package MODEL.ENTITY;
 
 public class LoaiPhong {
-    public String maLoaiPhong;
-    public String tenLoaiPhong;
-    public int soLuongToiDa;
-    public String moTa;
-    public Double giaTien;
+    private String maLoaiPhong;
+    private String tenLoaiPhong;
+    private int soLuongToiDa;
+    private String moTa;
+    private Double giaTien;
 
     public LoaiPhong(){
 

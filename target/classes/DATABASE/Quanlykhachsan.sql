@@ -336,7 +336,7 @@ BEGIN
 END
 GO
 
-------Chi Nhanh Khach San ----------
+---------------------------------------------------------Chi Nhanh Khach San ---------------------------
 --insert
 CREATE PROCEDURE sp_ThemChiNhanhKhachSan
     @maChiNhanh CHAR(5),
@@ -381,7 +381,7 @@ BEGIN
     SELECT * FROM ChiNhanhKhachSan
 END
 GO
---------Loai Phong----------
+-----------------------------------------------------------Loai Phong---------------------------
 
 --insert
 CREATE PROCEDURE sp_ThemLoaiPhong
@@ -431,7 +431,7 @@ BEGIN
 END
 GO
 
------------Phong-------------
+--------------------------------------------------------------Phong------------------------------
 --insert
 CREATE PROCEDURE sp_ThemPhong
     @maPhong CHAR(5),
@@ -483,7 +483,7 @@ BEGIN
 END
 GO
 
--------------------Dat Phong---------------------------
+-----------------------------------------------------Dat Phong---------------------------
 --insert
 CREATE PROCEDURE sp_ThemDatPhong
     @maDatPhong CHAR(5),
@@ -542,7 +542,7 @@ BEGIN
 END
 GO
 
-----------------------Hóa Đơn------------------------------------
+--------------------------------------------------------Hóa Đơn------------------------------------
 --insert
 CREATE PROCEDURE sp_ThemHoaDon
     @maHoaDon CHAR(5),

@@ -1,10 +1,10 @@
 package MODEL.ENTITY;
 
 public class ChiNhanhKhachSan {
-    public String maChiNhanh;
-    public String tenChiNhanh;
-    public String diaChi;
-    public String SDT;
+    private String maChiNhanh;
+    private String tenChiNhanh;
+    private String diaChi;
+    private String SDT;
 
     public ChiNhanhKhachSan(){
 

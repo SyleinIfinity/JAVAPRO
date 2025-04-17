@@ -1,14 +1,14 @@
 package MODEL.ENTITY;
 
 public class DatPhong {
-    public String maDatPhong;
-    public String maNguoiDung;
-    public String maPhong;
-    public String soNguoi;
-    public String dichVuSuDung;
-    public String ngayThuePhong;
-    public String ngayTraPhong;
-    public String trangThai;
+    private String maDatPhong;
+    private String maNguoiDung;
+    private String maPhong;
+    private String soNguoi;
+    private String dichVuSuDung;
+    private String ngayThuePhong;
+    private String ngayTraPhong;
+    private String trangThai;
 
     public DatPhong(){
 

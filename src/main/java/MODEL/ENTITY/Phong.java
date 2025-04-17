@@ -1,12 +1,12 @@
 package MODEL.ENTITY;
 
 public class Phong {
-    public String maPhong;
-    public String soPhong;
-    public String maLoaiPhong;
-    public int soTang;
-    public String maChiNhanh;
-    public String trangThai;
+    private String maPhong;
+    private String soPhong;
+    private String maLoaiPhong;
+    private int soTang;
+    private String maChiNhanh;
+    private String trangThai;
 
     public Phong(){
 
