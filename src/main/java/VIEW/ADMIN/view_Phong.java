@@ -19,6 +19,9 @@ public class view_Phong extends JFrame {
     private Color mauPhu = new Color(52, 152, 219);
     private Color mauNhan = new Color(230, 126, 34);
     private Color mauNen = new Color(236, 240, 241);
+    public String maNguoiDung;
+    public String maVaiTro;
+
     public view_Phong(String maNguoiDung, String maVaiTro) {
         setTitle("Quản lý Phòng");
         setSize(1080, 880);
@@ -26,6 +29,10 @@ public class view_Phong extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         getContentPane().setBackground(mauNen);
+
+        this.maNguoiDung = maNguoiDung;
+        this.maVaiTro = maVaiTro;
+
 
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
