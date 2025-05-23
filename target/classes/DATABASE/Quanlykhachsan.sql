@@ -42,6 +42,7 @@ CREATE TABLE NguoiDung
     matKhau NVARCHAR(255) NOT NULL,
 	soDuTaiKhoan decimal(20,2) default 0,
     maVaiTro CHAR(5),
+    trangThai BIT NOT NULL DEFAULT 1  -- 1: Hoạt động, 0: Khóa
     FOREIGN KEY (maVaiTro) REFERENCES VaiTro(maVaiTro),
 );
 
@@ -194,9 +195,9 @@ VALUES
 go
 INSERT INTO DatPhong (maDatPhong, maNguoiDung, maPhong, soNguoi, dichVuSuDung, ngayThuePhong, ngayTraPhong, trangThai)
 VALUES 
-('DP001', 'ND001', 'P001', 1, 'DV001', '2025-06-01', '2025-06-03', N'Đã đặt'),
-('DP002', 'ND002', 'P003', 2, 'DV002', '2025-06-05', '2025-06-07', N'Đã đặt'),
-('DP003', 'ND003', 'P002', 2, 'DV004', '2025-05-25', '2025-05-28', N'Hoàn thành');
+('DP001', 'ND002', 'P001', 1, 'DV001', '2025-06-01', '2025-06-03', N'Đã đặt'),
+('DP002', 'ND003', 'P003', 2, 'DV002', '2025-06-05', '2025-06-07', N'Đã đặt'),
+('DP003', 'ND004', 'P002', 2, 'DV004', '2025-05-25', '2025-05-28', N'Hoàn thành');
 GO
 INSERT INTO HoaDon (maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, ngayGiaoDich, phuongThucThanhToan)
 VALUES 
