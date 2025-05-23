@@ -9,13 +9,14 @@ public class NguoiDung {
     private String matKhau;
     private Double soDuTaiKhoan;
     private String maVaiTro;
+    private boolean trangThai;
 
     public NguoiDung(){
 
     }
 
     public NguoiDung(String maNguoiDung, String tenNguoiDung, String ngaySinh, String sDT, String email, String matKhau,
-            Double soDuTaiKhoan, String maVaiTro) {
+            Double soDuTaiKhoan, String maVaiTro, boolean trangThai) {
         this.maNguoiDung = maNguoiDung;
         this.tenNguoiDung = tenNguoiDung;
         this.ngaySinh = ngaySinh;
@@ -24,6 +25,15 @@ public class NguoiDung {
         this.matKhau = matKhau;
         this.soDuTaiKhoan = soDuTaiKhoan;
         this.maVaiTro = maVaiTro;
+        this.trangThai = trangThai;
+    }
+
+    public boolean isTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
     }
 
     public String getMaNguoiDung() {

@@ -131,7 +131,6 @@ CREATE TABLE HoaDon
 	nhanVienPhuTrach CHAR(5) null,
     tongTien DECIMAL(15,2) NOT NULL,
     ngayGiaoDich DATETIME NOT NULL,
-    phuongThucThanhToan NVARCHAR(20) CHECK (phuongThucThanhToan IN (N'Ví điện tử', N'Tiền mặt', N'Thẻ')) NOT NULL,
     FOREIGN KEY (maDatPhong) REFERENCES DatPhong(maDatPhong),
 	--FOREIGN KEY (nhanVienPhuTrach) REFERENCES NguoiDung(maNguoiDung),
 );
@@ -199,11 +198,11 @@ VALUES
 ('DP002', 'ND003', 'P003', 2, 'DV002', '2025-06-05', '2025-06-07', N'Đã đặt'),
 ('DP003', 'ND004', 'P002', 2, 'DV004', '2025-05-25', '2025-05-28', N'Hoàn thành');
 GO
-INSERT INTO HoaDon (maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, ngayGiaoDich, phuongThucThanhToan)
+INSERT INTO HoaDon (maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, ngayGiaoDich)
 VALUES 
-('HD001', 'DP001', 'DV001', 'ND002', 600000, '2025-06-03', N'Tiền mặt'),
-('HD002', 'DP002', 'DV002', 'ND002', 550000, '2025-06-07', N'Thẻ'),
-('HD003', 'DP003', 'DV004', 'ND002', 700000, '2025-05-28', N'Ví điện tử');
+('HD001', 'DP001', 'DV001', 'ND002', 600000, '2025-06-03'),
+('HD002', 'DP002', 'DV002', 'ND002', 550000, '2025-06-07'),
+('HD003', 'DP003', 'DV004', 'ND002', 700000, '2025-05-28');
 
 GO
 
@@ -302,10 +301,11 @@ CREATE PROCEDURE sp_ThemNguoiDung
     @email NVARCHAR(100),
     @matKhau NVARCHAR(255),
     @soDuTaiKhoan DECIMAL(20,2),
-    @maVaiTro CHAR(5)
+    @maVaiTro CHAR(5),
+    @trangThai BIT
 AS
 BEGIN
-    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro)
+    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro, @trangThai)
 END
 GO
 --update
@@ -601,12 +601,11 @@ CREATE PROCEDURE sp_ThemHoaDon
     @maDatPhong CHAR(5),
     @maDichVu CHAR(5),
     @nhanVienPhuTrach CHAR(5),
-    @tongTien DECIMAL(15,2),
-    @phuongThucThanhToan NVARCHAR(20)
+    @tongTien DECIMAL(15,2)
 AS
 BEGIN
-    INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, phuongThucThanhToan)
-    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien, @phuongThucThanhToan)
+    INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien)
+    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien)
 END
 GO
 
@@ -616,16 +615,14 @@ CREATE PROCEDURE sp_CapNhatHoaDon
     @maDatPhong CHAR(5),
     @maDichVu CHAR(5),
     @nhanVienPhuTrach CHAR(5),
-    @tongTien DECIMAL(15,2),
-    @phuongThucThanhToan NVARCHAR(20)
+    @tongTien DECIMAL(15,2)
 AS
 BEGIN
     UPDATE HoaDon
     SET maDatPhong = @maDatPhong,
         maDichVu = @maDichVu,
         nhanVienPhuTrach = @nhanVienPhuTrach,
-        tongTien = @tongTien,
-        phuongThucThanhToan = @phuongThucThanhToan
+        tongTien = @tongTien
     WHERE maHoaDon = @maHoaDon
 END
 GO
