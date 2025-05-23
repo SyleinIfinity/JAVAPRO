@@ -33,7 +33,8 @@ public class NguoiDungDAO {
                     rs.getString("email"),
                     rs.getString("matKhau"),
                     rs.getDouble("soDuTaiKhoan"),
-                    rs.getString("maVaiTro")
+                    rs.getString("maVaiTro"),
+                    rs.getBoolean("trangThai")
                 );
                 listNGUOIDUNG.put(nd.getMaNguoiDung(), nd);
             }
@@ -55,7 +56,7 @@ public class NguoiDungDAO {
 
     public int themNguoiDung(NguoiDung nd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemNguoiDung(?,?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemNguoiDung(?,?,?,?,?,?,?,?,?)}");
             stmt.setString(1, nd.getMaNguoiDung());
             stmt.setString(2, nd.getTenNguoiDung());
             stmt.setString(3, nd.getNgaySinh());
@@ -64,6 +65,7 @@ public class NguoiDungDAO {
             stmt.setString(6, nd.getMatKhau());
             stmt.setDouble(7, nd.getSoDuTaiKhoan());
             stmt.setString(8, nd.getMaVaiTro());
+            stmt.setBoolean(9, nd.isTrangThai());
 
             int row = stmt.executeUpdate();
             return row;
@@ -75,7 +77,7 @@ public class NguoiDungDAO {
 
     public int capNhatNguoiDung(NguoiDung nd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatNguoiDung(?,?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatNguoiDung(?,?,?,?,?,?,?,?,?)}");
             stmt.setString(1, nd.getMaNguoiDung());
             stmt.setString(2, nd.getTenNguoiDung());
             stmt.setString(3, nd.getNgaySinh());
@@ -84,7 +86,7 @@ public class NguoiDungDAO {
             stmt.setString(6, nd.getMatKhau());
             stmt.setDouble(7, nd.getSoDuTaiKhoan());
             stmt.setString(8, nd.getMaVaiTro());
-
+            stmt.setBoolean(9, nd.isTrangThai());
             int row = stmt.executeUpdate();
 
             return row;

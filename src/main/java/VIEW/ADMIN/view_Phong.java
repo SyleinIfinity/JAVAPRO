@@ -252,7 +252,6 @@ public class view_Phong extends JFrame {
                 button.setBackground(bgColor);
             }
         });
-
         return button;
     }
 

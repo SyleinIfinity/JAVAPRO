@@ -7,21 +7,18 @@ public class HoaDon {
     private String nhanVienPhuTrach;
     private Double tongTien;
     private String ngayGiaoDich;
-    private String phuongThucThanhToan;
 
     public HoaDon(){
 
     }
 
-    public HoaDon(String maHoaDon, String maDatPhong, String maDichVu, String nhanVienPhuTrach, Double tongTien, String ngayGiaoDich,
-            String phuongThucThanhToan) {
+    public HoaDon(String maHoaDon, String maDatPhong, String maDichVu, String nhanVienPhuTrach, Double tongTien, String ngayGiaoDich) {
         this.maHoaDon = maHoaDon;
         this.maDatPhong = maDatPhong;
         this.maDichVu = maDichVu;
         this.nhanVienPhuTrach = nhanVienPhuTrach;
         this.tongTien = tongTien;
         this.ngayGiaoDich = ngayGiaoDich;
-        this.phuongThucThanhToan = phuongThucThanhToan;
     }
 
     public String getMaHoaDon() {
@@ -72,19 +69,11 @@ public class HoaDon {
         this.ngayGiaoDich = ngayGiaoDich;
     }
 
-    public String getPhuongThucThanhToan() {
-        return phuongThucThanhToan;
-    }
-
-    public void setPhuongThucThanhToan(String phuongThucThanhToan) {
-        this.phuongThucThanhToan = phuongThucThanhToan;
-    }
-
     @Override
     public String toString() {
         return "HoaDon [maHoaDon=" + maHoaDon + ", maDatPhong=" + maDatPhong + ", maDichVu=" + maDichVu
                 + ", nhanVienPhuTrach=" + nhanVienPhuTrach + ", tongTien=" + tongTien + ", ngayGiaoDich=" + ngayGiaoDich
-                + ", phuongThucThanhToan=" + phuongThucThanhToan + "]";
+                + ", phuongThucThanhToan=" + "]";
     }
 
 
