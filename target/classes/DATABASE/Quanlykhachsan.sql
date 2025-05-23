@@ -36,7 +36,7 @@ CREATE TABLE NguoiDung
 (
     maNguoiDung CHAR(5) PRIMARY KEY,
     tenNguoiDung NVARCHAR(100) NOT NULL,
-	ngaySinh varchar(15) null CHECK (ngaySinh LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'),
+	ngaySinh DATETIME null,
     SDT VARCHAR(10) UNIQUE CHECK (SDT LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
     email NVARCHAR(100) UNIQUE CHECK (email LIKE '%@gmail.com' or email LIKE '%@sv.ute.udn.vn'),
     matKhau NVARCHAR(255) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Phong
     maLoaiPhong CHAR(5),
     soTang INT NOT NULL,
     maChiNhanh CHAR(5),
-    trangThai NVARCHAR(20) CHECK (trangThai IN ('Trống', 'Có người ở', 'Đã đặt trước', 'Bảo trì')) NOT NULL,
+    trangThai NVARCHAR(20) CHECK (trangThai IN (N'Trống', N'Có người ở', N'Đã đặt trước', N'Bảo trì')) NOT NULL,
     FOREIGN KEY (maLoaiPhong) REFERENCES LoaiPhong(maLoaiPhong),
     FOREIGN KEY (maChiNhanh) REFERENCES ChiNhanhKhachSan(maChiNhanh)
 );
@@ -109,12 +109,12 @@ CREATE TABLE DatPhong
     maPhong CHAR(5),
 	soNguoi int,
     dichVuSuDung CHAR(5),
-    ngayThuePhong varchar(15) NOT NULL CHECK (ngayThuePhong LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'),
-    ngayTraPhong varchar(15) NOT NULL CHECK (ngayTraPhong LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'),
-    trangThai NVARCHAR(20) CHECK (trangThai IN ('Đã đặt', 'Hoàn thành', 'Hủy')) NOT NULL,
+    ngayThuePhong DATETIME NOT NULL,
+    ngayTraPhong DATETIME NOT NULL,
+    trangThai NVARCHAR(20) CHECK (trangThai IN (N'Đã đặt', N'Hoàn thành', N'Hủy')) NOT NULL,
 	--check (check_in_date >= getdate()),
 	--check (check_out_date <= getdate()),
-	check (ngayThuePhong < ngayTraPhong),
+	-- check (ngayThuePhong < ngayTraPhong),
     FOREIGN KEY (maNguoiDung) REFERENCES NguoiDung(maNguoiDung),
     FOREIGN KEY (maPhong) REFERENCES Phong(maPhong),
     FOREIGN KEY (dichVuSuDung) REFERENCES DichVu(maDichVu)
@@ -129,32 +129,83 @@ CREATE TABLE HoaDon
     maDichVu CHAR(5),
 	nhanVienPhuTrach CHAR(5) null,
     tongTien DECIMAL(15,2) NOT NULL,
-    ngayGiaoDich DATETIME NOT NULL DEFAULT GETDATE(),
-    phuongThucThanhToan NVARCHAR(20) CHECK (phuongThucThanhToan IN ('Ví điện tử', 'Tiền mặt', 'Thẻ')) NOT NULL,
+    ngayGiaoDich DATETIME NOT NULL,
+    phuongThucThanhToan NVARCHAR(20) CHECK (phuongThucThanhToan IN (N'Ví điện tử', N'Tiền mặt', N'Thẻ')) NOT NULL,
     FOREIGN KEY (maDatPhong) REFERENCES DatPhong(maDatPhong),
 	--FOREIGN KEY (nhanVienPhuTrach) REFERENCES NguoiDung(maNguoiDung),
 );
 go
-insert into VaiTro
-values
-	('R001',N'Khách hàng', 'Thượng đế tới'),
-	('R002',N'Nhân Viên', 'Nô Lệ đồng tiên'),
-	('R003',N'Quản lý', 'Mini Boss');
+INSERT INTO VaiTro (maVaiTro, tenVaiTro, moTa)
+VALUES 
+    ('VT001', N'Quản trị viên', N'Tài khoản quản trị hệ thống'),
+    ('VT002', N'Nhân viên', N'Nhân viên khách sạn'),
+    ('VT003', N'Khách hàng', N'Tài khoản khách hàng sử dụng dịch vụ');
+go
+INSERT INTO NguoiDung (maNguoiDung, tenNguoiDung, ngaySinh, SDT, email, matKhau, soDuTaiKhoan, maVaiTro)
+VALUES 
+    ('ND001', N'Nguyễn Văn A', '1990-05-12', '0912345678', '23115053122114@sv.ute.udn.vn', '123456', 0, 'VT001'),
+    ('ND002', N'Lê Thị B', '1995-07-20', '0987654321', '23115053122111@sv.ute.udn.vn', '123456', 0, 'VT002'),
+    ('ND003', N'Trần Văn C', '1988-03-10', '0901122334', '23115053122123@sv.ute.udn.vn', '123456', 0, 'VT003'),
+    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', 'phamthid@sv.ute.udn.vn', 'pass123', 0, 'VT003'),
+    ('ND005', N'Hồ Minh E', '1992-11-11', '0977556677', '23115053122120@sv.ute.udn.vn', 'qwerty', 0, 'VT002');
 
 go
-insert into NguoiDung
-values
-	('ND001', N'Khanh', '05/04/2005', '0123456789','23115053122114@sv.ute.udn.vn'  ,'khanh123',0,'R003'),
-	('ND002', N'Hoang', '05/04/2004', '0123888789','abc@gmail.com','hoang123',0,'R002'),
-	('ND003', N'Nom'  , '05/04/2006', '0123456975','ada@gmail.com','Nom123'  ,0,'R001');
+INSERT INTO ChiNhanhKhachSan (maChiNhanh, tenChiNhanh, diaChi, SDT)
+VALUES 
+('CN001', N'Khách sạn Sông Hàn', N'123 Lê Duẩn, Đà Nẵng', '0236378989'),
+('CN002', N'Khách sạn Biển Xanh', N'45 Trần Phú, Nha Trang', '0258377888'),
+('CN003', N'Khách sạn Ánh Dương', N'89 Nguyễn Văn Linh, Hà Nội', '0246677889'),
+('CN004', N'Khách sạn Mặt Trời', N'12 Trường Chinh, TP. HCM', '0283344556'),
+('CN005', N'Khách sạn Vườn Xoài', N'67 Phạm Văn Đồng, Cần Thơ', '0292388999'),
+('CN006', N'Khách sạn Sao Mai', N'234 Lý Thường Kiệt, Huế', '0234388123'),
+('CN007', N'Khách sạn Bạch Dương', N'78 Nguyễn Huệ, Đà Lạt', '0263388123'),
+('CN008', N'Khách sạn Đại Dương', N'09 Lý Tự Trọng, Hải Phòng', '0225388123'),
+('CN009', N'Khách sạn Hương Tràm', N'123 Nguyễn Trãi, Vũng Tàu', '0254388123'),
+('CN010', N'Khách sạn Trúc Xanh', N'345 CMT8, Bình Dương', '0274388123');
+GO
+INSERT INTO LoaiPhong (maLoaiPhong, tenLoaiPhong, soLuongToiDa, moTa, giaPhong)
+VALUES 
+    ('LP001', N'Phòng đơn', 1, N'Phòng dành cho 1 người', 300000),
+    ('LP002', N'Phòng đôi', 2, N'Phòng dành cho 2 người', 500000),
+    ('LP003', N'Phòng gia đình', 4, N'Phòng rộng cho gia đình', 800000),
+    ('LP004', N'Suite', 2, N'Phòng cao cấp', 1500000);
+GO
+INSERT INTO Phong (maPhong, soPhong, maLoaiPhong, soTang, maChiNhanh, trangThai)
+VALUES 
+    ('P001', '101', 'LP001', 1, 'CN001', N'Trống'),
+    ('P002', '102', 'LP002', 1, 'CN001', N'Có người ở'),
+    ('P003', '201', 'LP003', 2, 'CN002', N'Đã đặt trước'),
+    ('P004', '202', 'LP004', 2, 'CN002', N'Trống'),
+    ('P005', '301', 'LP002', 3, 'CN003', N'Bảo trì');
+GO
+INSERT INTO LoaiDichVu (maLoaiDichVu, tenLoaiDichVu, giaDichVu, moTa)
+VALUES 
+    ('LDV01', N'Dịch vụ ăn uống', 100000, N'Bao gồm ăn sáng/trưa/tối'),
+    ('LDV02', N'Dịch vụ giặt ủi', 50000, N'Giặt ủi quần áo'),
+    ('LDV03', N'Dịch vụ spa', 200000, N'Spa thư giãn'),
+    ('LDV04', N'Dịch vụ xe đưa đón', 150000, N'Xe đưa đón sân bay');
 go
-insert into LoaiDichVu
-values
-	('LDV01', N'Không', 0, N'Không sử dụng dịch vụ');
+INSERT INTO DichVu (maDichVu, tenDichVu, maLoaiDichVu)
+VALUES 
+('DV001', N'Bữa sáng buffet', 'LDV01'),
+('DV002', N'Giặt nhanh 24h', 'LDV02'),
+('DV003', N'Massage thư giãn', 'LDV03'),
+('DV004', N'Đưa đón sân bay', 'LDV04');
 go
-insert into DichVu
-values
-	('DV001', N'Bỏ qua', 'LDV01');
+INSERT INTO DatPhong (maDatPhong, maNguoiDung, maPhong, soNguoi, dichVuSuDung, ngayThuePhong, ngayTraPhong, trangThai)
+VALUES 
+('DP001', 'ND001', 'P001', 1, 'DV001', '2025-06-01', '2025-06-03', N'Đã đặt'),
+('DP002', 'ND002', 'P003', 2, 'DV002', '2025-06-05', '2025-06-07', N'Đã đặt'),
+('DP003', 'ND003', 'P002', 2, 'DV004', '2025-05-25', '2025-05-28', N'Hoàn thành');
+GO
+INSERT INTO HoaDon (maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, ngayGiaoDich, phuongThucThanhToan)
+VALUES 
+('HD001', 'DP001', 'DV001', 'ND002', 600000, '2025-06-03', N'Tiền mặt'),
+('HD002', 'DP002', 'DV002', 'ND002', 550000, '2025-06-07', N'Thẻ'),
+('HD003', 'DP003', 'DV004', 'ND002', 700000, '2025-05-28', N'Ví điện tử');
+
+GO
+
 Go
 
 -------------Dich Vu-------------------
