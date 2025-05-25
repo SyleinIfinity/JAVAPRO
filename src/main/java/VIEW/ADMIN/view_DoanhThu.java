@@ -3,11 +3,14 @@ package VIEW.ADMIN;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+
+import VIEW.view_main;
+
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class view_DoanhThu extends JFrame{
+public class view_DoanhThu extends JPanel{
     private JTable tableDoanhThu;
     private DefaultTableModel tableModel;
     private JSpinner dateFrom, dateTo;
@@ -20,17 +23,15 @@ public class view_DoanhThu extends JFrame{
     private Color mauNen = new Color(236, 240, 241);
     public String maNguoiDung;
     public String maVaiTro;
+    view_main vMain;
     
-    public view_DoanhThu(String maNguoiDung, String maVaiTro) {
-        setTitle("Quản Lý Doanh Thu");
-        setSize(1080, 880);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    public view_DoanhThu(view_main vMain) {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(mauNen);
+        setBackground(mauNen);
+        this.vMain = vMain;
 
-        this.maNguoiDung = maNguoiDung;
-        this.maVaiTro = maVaiTro;
+        // this.maNguoiDung = maNguoiDung;
+        // this.maVaiTro = maVaiTro;
 
         initComponents();
     }
@@ -243,18 +244,5 @@ public class view_DoanhThu extends JFrame{
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new view_DoanhThu(null, null).setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }

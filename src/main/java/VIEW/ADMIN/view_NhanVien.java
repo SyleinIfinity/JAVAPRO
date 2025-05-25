@@ -3,10 +3,13 @@ package VIEW.ADMIN;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import VIEW.view_main;
+
 import java.awt.*;
 import java.awt.event.*;
 
-public class view_NhanVien extends JFrame {
+public class view_NhanVien extends JPanel {
     private JPanel pnForm;
     private JTable tblNhanVien;
     private JTextField txtMaNhanVien, txtTenNhanVien, txtNgaySinh, txtSDT, txtEmail, txtMatKhau, txtTrangThai;
@@ -18,17 +21,14 @@ public class view_NhanVien extends JFrame {
     private Color mauNen = new Color(255, 228, 235);
     public String maNguoiDung;
     public String maVaiTro;
+    view_main vMain;
 
-    public view_NhanVien(String maNguoiDung, String maVaiTro) {
-        this.maNguoiDung = maNguoiDung;
-        this.maVaiTro = maVaiTro;
-
-        setTitle("Quản lý Nhân Viên");
-        setSize(1080, 880);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public view_NhanVien(view_main vMain) {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(mauNen);
+        setBackground(mauNen);
+        this.vMain = vMain;
+
+
 
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
@@ -48,7 +48,7 @@ public class view_NhanVien extends JFrame {
         JPanel buttonPanel = taoButtonPanel();
         add(buttonPanel, BorderLayout.SOUTH);
 
-        themDuLieuMau();
+        // themDuLieuMau();
 
         setVisible(true);
     }
@@ -253,19 +253,10 @@ public class view_NhanVien extends JFrame {
         return new Color(red, green, blue);
     }
 
-    private void themDuLieuMau() {
-        model.addRow(new Object[]{"NV001", "Nguyễn Văn A", "1990-01-01", "0123456789", "a.nguyen@email.com", "Đang hoạt động"});
-        model.addRow(new Object[]{"NV002", "Trần Thị B", "1992-05-15", "0987654321", "b.tran@email.com", "Không hoạt động"});
-        model.addRow(new Object[]{"", "", "", "", "", ""});
-        model.addRow(new Object[]{"", "", "", "", "", ""});
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.invokeLater(() -> new view_NhanVien("ND01", "AD01"));
-    }
+    // private void themDuLieuMau() {
+    //     model.addRow(new Object[]{"NV001", "Nguyễn Văn A", "1990-01-01", "0123456789", "a.nguyen@email.com", "Đang hoạt động"});
+    //     model.addRow(new Object[]{"NV002", "Trần Thị B", "1992-05-15", "0987654321", "b.tran@email.com", "Không hoạt động"});
+    //     model.addRow(new Object[]{"", "", "", "", "", ""});
+    //     model.addRow(new Object[]{"", "", "", "", "", ""});
+    // }
 }

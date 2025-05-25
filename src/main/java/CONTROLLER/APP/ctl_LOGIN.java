@@ -143,10 +143,10 @@ public class ctl_LOGIN implements ActionListener {
 
         try {
             // Tạo mã OTP ngẫu nhiên 6 số
-            String otp = randomOTP(6);
+            String matKhau = nguoiDungDAO.getPass(email);
             // Gửi email chứa mã OTP
-            GMailer.sendMain(otp, email);
-            JOptionPane.showMessageDialog(pnForm, "Yêu cầu đã được gửi. Vui lòng kiểm tra email của bạn!");
+            GMailer.sendMain(matKhau, email);
+            JOptionPane.showMessageDialog(pnForm, "Mật khẩu đã được gửi. Vui lòng kiểm tra email của bạn!");
             view.hienThiFormDangNhap();
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(pnForm, e.getMessage());
@@ -156,21 +156,21 @@ public class ctl_LOGIN implements ActionListener {
         }
     }
 
-    public String randomOTP(int dodai) {
-        String kitusotaikhoan = "0123456789";
-        SecureRandom chuoingaunhien = new SecureRandom();
-        if (dodai > kitusotaikhoan.length()) {
-            throw new IllegalArgumentException("Do dai vuot qua soluong duy nhat co san");
-        }
-        Set<Character> sotaikhoanDuyNhat = new HashSet<>();
-        StringBuilder sb = new StringBuilder(dodai);
+    // public String randomOTP(int dodai) {
+    //     String kitusotaikhoan = "0123456789";
+    //     SecureRandom chuoingaunhien = new SecureRandom();
+    //     if (dodai > kitusotaikhoan.length()) {
+    //         throw new IllegalArgumentException("Do dai vuot qua soluong duy nhat co san");
+    //     }
+    //     Set<Character> sotaikhoanDuyNhat = new HashSet<>();
+    //     StringBuilder sb = new StringBuilder(dodai);
 
-        while (sotaikhoanDuyNhat.size() < dodai) {
-            char KituRamDom = kitusotaikhoan.charAt(chuoingaunhien.nextInt(kitusotaikhoan.length()));
-            if (sotaikhoanDuyNhat.add(KituRamDom)) {
-                sb.append(KituRamDom);
-            }
-        }
-        return sb.toString();
-    }
+    //     while (sotaikhoanDuyNhat.size() < dodai) {
+    //         char KituRamDom = kitusotaikhoan.charAt(chuoingaunhien.nextInt(kitusotaikhoan.length()));
+    //         if (sotaikhoanDuyNhat.add(KituRamDom)) {
+    //             sb.append(KituRamDom);
+    //         }
+    //     }
+    //     return sb.toString();
+    // }
 }

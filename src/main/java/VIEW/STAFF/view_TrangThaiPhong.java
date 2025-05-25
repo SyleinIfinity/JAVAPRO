@@ -5,8 +5,9 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import MODEL.DAO.PhongDAO;
+import VIEW.view_main;
 
-public class view_TrangThaiPhong extends JFrame {
+public class view_TrangThaiPhong extends JPanel {
     private JTable tblPhong;
     private JButton btnSua, btnTimKiem;
     private DefaultTableModel model;
@@ -20,23 +21,18 @@ public class view_TrangThaiPhong extends JFrame {
     private final Color mauBtnSua = new Color(52, 152, 219);
     private final Color mauBtnTimKiem = new Color(149, 165, 166);
 
-    private final String maVaiTro;
+    private view_main vMain;
 
-    public view_TrangThaiPhong(String maNguoiDung, String maVaiTro) {
-        this.maVaiTro = maVaiTro;
-
-        setTitle("Quản lý trạng thái phòng");
-        setSize(1080, 880);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    public view_TrangThaiPhong(view_main vMain) {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(mauNen);
+        setBackground(mauNen);
+        this.vMain = vMain;
 
         add(taoHeaderPanel(), BorderLayout.NORTH);
         add(taoContentPanel(), BorderLayout.CENTER);
         add(taoButtonPanel(), BorderLayout.SOUTH);
 
-        themDuLieuMau();
+        // themDuLieuMau();
         setVisible(true);
     }
 
@@ -109,7 +105,7 @@ public class view_TrangThaiPhong extends JFrame {
         model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) {
-                return "NV".equalsIgnoreCase(maVaiTro) && c == 4;
+                return "NV".equalsIgnoreCase(null) && c == 4;
             }
         };
 
@@ -210,15 +206,8 @@ public class view_TrangThaiPhong extends JFrame {
         return new Color(r, g, b);
     }
 
-    private void themDuLieuMau() {
-        model.addRow(new Object[]{"PH001", "Phòng đơn không view", "2", "Standard Room", "Trống"});
-        model.addRow(new Object[]{"PH002", "Phòng Deluxe có giường cỡ King", "3", "King Room", "Đã đặt"});
-    }
-
-    public static void main(String[] args) {
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-        catch(Exception ex){ ex.printStackTrace(); }
-
-        SwingUtilities.invokeLater(() -> new view_TrangThaiPhong("ND02", "NV"));
-    }
+    // private void themDuLieuMau() {
+    //     model.addRow(new Object[]{"PH001", "Phòng đơn không view", "2", "Standard Room", "Trống"});
+    //     model.addRow(new Object[]{"PH002", "Phòng Deluxe có giường cỡ King", "3", "King Room", "Đã đặt"});
+    // }
 }

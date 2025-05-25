@@ -118,6 +118,15 @@ public class NguoiDungDAO {
         return null; // Sai tài khoản hoặc mật khẩu
     }
 
+    public String getPass(String email) {
+        for (NguoiDung nd : listNGUOIDUNG.values()) {
+            if (nd.getEmail().equalsIgnoreCase(email)) {
+                return nd.getMatKhau(); // Đăng nhập thành công
+            }
+        }
+        return null; // Sai tài khoản hoặc mật khẩu
+    }
+
     public boolean checkGmail(String email){
         for(NguoiDung nd : listNGUOIDUNG.values()){
             if (nd.getEmail().equalsIgnoreCase(email)) {

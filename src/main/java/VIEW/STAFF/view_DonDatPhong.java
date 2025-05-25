@@ -3,12 +3,15 @@ package VIEW.STAFF;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import VIEW.view_main;
+
 import java.awt.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class view_DonDatPhong extends JFrame {
+public class view_DonDatPhong extends JPanel {
     private JTextField txtSoNguoi;
     private JComboBox<String> cbMaDatPhong, cbMaPhong, cbDichVu;
     private JSpinner spinnerNgayThue, spinnerNgayTra;
@@ -19,13 +22,12 @@ public class view_DonDatPhong extends JFrame {
     private Color mauNen = new Color(236, 240, 241);
     private Color mauNhan = new Color(230, 126, 34);
 
-    public view_DonDatPhong() {
-        setTitle("Đặt phòng - Nhân viên");
-        setSize(1080, 880);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        getContentPane().setBackground(mauNen);
+    view_main vMain;
+
+    public view_DonDatPhong(view_main vMain) {
         setLayout(new BorderLayout());
+        setBackground(mauNen);
+        this.vMain = vMain;
 
         // Header panel
         JPanel headerPanel = taoHeaderPanel();
@@ -371,15 +373,5 @@ public class view_DonDatPhong extends JFrame {
         int green = Math.max(0, Math.round(color.getGreen() * (1 - fraction)));
         int blue = Math.max(0, Math.round(color.getBlue() * (1 - fraction)));
         return new Color(red, green, blue);
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(() -> new view_DonDatPhong().setVisible(true));
     }
 }

@@ -7,8 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import MODEL.DAO.PhongDAO;
 import MODEL.ENTITY.Phong;
+import VIEW.view_main;
 
-public class view_Phong extends JFrame {
+public class view_Phong extends JPanel {
     private JPanel pnForm;
     private JTable tblPhong;
     private JTextField txtMaPhong, txtTenPhong, txtLoaiPhong, txtGiaPhong, txtTrangThai;
@@ -19,20 +20,17 @@ public class view_Phong extends JFrame {
     private Color mauPhu = new Color(52, 152, 219);
     private Color mauNhan = new Color(230, 126, 34);
     private Color mauNen = new Color(236, 240, 241);
-    public String maNguoiDung;
-    public String maVaiTro;
+    // public String maNguoiDung;
+    // public String maVaiTro;
+    view_main vMain;
 
-    public view_Phong(String maNguoiDung, String maVaiTro) {
-        setTitle("Quản lý Phòng");
-        setSize(1080, 880);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public view_Phong(view_main vMain) {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(mauNen);
+        setBackground(mauNen);
+        this.vMain = vMain;
 
-        this.maNguoiDung = maNguoiDung;
-        this.maVaiTro = maVaiTro;
-
+        // this.maNguoiDung = maNguoiDung;
+        // this.maVaiTro = maVaiTro;
 
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
@@ -53,8 +51,6 @@ public class view_Phong extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         themDuLieuMau();
-
-        setVisible(true);
     }
     
     private JPanel taoHeaderPanel() {
@@ -266,13 +262,13 @@ public class view_Phong extends JFrame {
         // Thêm dữ liệu mẫu nếu cần
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // public static void main(String[] args) {
+    //     try {
+    //         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
 
-        SwingUtilities.invokeLater(() -> new view_Phong("ND01", "AD01"));
-    }
+    //     SwingUtilities.invokeLater(() -> new view_Phong(null));
+    // }
 }
