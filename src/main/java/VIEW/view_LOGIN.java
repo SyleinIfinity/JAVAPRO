@@ -110,54 +110,54 @@ public class view_LOGIN extends JPanel {
         JLabel lbeTieuDe = new JLabel("ĐĂNG KÝ");
         lbeTieuDe.setForeground(Color.WHITE);
         lbeTieuDe.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        lbeTieuDe.setBounds(150, 30, 200, 40);
+        lbeTieuDe.setBounds(190, 30, 200, 40);
         pnForm.add(lbeTieuDe);
     
         JLabel lbeHoTen = new JLabel("Họ tên:");
         lbeHoTen.setForeground(Color.WHITE);
-        lbeHoTen.setBounds(60, 90, 100, 30);
+        lbeHoTen.setBounds(60, 80, 100, 30);
         pnForm.add(lbeHoTen);
     
         txtHoTen = new JTextField();
-        txtHoTen.setBounds(60, 120, 380, 35);
+        txtHoTen.setBounds(60, 110, 380, 35);
         pnForm.add(txtHoTen);
     
         JLabel lbeEmail = new JLabel("Email:");
         lbeEmail.setForeground(Color.WHITE);
-        lbeEmail.setBounds(60, 170, 100, 30);
+        lbeEmail.setBounds(60, 150, 100, 30);
         pnForm.add(lbeEmail);
     
         txtEmailDangKy = new JTextField();
-        txtEmailDangKy.setBounds(60, 200, 380, 35);
+        txtEmailDangKy.setBounds(60, 180, 380, 35);
         pnForm.add(txtEmailDangKy);
     
         JLabel lbeMatKhau = new JLabel("Mật khẩu:");
         lbeMatKhau.setForeground(Color.WHITE);
-        lbeMatKhau.setBounds(60, 250, 100, 30);
+        lbeMatKhau.setBounds(60, 230, 100, 30);
         pnForm.add(lbeMatKhau);
     
         txtMatKhauDangKy = new JPasswordField();
-        txtMatKhauDangKy.setBounds(60, 280, 380, 35);
+        txtMatKhauDangKy.setBounds(60, 260, 380, 35);
         pnForm.add(txtMatKhauDangKy);
     
         JLabel lbeXacNhanMatKhau = new JLabel("Nhập lại mật khẩu:");
         lbeXacNhanMatKhau.setForeground(Color.WHITE);
-        lbeXacNhanMatKhau.setBounds(60, 330, 200, 30);
+        lbeXacNhanMatKhau.setBounds(60, 310, 200, 30);
         pnForm.add(lbeXacNhanMatKhau);
     
         txtXacNhanMatKhau = new JPasswordField();
-        txtXacNhanMatKhau.setBounds(60, 360, 380, 35);
+        txtXacNhanMatKhau.setBounds(60, 340, 380, 35);
         pnForm.add(txtXacNhanMatKhau);
     
         btnDangKy = new JButton("Đăng ký");
-        btnDangKy.setBounds(60, 410, 380, 40);
+        btnDangKy.setBounds(60, 400, 380, 40);
         btnDangKy.setBackground(new Color(33, 150, 243));
         btnDangKy.setForeground(Color.WHITE);
         btnDangKy.setFocusPainted(false);
         pnForm.add(btnDangKy);
     
         btnHienThiDangNhap = new JButton("Đã có tài khoản? Đăng nhập");
-        btnHienThiDangNhap.setBounds(60, 470, 380, 30);
+        btnHienThiDangNhap.setBounds(60, 450, 380, 30);
         pnForm.add(btnHienThiDangNhap);
     
         pnForm.repaint();
@@ -200,7 +200,7 @@ public class view_LOGIN extends JPanel {
         pnForm.repaint();
         pnForm.revalidate();
 
-        // Thêm sự kiện cho các nút trong form quên mật khẩu
         controller.themSuKien();
     }
+
 }

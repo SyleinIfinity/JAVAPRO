@@ -20,7 +20,7 @@ public class view_HoaDon extends JFrame {
     public String maNguoiDung;
     public String maVaiTro;
     
-    public view_HoaDon(String maNguoiDung, String maVaiTro) {
+    public view_HoaDon() {
         setTitle("Quản Lý Hóa Đơn");
         setSize(1080, 880);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,8 +28,8 @@ public class view_HoaDon extends JFrame {
         setLayout(new BorderLayout());
         getContentPane().setBackground(mauNen);
 
-        this.maNguoiDung = maNguoiDung;
-        this.maVaiTro = maVaiTro;
+        // this.maNguoiDung = maNguoiDung;
+        // this.maVaiTro = maVaiTro;
 
         initComponents();
     }
@@ -230,7 +230,7 @@ public class view_HoaDon extends JFrame {
             @Override
             public void run() {
                 try {
-                    new view_HoaDon(null, null).setVisible(true);
+                    new view_HoaDon().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

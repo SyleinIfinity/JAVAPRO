@@ -81,6 +81,7 @@ public class view_main extends JFrame {
         btn_Account = new RoundedButton("Tài khoản");
         btn_Account.setBounds(35, 170, 129, 33);
         btn_Account.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        
         pn_up.add(btn_Account);
 
         btn_DangNhap = new RoundedButton("Đăng nhập");
@@ -110,6 +111,7 @@ public class view_main extends JFrame {
             pn_down.add(btn);
             btnArr[i] = btn;
         }
+        
         btn_TrangChu = btnArr[0];
         btn_Phong = btnArr[1];
         btn_KhachSan = btnArr[2];
@@ -146,15 +148,5 @@ public class view_main extends JFrame {
         pn_content.setBackground(new Color(102, 128, 153)); // xanh xám
         pn_content.setLayout(null);
         add(pn_content, BorderLayout.CENTER);
-
-        // btn_DangNhap = new RoundButton(new ImageIcon("src\\main\\resources\\IMAGES\\login.png"));
-        // btn_DangNhap.setToolTipText("Đăng nhập");
-        // btn_DangNhap.setBounds(1190, 10, 60, 60);
-        // btn_DangNhap.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        // pn_top.add(btn_DangNhap);
-
-        btn_TrangChu = new RoundedButton("Home");
-        btn_TrangChu.setPreferredSize(new Dimension(190, 40));
-        pn_down.add(btn_TrangChu);
     }
 }
