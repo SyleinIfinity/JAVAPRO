@@ -3,11 +3,14 @@ package VIEW.ADMIN;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import VIEW.view_main;
+
 import java.awt.*;
 
 import java.util.Date;
 
-public class view_KhachHang extends JFrame {
+public class view_KhachHang extends JPanel {
     private JTable tblKhachHang;
     private JTextField txtMaKhachHang, txtTenKhachHang, txtEmail, txtSoDienThoai, txtDiaChi;
     private JSpinner spnNgaySinh;
@@ -20,14 +23,12 @@ public class view_KhachHang extends JFrame {
     private Color mauNen = new Color(236, 240, 241);
     public String maNguoiDung;
     public String maVaiTro;
+    view_main vMain;
 
-    public view_KhachHang(String maNguoiDung, String maVaiTro) {
-        setTitle("Quản lý Khách Hàng");
-        setSize(1080, 880);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public view_KhachHang(view_main vMain) {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(mauNen);
+        setBackground(mauNen);
+        this.vMain = vMain;
 
         this.maNguoiDung = maNguoiDung;
         this.maVaiTro = maVaiTro;
@@ -380,13 +381,4 @@ public class view_KhachHang extends JFrame {
         return new Color(red, green, blue);
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(() -> new view_KhachHang("ND01", "AD01"));
-    }
 }

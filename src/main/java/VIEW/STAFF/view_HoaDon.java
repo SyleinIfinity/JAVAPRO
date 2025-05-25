@@ -3,11 +3,14 @@ package VIEW.STAFF;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+
+import VIEW.view_main;
+
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class view_HoaDon extends JFrame {
+public class view_HoaDon extends JPanel {
     private JTable tableHoaDon;
     private DefaultTableModel tableModel;
     private JSpinner dateFrom, dateTo;
@@ -19,14 +22,12 @@ public class view_HoaDon extends JFrame {
     private Color mauNen = new Color(236, 240, 241);
     public String maNguoiDung;
     public String maVaiTro;
-    
-    public view_HoaDon() {
-        setTitle("Quản Lý Hóa Đơn");
-        setSize(1080, 880);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    view_main vMain;
+
+    public view_HoaDon(view_main vMain) {
         setLayout(new BorderLayout());
-        getContentPane().setBackground(mauNen);
+        setBackground(mauNen);
+        this.vMain = vMain;
 
         // this.maNguoiDung = maNguoiDung;
         // this.maVaiTro = maVaiTro;
@@ -223,18 +224,5 @@ public class view_HoaDon extends JFrame {
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new view_HoaDon().setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }
