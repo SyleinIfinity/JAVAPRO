@@ -2,21 +2,15 @@ package VIEW;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import CONTROLLER.APP.ctl_TrangChu;
 
-public class view_TrangChu extends JFrame {
+public class view_TrangChu extends JPanel {
     private JPanel pnContent;
-    // private ctl_TrangChu controller;
+    private view_main vMain;
 
-    public view_TrangChu() {
-        setTitle("Khách sạn K-Team");
-        setSize(1080, 880);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
+    public view_TrangChu(view_main vMain) {
+        this.vMain = vMain;
         setLayout(new BorderLayout());
-        getContentPane().setBackground(new Color(40, 40, 40));
+        setBackground(new Color(40, 40, 40));
 
         // Panel chứa nội dung chính
         pnContent = new JPanel();
@@ -77,18 +71,5 @@ public class view_TrangChu extends JFrame {
 
         // Thêm panel giới thiệu vào panel nội dung
         pnContent.add(pnGioiThieu, BorderLayout.CENTER);
-
-        // Khởi tạo controller
-        // controller = new ctl_TrangChu(this, pnContent);
-
-        // Hiển thị mặc định form đăng nhập
-        // controller.hienThiFormDangNhap();
-    }
-
-    public static void main(String[] args) {
-        
-        SwingUtilities.invokeLater(() -> {
-            new view_TrangChu().setVisible(true);
-        });
     }
 }

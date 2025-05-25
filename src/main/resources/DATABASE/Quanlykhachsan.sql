@@ -146,7 +146,7 @@ VALUES
     ('ND001', N'Nguyễn Văn A', '1990-05-12', '0912345678', '23115053122114@sv.ute.udn.vn', '123456', 0, 'VT001'),
     ('ND002', N'Lê Thị B', '1995-07-20', '0987654321', '23115053122111@sv.ute.udn.vn', '123456', 0, 'VT002'),
     ('ND003', N'Trần Văn C', '1988-03-10', '0901122334', '23115053122123@sv.ute.udn.vn', '123456', 0, 'VT003'),
-    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', 'phamthid@sv.ute.udn.vn', 'pass123', 0, 'VT003'),
+    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', '23115053122124@sv.ute.udn.vn', 'pass123', 0, 'VT003'),
     ('ND005', N'Hồ Minh E', '1992-11-11', '0977556677', '23115053122120@sv.ute.udn.vn', 'qwerty', 0, 'VT002');
 
 go
@@ -187,10 +187,20 @@ VALUES
 go
 INSERT INTO DichVu (maDichVu, tenDichVu, maLoaiDichVu)
 VALUES 
-('DV001', N'Bữa sáng buffet', 'LDV01'),
-('DV002', N'Giặt nhanh 24h', 'LDV02'),
-('DV003', N'Massage thư giãn', 'LDV03'),
-('DV004', N'Đưa đón sân bay', 'LDV04');
+    ('DV001', N'Bữa sáng buffet', 'LDV01'),
+    ('DV002', N'Giặt nhanh 24h', 'LDV02'),
+    ('DV003', N'Massage thư giãn', 'LDV03'),
+    ('DV004', N'Đưa đón sân bay', 'LDV04'),
+    ('DV005', N'Dọn phòng hàng ngày', 'LDV01'),
+    ('DV006', N'Thuê xe đạp', 'LDV04'),
+    ('DV007', N'Bữa tối tại phòng', 'LDV01'),
+    ('DV008', N'Giặt hấp cao cấp', 'LDV02'),
+    ('DV009', N'Massage chân', 'LDV03'),
+    ('DV010', N'Trông trẻ', 'LDV04'),
+    ('DV011', N'Spa cao cấp', 'LDV03'),
+    ('DV012', N'Bữa trưa tự chọn', 'LDV01'),
+    ('DV013', N'Giặt đồ trẻ em', 'LDV02'),
+    ('DV014', N'Dẫn tour địa phương', 'LDV04');
 go
 INSERT INTO DatPhong (maDatPhong, maNguoiDung, maPhong, soNguoi, dichVuSuDung, ngayThuePhong, ngayTraPhong, trangThai)
 VALUES 

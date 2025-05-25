@@ -121,11 +121,18 @@ public class NguoiDungDAO {
     public boolean checkGmail(String email){
         for(NguoiDung nd : listNGUOIDUNG.values()){
             if (nd.getEmail().equalsIgnoreCase(email)) {
+                System.out.println(nd.getEmail());
+                System.out.println(email);
                 return false;
             }
         }
         return true;
     }
 
+    public static void main(String[] args) {
+        NguoiDungDAO nguoiDungDAO = new NguoiDungDAO();
+
+        boolean a = nguoiDungDAO.checkGmail("khanhsky2k5nam@gmail.com");
+    }
 
 }
