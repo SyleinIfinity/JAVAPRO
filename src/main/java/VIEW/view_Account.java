@@ -65,7 +65,7 @@ public class view_Account extends Frame {
 
         txt_matKhau = new JTextField();
         txt_matKhau.setBounds(120, 220, 200, 30);
-        txt_matKhau.setEditable(false); // Disable editing for the password field
+        txt_matKhau.setEditable(false);
         add(txt_matKhau);
     }
 

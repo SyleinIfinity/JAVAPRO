@@ -42,6 +42,7 @@ CREATE TABLE NguoiDung
     matKhau NVARCHAR(255) NOT NULL,
 	soDuTaiKhoan decimal(20,2) default 0,
     maVaiTro CHAR(5),
+    trangThai BIT NOT NULL DEFAULT 1  -- 1: Hoạt động, 0: Khóa
     FOREIGN KEY (maVaiTro) REFERENCES VaiTro(maVaiTro),
 );
 
@@ -130,7 +131,6 @@ CREATE TABLE HoaDon
 	nhanVienPhuTrach CHAR(5) null,
     tongTien DECIMAL(15,2) NOT NULL,
     ngayGiaoDich DATETIME NOT NULL,
-    phuongThucThanhToan NVARCHAR(20) CHECK (phuongThucThanhToan IN (N'Ví điện tử', N'Tiền mặt', N'Thẻ')) NOT NULL,
     FOREIGN KEY (maDatPhong) REFERENCES DatPhong(maDatPhong),
 	--FOREIGN KEY (nhanVienPhuTrach) REFERENCES NguoiDung(maNguoiDung),
 );
@@ -146,7 +146,7 @@ VALUES
     ('ND001', N'Nguyễn Văn A', '1990-05-12', '0912345678', '23115053122114@sv.ute.udn.vn', '123456', 0, 'VT001'),
     ('ND002', N'Lê Thị B', '1995-07-20', '0987654321', '23115053122111@sv.ute.udn.vn', '123456', 0, 'VT002'),
     ('ND003', N'Trần Văn C', '1988-03-10', '0901122334', '23115053122123@sv.ute.udn.vn', '123456', 0, 'VT003'),
-    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', 'phamthid@sv.ute.udn.vn', 'pass123', 0, 'VT003'),
+    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', '23115053122124@sv.ute.udn.vn', 'pass123', 0, 'VT003'),
     ('ND005', N'Hồ Minh E', '1992-11-11', '0977556677', '23115053122120@sv.ute.udn.vn', 'qwerty', 0, 'VT002');
 
 go
@@ -187,22 +187,32 @@ VALUES
 go
 INSERT INTO DichVu (maDichVu, tenDichVu, maLoaiDichVu)
 VALUES 
-('DV001', N'Bữa sáng buffet', 'LDV01'),
-('DV002', N'Giặt nhanh 24h', 'LDV02'),
-('DV003', N'Massage thư giãn', 'LDV03'),
-('DV004', N'Đưa đón sân bay', 'LDV04');
+    ('DV001', N'Bữa sáng buffet', 'LDV01'),
+    ('DV002', N'Giặt nhanh 24h', 'LDV02'),
+    ('DV003', N'Massage thư giãn', 'LDV03'),
+    ('DV004', N'Đưa đón sân bay', 'LDV04'),
+    ('DV005', N'Dọn phòng hàng ngày', 'LDV01'),
+    ('DV006', N'Thuê xe đạp', 'LDV04'),
+    ('DV007', N'Bữa tối tại phòng', 'LDV01'),
+    ('DV008', N'Giặt hấp cao cấp', 'LDV02'),
+    ('DV009', N'Massage chân', 'LDV03'),
+    ('DV010', N'Trông trẻ', 'LDV04'),
+    ('DV011', N'Spa cao cấp', 'LDV03'),
+    ('DV012', N'Bữa trưa tự chọn', 'LDV01'),
+    ('DV013', N'Giặt đồ trẻ em', 'LDV02'),
+    ('DV014', N'Dẫn tour địa phương', 'LDV04');
 go
 INSERT INTO DatPhong (maDatPhong, maNguoiDung, maPhong, soNguoi, dichVuSuDung, ngayThuePhong, ngayTraPhong, trangThai)
 VALUES 
-('DP001', 'ND001', 'P001', 1, 'DV001', '2025-06-01', '2025-06-03', N'Đã đặt'),
-('DP002', 'ND002', 'P003', 2, 'DV002', '2025-06-05', '2025-06-07', N'Đã đặt'),
-('DP003', 'ND003', 'P002', 2, 'DV004', '2025-05-25', '2025-05-28', N'Hoàn thành');
+('DP001', 'ND002', 'P001', 1, 'DV001', '2025-06-01', '2025-06-03', N'Đã đặt'),
+('DP002', 'ND003', 'P003', 2, 'DV002', '2025-06-05', '2025-06-07', N'Đã đặt'),
+('DP003', 'ND004', 'P002', 2, 'DV004', '2025-05-25', '2025-05-28', N'Hoàn thành');
 GO
-INSERT INTO HoaDon (maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, ngayGiaoDich, phuongThucThanhToan)
+INSERT INTO HoaDon (maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, ngayGiaoDich)
 VALUES 
-('HD001', 'DP001', 'DV001', 'ND002', 600000, '2025-06-03', N'Tiền mặt'),
-('HD002', 'DP002', 'DV002', 'ND002', 550000, '2025-06-07', N'Thẻ'),
-('HD003', 'DP003', 'DV004', 'ND002', 700000, '2025-05-28', N'Ví điện tử');
+('HD001', 'DP001', 'DV001', 'ND002', 600000, '2025-06-03'),
+('HD002', 'DP002', 'DV002', 'ND002', 550000, '2025-06-07'),
+('HD003', 'DP003', 'DV004', 'ND002', 700000, '2025-05-28');
 
 GO
 
@@ -301,10 +311,11 @@ CREATE PROCEDURE sp_ThemNguoiDung
     @email NVARCHAR(100),
     @matKhau NVARCHAR(255),
     @soDuTaiKhoan DECIMAL(20,2),
-    @maVaiTro CHAR(5)
+    @maVaiTro CHAR(5),
+    @trangThai BIT
 AS
 BEGIN
-    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro)
+    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro, @trangThai)
 END
 GO
 --update
@@ -600,12 +611,11 @@ CREATE PROCEDURE sp_ThemHoaDon
     @maDatPhong CHAR(5),
     @maDichVu CHAR(5),
     @nhanVienPhuTrach CHAR(5),
-    @tongTien DECIMAL(15,2),
-    @phuongThucThanhToan NVARCHAR(20)
+    @tongTien DECIMAL(15,2)
 AS
 BEGIN
-    INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien, phuongThucThanhToan)
-    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien, @phuongThucThanhToan)
+    INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien)
+    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien)
 END
 GO
 
@@ -615,16 +625,14 @@ CREATE PROCEDURE sp_CapNhatHoaDon
     @maDatPhong CHAR(5),
     @maDichVu CHAR(5),
     @nhanVienPhuTrach CHAR(5),
-    @tongTien DECIMAL(15,2),
-    @phuongThucThanhToan NVARCHAR(20)
+    @tongTien DECIMAL(15,2)
 AS
 BEGIN
     UPDATE HoaDon
     SET maDatPhong = @maDatPhong,
         maDichVu = @maDichVu,
         nhanVienPhuTrach = @nhanVienPhuTrach,
-        tongTien = @tongTien,
-        phuongThucThanhToan = @phuongThucThanhToan
+        tongTien = @tongTien
     WHERE maHoaDon = @maHoaDon
 END
 GO

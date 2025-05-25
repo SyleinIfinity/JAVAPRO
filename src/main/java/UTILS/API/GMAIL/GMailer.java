@@ -48,9 +48,9 @@ public class GMailer {
     private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
         // Đọc file client secret từ thư mục resources
-        InputStream in = GMailer.class.getClassLoader().getResourceAsStream("API/client_secret_446364812873-1gqs7tkrmfhgm7b8pj6e51mmvkg8foo0.apps.googleusercontent.com.json");
+        InputStream in = GMailer.class.getClassLoader().getResourceAsStream("TOKEN/client_secret_446364812873-1gqs7tkrmfhgm7b8pj6e51mmvkg8foo0.apps.googleusercontent.com.json");
         if (in == null) {
-            throw new FileNotFoundException("Không tìm thấy file client secret trong thư mục resources/API");
+            throw new FileNotFoundException("Không tìm thấy file client secret trong thư mục resources/TOKEN");
         }
         
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));

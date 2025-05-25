@@ -30,8 +30,7 @@ public class HoaDonDAO {
                     rs.getString("maDichVu"),
                     rs.getString("nhanVienPhuTrach"),
                     rs.getDouble("tongTien"),
-                    rs.getString("ngayGiaoDich"),
-                    rs.getString("phuongThucThanhToan")
+                    rs.getString("ngayGiaoDich")
                 );
                 listHOADON.put(hd.getMaHoaDon(), hd);
             }
@@ -53,14 +52,13 @@ public class HoaDonDAO {
 
     public int themHoaDon(HoaDon hd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemHoaDon(?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemHoaDon(?,?,?,?,?,?)}");
             stmt.setString(1, hd.getMaHoaDon());
             stmt.setString(2, hd.getMaDatPhong());
             stmt.setString(3, hd.getMaDichVu());
             stmt.setString(4, hd.getNhanVienPhuTrach());
             stmt.setDouble(5, hd.getTongTien());
             stmt.setString(6, hd.getNgayGiaoDich());
-            stmt.setString(7, hd.getPhuongThucThanhToan());
 
             int row = stmt.executeUpdate();
             return row;
@@ -72,14 +70,13 @@ public class HoaDonDAO {
 
     public int capNhatHoaDon(HoaDon hd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatHoaDon(?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatHoaDon(?,?,?,?,?,?)}");
             stmt.setString(1, hd.getMaHoaDon());
             stmt.setString(2, hd.getMaDatPhong());
             stmt.setString(3, hd.getMaDichVu());
             stmt.setString(4, hd.getNhanVienPhuTrach());
             stmt.setDouble(5, hd.getTongTien());
             stmt.setString(6, hd.getNgayGiaoDich());
-            stmt.setString(7, hd.getPhuongThucThanhToan());
 
             int row = stmt.executeUpdate();
 
