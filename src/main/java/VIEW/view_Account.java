@@ -12,6 +12,7 @@ public class view_Account extends JFrame {
     private String maVaiTro;
     private JLabel lbe_maND, lbe_tenND, lbe_ngaySinh, lbe_sdt, lbe_emailND, lbe_matKhau, lbe_soDuTaiKhoan;
     public JTextField txt_maND, txt_tenND, txt_ngaySinh, txt_sdt, txt_emailND, txt_matKhau, txt_soDuTaiKhoan;
+
     private JButton btn_edit, btn_save, btn_cancel, btn_close;
 
     // Modern color palette

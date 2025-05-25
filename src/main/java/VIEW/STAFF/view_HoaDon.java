@@ -1,4 +1,4 @@
-package VIEW.ADMIN;
+package VIEW.STAFF;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,13 +7,12 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class view_DoanhThu extends JFrame{
-    private JTable tableDoanhThu;
+public class view_HoaDon extends JFrame {
+    private JTable tableHoaDon;
     private DefaultTableModel tableModel;
     private JSpinner dateFrom, dateTo;
-    private JComboBox<String> cboLoaiThoiGian, cboChiNhanh;
-    private JButton btnTraCuu, btnXuatExcel;
-    private JLabel lblTongDoanhThu;
+    private JComboBox<String> cboTrangThai, cboChiNhanh, cboNhanVien;
+    private JButton btnTraCuu, btnXuatHoaDon;
     private Color mauChinh = new Color(41, 128, 185);
     private Color mauPhu = new Color(52, 152, 219);
     private Color mauNhan = new Color(230, 126, 34);
@@ -21,16 +20,16 @@ public class view_DoanhThu extends JFrame{
     public String maNguoiDung;
     public String maVaiTro;
     
-    public view_DoanhThu(String maNguoiDung, String maVaiTro) {
-        setTitle("Quản Lý Doanh Thu");
+    public view_HoaDon() {
+        setTitle("Quản Lý Hóa Đơn");
         setSize(1080, 880);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         getContentPane().setBackground(mauNen);
 
-        this.maNguoiDung = maNguoiDung;
-        this.maVaiTro = maVaiTro;
+        // this.maNguoiDung = maNguoiDung;
+        // this.maVaiTro = maVaiTro;
 
         initComponents();
     }
@@ -44,7 +43,7 @@ public class view_DoanhThu extends JFrame{
         // Panel tiêu đề
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.setBackground(mauNen);
-        JLabel lblTitle = new JLabel("QUẢN LÝ DOANH THU");
+        JLabel lblTitle = new JLabel("QUẢN LÝ HÓA ĐƠN");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
         lblTitle.setForeground(mauChinh);
         titlePanel.add(lblTitle);
@@ -69,21 +68,9 @@ public class view_DoanhThu extends JFrame{
             mauChinh
         ));
         
-        // Panel cho loại thời gian và từ ngày
+        // Panel cho nhân viên phụ trách và từ ngày
         JPanel panelRow1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         panelRow1.setBackground(mauNen);
-        
-        // Thêm combobox loại thời gian
-        JLabel lblLoaiThoiGian = new JLabel("Loại thời gian:");
-        lblLoaiThoiGian.setForeground(mauChinh);
-        lblLoaiThoiGian.setPreferredSize(new Dimension(100, 30));
-        panelRow1.add(lblLoaiThoiGian);
-        
-        String[] loaiThoiGian = {"Ngày", "Tháng", "Năm"};
-        cboLoaiThoiGian = new JComboBox<>(loaiThoiGian);
-        cboLoaiThoiGian.setPreferredSize(new Dimension(200, 30));
-        cboLoaiThoiGian.setBackground(Color.WHITE);
-        panelRow1.add(cboLoaiThoiGian);
         
         // Thêm date spinner từ ngày
         JLabel lblTuNgay = new JLabel("Từ ngày:");
@@ -98,21 +85,21 @@ public class view_DoanhThu extends JFrame{
         dateFrom.setBackground(Color.WHITE);
         panelRow1.add(dateFrom);
         
-        // Panel cho chi nhánh và đến ngày
+        // Thêm combobox nhân viên phụ trách
+        JLabel lblNhanVien = new JLabel("Nhân viên:");
+        lblNhanVien.setForeground(mauChinh);
+        lblNhanVien.setPreferredSize(new Dimension(100, 30));
+        panelRow1.add(lblNhanVien);
+        
+        String[] nhanVien = {"Tất cả", "NV001 - Nguyễn Văn A", "NV002 - Trần Thị B", "NV003 - Lê Văn C"};
+        cboNhanVien = new JComboBox<>(nhanVien);
+        cboNhanVien.setPreferredSize(new Dimension(200, 30));
+        cboNhanVien.setBackground(Color.WHITE);
+        panelRow1.add(cboNhanVien);
+        
+        // Panel cho đến ngày
         JPanel panelRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         panelRow2.setBackground(mauNen);
-        
-        // Thêm combobox chi nhánh
-        JLabel lblChiNhanh = new JLabel("Chi nhánh:");
-        lblChiNhanh.setForeground(mauChinh);
-        lblChiNhanh.setPreferredSize(new Dimension(100, 30));
-        panelRow2.add(lblChiNhanh);
-        
-        String[] chiNhanh = {"Tất cả", "Chi nhánh 1", "Chi nhánh 2", "Chi nhánh 3"};
-        cboChiNhanh = new JComboBox<>(chiNhanh);
-        cboChiNhanh.setPreferredSize(new Dimension(200, 30));
-        cboChiNhanh.setBackground(Color.WHITE);
-        panelRow2.add(cboChiNhanh);
         
         // Thêm date spinner đến ngày
         JLabel lblDenNgay = new JLabel("Đến ngày:");
@@ -150,48 +137,39 @@ public class view_DoanhThu extends JFrame{
         styleButton(btnTraCuu);
         traCuuPanel.add(btnTraCuu);
         
-        // Panel cho nút xuất excel
-        JPanel xuatExcelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
-        xuatExcelPanel.setBackground(mauNen);
-        btnXuatExcel = new JButton("Xuất Excel");
-        styleButton(btnXuatExcel);
-        xuatExcelPanel.add(btnXuatExcel);
+        // Panel cho nút xuất hóa đơn
+        JPanel xuatHoaDonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
+        xuatHoaDonPanel.setBackground(mauNen);
+        btnXuatHoaDon = new JButton("Xuất hóa đơn");
+        styleButton(btnXuatHoaDon);
+        xuatHoaDonPanel.add(btnXuatHoaDon);
         
         toolPanel.add(traCuuPanel);
-        toolPanel.add(xuatExcelPanel);
+        toolPanel.add(xuatHoaDonPanel);
         
         // Thêm searchPanel và toolPanel vào topPanel
         topPanel.add(searchPanel, BorderLayout.CENTER);
         topPanel.add(toolPanel, BorderLayout.EAST);
         
-        // Bảng doanh thu
-        String[] columns = {"STT", "Ngày", "Mã hóa đơn", "Số tiền", "Ghi chú"};
+        // Bảng hóa đơn
+        String[] columns = {"STT", "Mã hóa đơn", "Ngày tạo", "Khách hàng", "Tổng tiền", "Trạng thái", "Chi nhánh"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        tableDoanhThu = new JTable(tableModel);
-        styleTable(tableDoanhThu);
+        tableHoaDon = new JTable(tableModel);
+        styleTable(tableHoaDon);
         
-        JScrollPane scrollPane = new JScrollPane(tableDoanhThu);
+        JScrollPane scrollPane = new JScrollPane(tableHoaDon);
         scrollPane.setBorder(BorderFactory.createLineBorder(mauChinh, 2));
-        
-        // Panel tổng doanh thu
-        JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        totalPanel.setBackground(mauNen);
-        lblTongDoanhThu = new JLabel("Tổng doanh thu: 0 VNĐ");
-        lblTongDoanhThu.setFont(new Font("Arial", Font.BOLD, 14));
-        lblTongDoanhThu.setForeground(mauNhan);
-        totalPanel.add(lblTongDoanhThu);
         
         // Thêm các panel vào frame
         mainPanel.add(titlePanel, BorderLayout.NORTH);
         contentPanel.add(topPanel, BorderLayout.NORTH);
         contentPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
-        mainPanel.add(totalPanel, BorderLayout.SOUTH);
         
         add(mainPanel);
     }
@@ -231,11 +209,13 @@ public class view_DoanhThu extends JFrame{
         table.setShowGrid(true);
         
         // Căn giữa các cột
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);  // STT
-        table.getColumnModel().getColumn(1).setPreferredWidth(100); // Ngày
-        table.getColumnModel().getColumn(2).setPreferredWidth(150); // Mã hóa đơn
-        table.getColumnModel().getColumn(3).setPreferredWidth(150); // Số tiền
-        table.getColumnModel().getColumn(4).setPreferredWidth(200); // Ghi chú
+        table.getColumnModel().getColumn(0).setPreferredWidth(50);   // STT
+        table.getColumnModel().getColumn(1).setPreferredWidth(150);  // Mã hóa đơn
+        table.getColumnModel().getColumn(2).setPreferredWidth(100);  // Ngày tạo
+        table.getColumnModel().getColumn(3).setPreferredWidth(200);  // Khách hàng
+        table.getColumnModel().getColumn(4).setPreferredWidth(150);  // Tổng tiền
+        table.getColumnModel().getColumn(5).setPreferredWidth(100);  // Trạng thái
+        table.getColumnModel().getColumn(6).setPreferredWidth(150);  // Chi nhánh
         
         // Căn giữa cho các cột
         javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
@@ -250,7 +230,7 @@ public class view_DoanhThu extends JFrame{
             @Override
             public void run() {
                 try {
-                    new view_DoanhThu(null, null).setVisible(true);
+                    new view_HoaDon().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

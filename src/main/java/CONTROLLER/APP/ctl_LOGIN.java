@@ -86,8 +86,8 @@ public class ctl_LOGIN implements ActionListener {
         NguoiDung nguoiDung = nguoiDungDAO.checkLogin(email, matKhau);
         if (nguoiDung != null) {
             JOptionPane.showMessageDialog(pnForm, "Đăng nhập thành công!");
-            // vMain.setMaNguoiDung(nguoiDung.getMaNguoiDung());
-            // vMain.setMaVaiTro(nguoiDung.getMaVaiTro());
+            vMain.setMaNguoiDung(nguoiDung.getMaNguoiDung());
+            vMain.setMaVaiTro(nguoiDung.getMaVaiTro());
             
             // Load lại giao diện view_main
             vMain.dispose(); // Đóng cửa sổ hiện tại
@@ -114,18 +114,18 @@ public class ctl_LOGIN implements ActionListener {
             return;
         }
 
-        if (nguoiDungDAO.checkGmail(email)) {
+        if (nguoiDungDAO.checkGmail(email) == false) {
             JOptionPane.showMessageDialog(pnForm, "Email đã tồn tại!");
             return;
         }
 
-        // NguoiDung nguoiDung = new NguoiDung();
-        // if (nguoiDungDAO.themNguoiDung(nguoiDung)) {
-        //     JOptionPane.showMessageDialog(pnForm, "Đăng ký thành công!");
-        //     view.hienThiFormDangNhap();
-        // } else {
-        //     JOptionPane.showMessageDialog(pnForm, "Đăng ký thất bại!");
-        // }
+        NguoiDung nguoiDung = new NguoiDung();
+        if (nguoiDungDAO.themNguoiDung(nguoiDung) > 0) {
+            JOptionPane.showMessageDialog(pnForm, "Đăng ký thành công!");
+            view.hienThiFormDangNhap();
+        } else {
+            JOptionPane.showMessageDialog(pnForm, "Đăng ký thất bại!");
+        }
     }
 
     private void xuLyQuenMatKhau() {
