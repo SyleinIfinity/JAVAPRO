@@ -9,18 +9,18 @@ public class NguoiDung {
     private String matKhau;
     private Double soDuTaiKhoan;
     private String maVaiTro;
-    private boolean trangThai;
+    private int trangThai;
 
     public NguoiDung(){
 
     }
 
     public NguoiDung(String maNguoiDung, String tenNguoiDung, String ngaySinh, String sDT, String email, String matKhau,
-            Double soDuTaiKhoan, String maVaiTro, boolean trangThai) {
+            Double soDuTaiKhoan, String maVaiTro, int trangThai) {
         this.maNguoiDung = maNguoiDung;
         this.tenNguoiDung = tenNguoiDung;
         this.ngaySinh = ngaySinh;
-        SDT = sDT;
+        this.SDT = sDT;
         this.email = email;
         this.matKhau = matKhau;
         this.soDuTaiKhoan = soDuTaiKhoan;
@@ -28,11 +28,24 @@ public class NguoiDung {
         this.trangThai = trangThai;
     }
 
-    public boolean isTrangThai() {
+        public NguoiDung(String tenNguoiDung, String ngaySinh, String sDT, String email, String matKhau,
+            Double soDuTaiKhoan, String maVaiTro, int trangThai) {
+        // this.maNguoiDung = maNguoiDung;
+        this.tenNguoiDung = tenNguoiDung;
+        this.ngaySinh = ngaySinh;
+        this.SDT = sDT;
+        this.email = email;
+        this.matKhau = matKhau;
+        this.soDuTaiKhoan = soDuTaiKhoan;
+        this.maVaiTro = maVaiTro;
+        this.trangThai = trangThai;
+    }
+
+    public int isTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(int trangThai) {
         this.trangThai = trangThai;
     }
 

@@ -119,7 +119,7 @@ public class ctl_LOGIN implements ActionListener {
             return;
         }
 
-        NguoiDung nguoiDung = new NguoiDung();
+        NguoiDung nguoiDung = new NguoiDung(hoTen, null, null, email, matKhau, 0.0, "VT003", 1);
         if (nguoiDungDAO.themNguoiDung(nguoiDung) > 0) {
             JOptionPane.showMessageDialog(pnForm, "Đăng ký thành công!");
             view.hienThiFormDangNhap();
@@ -143,7 +143,7 @@ public class ctl_LOGIN implements ActionListener {
 
         try {
             // Tạo mã OTP ngẫu nhiên 6 số
-            String matKhau = nguoiDungDAO.getPass(email);
+            String matKhau = "Mật khẩu của bạn là: " + nguoiDungDAO.getPass(email);
             // Gửi email chứa mã OTP
             GMailer.sendMain(matKhau, email);
             JOptionPane.showMessageDialog(pnForm, "Mật khẩu đã được gửi. Vui lòng kiểm tra email của bạn!");
@@ -155,22 +155,4 @@ public class ctl_LOGIN implements ActionListener {
             e.printStackTrace();
         }
     }
-
-    // public String randomOTP(int dodai) {
-    //     String kitusotaikhoan = "0123456789";
-    //     SecureRandom chuoingaunhien = new SecureRandom();
-    //     if (dodai > kitusotaikhoan.length()) {
-    //         throw new IllegalArgumentException("Do dai vuot qua soluong duy nhat co san");
-    //     }
-    //     Set<Character> sotaikhoanDuyNhat = new HashSet<>();
-    //     StringBuilder sb = new StringBuilder(dodai);
-
-    //     while (sotaikhoanDuyNhat.size() < dodai) {
-    //         char KituRamDom = kitusotaikhoan.charAt(chuoingaunhien.nextInt(kitusotaikhoan.length()));
-    //         if (sotaikhoanDuyNhat.add(KituRamDom)) {
-    //             sb.append(KituRamDom);
-    //         }
-    //     }
-    //     return sb.toString();
-    // }
 }

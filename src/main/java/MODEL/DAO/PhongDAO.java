@@ -49,13 +49,13 @@ public class PhongDAO {
     
     public int themPhong(Phong p){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemPhong(?,?,?)}");
-            stmt.setString(1, p.getMaPhong());
-            stmt.setString(2, p.getSoPhong());
-            stmt.setString(3, p.getMaLoaiPhong());
-            stmt.setInt(4, p.getSoTang());
-            stmt.setString(5, p.getMaChiNhanh());
-            stmt.setString(6, p.getTrangThai());
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemPhong(?,?,?,?,?)}");
+            // stmt.setString(1, p.getMaPhong());
+            stmt.setString(1, p.getSoPhong());
+            stmt.setString(2, p.getMaLoaiPhong());
+            stmt.setInt(3, p.getSoTang());
+            stmt.setString(4, p.getMaChiNhanh());
+            stmt.setString(5, p.getTrangThai());
 
             int row = stmt.executeUpdate();
             return row;
@@ -67,7 +67,7 @@ public class PhongDAO {
 
     public int capNhatPhong(Phong p){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?,?)}");
             stmt.setString(1, p.getMaPhong());
             stmt.setString(2, p.getSoPhong());
             stmt.setString(3, p.getMaLoaiPhong());
