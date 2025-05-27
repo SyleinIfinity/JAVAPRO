@@ -77,46 +77,51 @@ public class ctl_main implements ActionListener {
             this.vMain.btn_Account.setVisible(false);
 
             
-            this.vMain.btn_DonDatPhong.setVisible(false);
-            this.vMain.btn_HoaDon.setVisible(false);
-            this.vMain.btn_TrangThaiPhong.setVisible(false);
-            this.vMain.btn_NapRut.setVisible(false);
-            this.vMain.btn_DatPhong.setVisible(false);
-            this.vMain.btn_TraPhong.setVisible(false);
-            this.vMain.btn_Phong.setVisible(false);
-            this.vMain.btn_KhachSan.setVisible(false);
-            this.vMain.btn_DichVu.setVisible(false);
-            this.vMain.btn_KhachHang.setVisible(false);
-            this.vMain.btn_NhanVien.setVisible(false);
-            this.vMain.btn_DoanhThu.setVisible(false);
+            // this.vMain.btn_DonDatPhong.setVisible(false);
+            // this.vMain.btn_HoaDon.setVisible(false);
+            // this.vMain.btn_TrangThaiPhong.setVisible(false);
+
+            // this.vMain.btn_NapRut.setVisible(false);
+            // this.vMain.btn_DatPhong.setVisible(false);
+            // this.vMain.btn_TraPhong.setVisible(false);
+
+            // this.vMain.btn_Phong.setVisible(false);
+            // this.vMain.btn_KhachSan.setVisible(false);
+            // this.vMain.btn_DichVu.setVisible(false);
+            // this.vMain.btn_KhachHang.setVisible(false);
+            // this.vMain.btn_NhanVien.setVisible(false);
+            // this.vMain.btn_DoanhThu.setVisible(false);
         } else {
             if (this.vMain.maVaiTro.equals("VT001")) {
                 this.vMain.btn_DonDatPhong.setVisible(false);
                 this.vMain.btn_HoaDon.setVisible(false);
                 this.vMain.btn_TrangThaiPhong.setVisible(false);
+
                 this.vMain.btn_NapRut.setVisible(false);
                 this.vMain.btn_DatPhong.setVisible(false);
                 this.vMain.btn_TraPhong.setVisible(false);
             } else if (this.vMain.maVaiTro.equals("TV002")) {
+                this.vMain.btn_Phong.setVisible(false);
+                this.vMain.btn_KhachSan.setVisible(false);
+                this.vMain.btn_DichVu.setVisible(false);
+                this.vMain.btn_KhachHang.setVisible(false);
+                this.vMain.btn_NhanVien.setVisible(false);
+                this.vMain.btn_DoanhThu.setVisible(false);
+
                 this.vMain.btn_NapRut.setVisible(false);
                 this.vMain.btn_DatPhong.setVisible(false);
                 this.vMain.btn_TraPhong.setVisible(false);
+            } else if (this.vMain.maVaiTro.equals("TV003")) {
                 this.vMain.btn_Phong.setVisible(false);
                 this.vMain.btn_KhachSan.setVisible(false);
                 this.vMain.btn_DichVu.setVisible(false);
                 this.vMain.btn_KhachHang.setVisible(false);
                 this.vMain.btn_NhanVien.setVisible(false);
                 this.vMain.btn_DoanhThu.setVisible(false);
-            } else if (this.vMain.maVaiTro.equals("TV003")) {
+
                 this.vMain.btn_DonDatPhong.setVisible(false);
                 this.vMain.btn_HoaDon.setVisible(false);
                 this.vMain.btn_TrangThaiPhong.setVisible(false);
-                this.vMain.btn_Phong.setVisible(false);
-                this.vMain.btn_KhachSan.setVisible(false);
-                this.vMain.btn_DichVu.setVisible(false);
-                this.vMain.btn_KhachHang.setVisible(false);
-                this.vMain.btn_NhanVien.setVisible(false);
-                this.vMain.btn_DoanhThu.setVisible(false);
             } else {
 
             }
