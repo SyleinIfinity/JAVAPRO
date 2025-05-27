@@ -14,8 +14,6 @@ public class DatPhongDAO {
 
     public DatPhongDAO(){
         listDATPHONG = new HashMap<>();
-
-
         try {
             conn = CONNECTIONSQLSERVER.getConnection();
 
@@ -54,16 +52,15 @@ public class DatPhongDAO {
 
     public int themDatPhong(DatPhong dp){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemDatPhong(?,?,?,?,?,?,?,?)}");
-            stmt.setString(1, dp.getMaDatPhong());
-            stmt.setString(2, dp.getMaNguoiDung());
-            stmt.setString(3, dp.getMaPhong());
-            stmt.setString(4, dp.getSoNguoi());
-            stmt.setString(5, dp.getDichVuSuDung());
-            stmt.setString(6, dp.getNgayThuePhong());
-            stmt.setString( 7, dp.getNgayTraPhong());
-            stmt.setString(8, dp.getTrangThai());
-
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemDatPhong(?,?,?,?,?,?,?)}");
+            // stmt.setString(1, dp.getMaDatPhong());
+            stmt.setString(1, dp.getMaNguoiDung());
+            stmt.setString(2, dp.getMaPhong());
+            stmt.setString(3, dp.getSoNguoi());
+            stmt.setString(4, dp.getDichVuSuDung());
+            stmt.setString(5, dp.getNgayThuePhong());
+            stmt.setString(6, dp.getNgayTraPhong());
+            stmt.setString(7, dp.getTrangThai());
             int row = stmt.executeUpdate();
             return row;
         } catch (Exception e) {
@@ -83,7 +80,6 @@ public class DatPhongDAO {
             stmt.setString(6, dp.getNgayThuePhong());
             stmt.setString( 7, dp.getNgayTraPhong());
             stmt.setString(8, dp.getTrangThai());
-
             int row = stmt.executeUpdate();
 
             return row;

@@ -233,7 +233,14 @@ CREATE PROCEDURE sp_ThemDichVu
     @maLoaiDichVu CHAR(5)
 AS
 BEGIN
-    INSERT INTO DichVu VALUES (@maDichVu, @tenDichVu, @maLoaiDichVu)
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maDichVu, 3, LEN(maDichVu)) AS INT)), 0) + 1 FROM DichVu;
+    SET @newMa = 'DV' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO DichVu VALUES (@newMa, @tenDichVu, @maLoaiDichVu)
 END;
 go
 
@@ -304,18 +311,22 @@ GO
 --------------Nguoi Dung-----------------
 --insert
 CREATE PROCEDURE sp_ThemNguoiDung
-    @maNguoiDung CHAR(5),
     @tenNguoiDung NVARCHAR(100),
     @ngaySinh VARCHAR(15),
     @SDT VARCHAR(10),
     @email NVARCHAR(100),
     @matKhau NVARCHAR(255),
-    @soDuTaiKhoan DECIMAL(20,2),
     @maVaiTro CHAR(5),
     @trangThai BIT
 AS
 BEGIN
-    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro, @trangThai)
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maNguoiDung, 3, LEN(maNguoiDung)) AS INT)), 0) + 1 FROM NguoiDung;
+    SET @newMa = 'ND' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO NguoiDung VALUES (@newMa, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, 0, @maVaiTro, @trangThai)
 END
 GO
 --update
@@ -327,7 +338,8 @@ CREATE PROCEDURE sp_CapNhatNguoiDung
     @email NVARCHAR(100),
     @matKhau NVARCHAR(255),
     @soDuTaiKhoan DECIMAL(20,2),
-    @maVaiTro CHAR(5)
+    @maVaiTro CHAR(5),
+    @trangThai bit
 AS
 BEGIN
     UPDATE NguoiDung
@@ -337,7 +349,8 @@ BEGIN
         email = @email,
         matKhau = @matKhau,
         soDuTaiKhoan = @soDuTaiKhoan,
-        maVaiTro = @maVaiTro
+        maVaiTro = @maVaiTro,
+        trangThai = @trangThai
     WHERE maNguoiDung = @maNguoiDung
 END
 GO
@@ -401,13 +414,20 @@ GO
 ---------------------------------------------------------Chi Nhanh Khach San ---------------------------
 --insert
 CREATE PROCEDURE sp_ThemChiNhanhKhachSan
-    @maChiNhanh CHAR(5),
+    -- @maChiNhanh CHAR(5),
     @tenChiNhanh NVARCHAR(100),
     @diaChi NVARCHAR(255),
     @SDT VARCHAR(10)
 AS
 BEGIN
-    INSERT INTO ChiNhanhKhachSan VALUES (@maChiNhanh, @tenChiNhanh, @diaChi, @SDT)
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maChiNhanh, 3, LEN(maChiNhanh)) AS INT)), 0) + 1 FROM ChiNhanhKhachSan;
+    SET @newMa = 'CN' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO ChiNhanhKhachSan VALUES (@newMa, @tenChiNhanh, @diaChi, @SDT)
 END
 GO
 
@@ -496,7 +516,7 @@ GO
 --------------------------------------------------------------Phong------------------------------
 --insert
 CREATE PROCEDURE sp_ThemPhong
-    @maPhong CHAR(5),
+    -- @maPhong CHAR(5),
     @soPhong VARCHAR(10),
     @maLoaiPhong CHAR(5),
     @soTang INT,
@@ -504,7 +524,14 @@ CREATE PROCEDURE sp_ThemPhong
     @trangThai NVARCHAR(20)
 AS
 BEGIN
-    INSERT INTO Phong VALUES (@maPhong, @soPhong, @maLoaiPhong, @soTang, @maChiNhanh, @trangThai)
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maPhong, 3, LEN(maPhong)) AS INT)), 0) + 1 FROM Phong;
+    SET @newMa = 'P' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO Phong VALUES (@newMa, @soPhong, @maLoaiPhong, @soTang, @maChiNhanh, @trangThai)
 END
 GO
 
@@ -548,7 +575,7 @@ GO
 -----------------------------------------------------Dat Phong---------------------------
 --insert
 CREATE PROCEDURE sp_ThemDatPhong
-    @maDatPhong CHAR(5),
+    -- @maDatPhong CHAR(5),
     @maNguoiDung CHAR(5),
     @maPhong CHAR(5),
     @soNguoi INT,
@@ -558,8 +585,15 @@ CREATE PROCEDURE sp_ThemDatPhong
     @trangThai NVARCHAR(20)
 AS
 BEGIN
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maDatPhong, 3, LEN(maDatPhong)) AS INT)), 0) + 1 FROM DatPhong;
+    SET @newMa = 'DP' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
     INSERT INTO DatPhong 
-    VALUES (@maDatPhong, @maNguoiDung, @maPhong, @soNguoi, @dichVuSuDung, @ngayThuePhong, @ngayTraPhong, @trangThai)
+    VALUES (@newMa, @maNguoiDung, @maPhong, @soNguoi, @dichVuSuDung, @ngayThuePhong, @ngayTraPhong, @trangThai)
 END
 GO
 
@@ -607,15 +641,22 @@ GO
 --------------------------------------------------------Hóa Đơn------------------------------------
 --insert
 CREATE PROCEDURE sp_ThemHoaDon
-    @maHoaDon CHAR(5),
+    -- @maHoaDon CHAR(5),
     @maDatPhong CHAR(5),
     @maDichVu CHAR(5),
     @nhanVienPhuTrach CHAR(5),
     @tongTien DECIMAL(15,2)
 AS
 BEGIN
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maHoaDon, 3, LEN(maHoaDon)) AS INT)), 0) + 1 FROM HoaDon;
+    SET @newMa = 'HD' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
     INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien)
-    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien)
+    VALUES (@newMa, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien)
 END
 GO
 

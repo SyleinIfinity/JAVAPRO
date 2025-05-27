@@ -52,13 +52,13 @@ public class HoaDonDAO {
 
     public int themHoaDon(HoaDon hd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemHoaDon(?,?,?,?,?,?)}");
-            stmt.setString(1, hd.getMaHoaDon());
-            stmt.setString(2, hd.getMaDatPhong());
-            stmt.setString(3, hd.getMaDichVu());
-            stmt.setString(4, hd.getNhanVienPhuTrach());
-            stmt.setDouble(5, hd.getTongTien());
-            stmt.setString(6, hd.getNgayGiaoDich());
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemHoaDon(?,?,?,?,?)}");
+            // stmt.setString(1, hd.getMaHoaDon());
+            stmt.setString(1, hd.getMaDatPhong());
+            stmt.setString(2, hd.getMaDichVu());
+            stmt.setString(3, hd.getNhanVienPhuTrach());
+            stmt.setDouble(4, hd.getTongTien());
+            stmt.setString(5, hd.getNgayGiaoDich());
 
             int row = stmt.executeUpdate();
             return row;

@@ -16,7 +16,6 @@ public class NguoiDungDAO {
     public NguoiDungDAO(){
         listNGUOIDUNG = new HashMap<>();
 
-
         try {
             conn = CONNECTIONSQLSERVER.getConnection();
 
@@ -34,7 +33,7 @@ public class NguoiDungDAO {
                     rs.getString("matKhau"),
                     rs.getDouble("soDuTaiKhoan"),
                     rs.getString("maVaiTro"),
-                    rs.getBoolean("trangThai")
+                    rs.getInt("trangThai")
                 );
                 listNGUOIDUNG.put(nd.getMaNguoiDung(), nd);
             }
@@ -56,16 +55,15 @@ public class NguoiDungDAO {
 
     public int themNguoiDung(NguoiDung nd){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_ThemNguoiDung(?,?,?,?,?,?,?,?,?)}");
-            stmt.setString(1, nd.getMaNguoiDung());
-            stmt.setString(2, nd.getTenNguoiDung());
-            stmt.setString(3, nd.getNgaySinh());
-            stmt.setString(4, nd.getSDT());
-            stmt.setString(5, nd.getEmail());
-            stmt.setString(6, nd.getMatKhau());
-            stmt.setDouble(7, nd.getSoDuTaiKhoan());
-            stmt.setString(8, nd.getMaVaiTro());
-            stmt.setBoolean(9, nd.isTrangThai());
+            CallableStatement stmt = conn.prepareCall("{Call sp_ThemNguoiDung(?,?,?,?,?,?,?)}");
+            // stmt.setString(1, nd.getMaNguoiDung());
+            stmt.setString(1, nd.getTenNguoiDung());
+            stmt.setString(2, nd.getNgaySinh());
+            stmt.setString(3, nd.getSDT());
+            stmt.setString(4, nd.getEmail());
+            stmt.setString(5, nd.getMatKhau());
+            stmt.setString(6, nd.getMaVaiTro());
+            stmt.setInt(7, nd.isTrangThai());
 
             int row = stmt.executeUpdate();
             return row;
@@ -86,7 +84,7 @@ public class NguoiDungDAO {
             stmt.setString(6, nd.getMatKhau());
             stmt.setDouble(7, nd.getSoDuTaiKhoan());
             stmt.setString(8, nd.getMaVaiTro());
-            stmt.setBoolean(9, nd.isTrangThai());
+            stmt.setInt(9, nd.isTrangThai());
             int row = stmt.executeUpdate();
 
             return row;

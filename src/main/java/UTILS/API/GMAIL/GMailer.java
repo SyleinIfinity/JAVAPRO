@@ -104,8 +104,8 @@ public class GMailer {
         }
         
         TO_TEST_EMAIL = b;
-        String text = "Your OTP: " + a;
-        new GMailer().sendMail("OTP code to verify identity", text);
+        // String text = "Your OTP: " + a;
+        new GMailer().sendMail("OTP code to verify identity", a);
     }
 
     

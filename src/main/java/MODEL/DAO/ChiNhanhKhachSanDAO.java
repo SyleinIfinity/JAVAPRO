@@ -48,10 +48,9 @@ public class ChiNhanhKhachSanDAO {
     public int themChiNhanhKhachSan(ChiNhanhKhachSan cnks){
         try {
             CallableStatement stmt = conn.prepareCall("{Call sp_ThemChiNhanhKhachSan(?,?,?)}");
-            stmt.setString(1, cnks.getMaChiNhanh());
-            stmt.setString(2, cnks.getTenChiNhanh());
-            stmt.setString(3, cnks.getDiaChi());
-            stmt.setString(4, cnks.getSDT());
+            stmt.setString(1, cnks.getTenChiNhanh());
+            stmt.setString(2, cnks.getDiaChi());
+            stmt.setString(3, cnks.getSDT());
 
             int row = stmt.executeUpdate();
             return row;
