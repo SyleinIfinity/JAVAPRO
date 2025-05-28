@@ -6,17 +6,19 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.*;
 
+import CONTROLLER.APP.ADMIN.ctl_ChiNhanh;
 import VIEW.view_main;
 
 public class view_ChiNhanh extends JPanel {
-    private JTable table;
-    private DefaultTableModel tableModel;
+    public JTable table;
+    // private DefaultTableModel tableModel;
     private JButton addButton, editButton, deleteButton, refreshButton, clearButton;
     private JTextField txtMaChiNhanh, txtTenChiNhanh, txtDiaChi, txtSDT;
 
     public String maNguoiDung;
     public String maVaiTro;
     public view_main vMain;
+    ctl_ChiNhanh controller;
 
     private final Color PRIMARY_COLOR = new Color(52, 152, 219);
     private final Color SECONDARY_COLOR = new Color(46, 204, 113);
@@ -35,6 +37,7 @@ public class view_ChiNhanh extends JPanel {
         initializeComponents();
         setupLayout();
         applyModernStyling();
+        controller = new ctl_ChiNhanh(this, vMain);
     }
 
     private void initializeComponents() {
@@ -43,12 +46,12 @@ public class view_ChiNhanh extends JPanel {
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
         String[] columnNames = {"🏢 Mã Chi Nhánh", "🏨 Tên Chi Nhánh", "📍 Địa Chỉ", "📞 Số Điện Thoại"};
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        table = new JTable(tableModel);
+        // tableModel = new DefaultTableModel(columnNames, 0) {
+        //     public boolean isCellEditable(int row, int column) {
+        //         return false;
+        //     }
+        // };
+        table = new JTable(new DefaultTableModel(columnNames, 0));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getTableHeader().setReorderingAllowed(false);
 

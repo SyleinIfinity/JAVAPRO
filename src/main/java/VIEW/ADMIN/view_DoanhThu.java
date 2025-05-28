@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import CONTROLLER.APP.ADMIN.ctl_DoanhThu;
 import VIEW.view_main;
 
 import java.awt.*;
@@ -11,12 +12,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class view_DoanhThu extends JPanel{
-    private JTable tableDoanhThu;
-    private DefaultTableModel tableModel;
-    private JSpinner dateFrom, dateTo;
-    private JComboBox<String> cboLoaiThoiGian, cboChiNhanh;
-    private JButton btnTraCuu, btnXuatExcel;
-    private JLabel lblTongDoanhThu;
+    public JTable tableDoanhThu;
+    // public DefaultTableModel tableModel;
+    public JSpinner dateFrom, dateTo;
+    public JComboBox<String> cboLoaiThoiGian, cboChiNhanh;
+    public JButton btnTraCuu, btnXuatExcel;
+    public JLabel lblTongDoanhThu;
     private Color mauChinh = new Color(41, 128, 185);
     private Color mauPhu = new Color(52, 152, 219);
     private Color mauNhan = new Color(230, 126, 34);
@@ -24,16 +25,16 @@ public class view_DoanhThu extends JPanel{
     public String maNguoiDung;
     public String maVaiTro;
     view_main vMain;
+    ctl_DoanhThu controller;
     
     public view_DoanhThu(view_main vMain) {
         setLayout(new BorderLayout());
         setBackground(mauNen);
         this.vMain = vMain;
 
-        // this.maNguoiDung = maNguoiDung;
-        // this.maVaiTro = maVaiTro;
-
+        
         initComponents();
+        controller = new ctl_DoanhThu(this, vMain);
     }
     
     private void initComponents() {
@@ -74,17 +75,9 @@ public class view_DoanhThu extends JPanel{
         JPanel panelRow1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         panelRow1.setBackground(mauNen);
         
-        // Thêm combobox loại thời gian
-        JLabel lblLoaiThoiGian = new JLabel("Loại thời gian:");
-        lblLoaiThoiGian.setForeground(mauChinh);
-        lblLoaiThoiGian.setPreferredSize(new Dimension(100, 30));
-        panelRow1.add(lblLoaiThoiGian);
-        
-        String[] loaiThoiGian = {"Ngày", "Tháng", "Năm"};
-        cboLoaiThoiGian = new JComboBox<>(loaiThoiGian);
-        cboLoaiThoiGian.setPreferredSize(new Dimension(200, 30));
-        cboLoaiThoiGian.setBackground(Color.WHITE);
-        panelRow1.add(cboLoaiThoiGian);
+        // Panel cho chi nhánh và đến ngày
+        JPanel panelRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        panelRow2.setBackground(mauNen);
         
         // Thêm date spinner từ ngày
         JLabel lblTuNgay = new JLabel("Từ ngày:");
@@ -99,22 +92,6 @@ public class view_DoanhThu extends JPanel{
         dateFrom.setBackground(Color.WHITE);
         panelRow1.add(dateFrom);
         
-        // Panel cho chi nhánh và đến ngày
-        JPanel panelRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-        panelRow2.setBackground(mauNen);
-        
-        // Thêm combobox chi nhánh
-        JLabel lblChiNhanh = new JLabel("Chi nhánh:");
-        lblChiNhanh.setForeground(mauChinh);
-        lblChiNhanh.setPreferredSize(new Dimension(100, 30));
-        panelRow2.add(lblChiNhanh);
-        
-        String[] chiNhanh = {"Tất cả", "Chi nhánh 1", "Chi nhánh 2", "Chi nhánh 3"};
-        cboChiNhanh = new JComboBox<>(chiNhanh);
-        cboChiNhanh.setPreferredSize(new Dimension(200, 30));
-        cboChiNhanh.setBackground(Color.WHITE);
-        panelRow2.add(cboChiNhanh);
-        
         // Thêm date spinner đến ngày
         JLabel lblDenNgay = new JLabel("Đến ngày:");
         lblDenNgay.setForeground(mauChinh);
@@ -127,6 +104,18 @@ public class view_DoanhThu extends JPanel{
         dateTo.setPreferredSize(new Dimension(200, 30));
         dateTo.setBackground(Color.WHITE);
         panelRow2.add(dateTo);
+        
+        // Thêm combobox chi nhánh
+        JLabel lblChiNhanh = new JLabel("Chi nhánh:");
+        lblChiNhanh.setForeground(mauChinh);
+        lblChiNhanh.setPreferredSize(new Dimension(100, 30));
+        panelRow2.add(lblChiNhanh);
+        
+        String[] defaultChiNhanh = {"Tất cả"};
+        cboChiNhanh = new JComboBox<>(defaultChiNhanh);
+        cboChiNhanh.setPreferredSize(new Dimension(200, 30));        
+        cboChiNhanh.setBackground(Color.WHITE);
+        panelRow2.add(cboChiNhanh);
         
         // Thêm các panel vào searchPanel
         searchPanel.add(panelRow1);
@@ -166,14 +155,15 @@ public class view_DoanhThu extends JPanel{
         topPanel.add(toolPanel, BorderLayout.EAST);
         
         // Bảng doanh thu
-        String[] columns = {"STT", "Ngày", "Mã hóa đơn", "Số tiền", "Ghi chú"};
-        tableModel = new DefaultTableModel(columns, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        tableDoanhThu = new JTable(tableModel);
+        String[] columns = {"Mã hóa đơn", "khách đặt", "Số người", "ngày thuê", "ngày trả", "nhân viên phụ trách", "tổng tiền"};
+        // tableModel = new DefaultTableModel(columns, 0) {
+        //     @Override
+        //     public boolean isCellEditable(int row, int column) {
+        //         return false;
+        //     }
+        // };
+        tableDoanhThu = new JTable(new DefaultTableModel(columns, 0));
+        tableDoanhThu.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         styleTable(tableDoanhThu);
         
         JScrollPane scrollPane = new JScrollPane(tableDoanhThu);

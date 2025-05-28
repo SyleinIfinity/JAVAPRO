@@ -695,5 +695,22 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE sp_LayHoaDonTheoNgayVaChiNhanh
+    @TuNgay DATE,
+    @DenNgay DATE,
+    @TenChiNhanh NVARCHAR(100)
+AS
+BEGIN
+    SELECT hd.*
+    FROM HoaDon hd
+    JOIN DatPhong dp ON hd.maDatPhong = dp.maDatPhong
+    JOIN Phong p ON dp.maPhong = p.maPhong
+    JOIN ChiNhanhKhachSan cn ON p.maChiNhanh = cn.maChiNhanh
+    WHERE hd.ngayGiaoDich BETWEEN @TuNgay AND @DenNgay
+      AND cn.tenChiNhanh = @TenChiNhanh
+END
+
+
+
 -------Trigger-------Trigger-------Trigger-------Trigger-------Trigger-------Trigger-------
 
