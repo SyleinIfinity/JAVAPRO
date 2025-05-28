@@ -2,14 +2,17 @@ package VIEW;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import CONTROLLER.APP.ctl_Account;
+
 import java.awt.*;
 
 public class view_Account extends JPanel {
     private String maNguoiDung;
     private String maVaiTro;
-    private JLabel lbe_maND, lbe_tenND, lbe_ngaySinh, lbe_sdt, lbe_emailND, lbe_matKhau, lbe_soDuTaiKhoan;
+    public JLabel lbe_maND, lbe_tenND, lbe_ngaySinh, lbe_sdt, lbe_emailND, lbe_matKhau, lbe_soDuTaiKhoan;
     public JTextField txt_maND, txt_tenND, txt_ngaySinh, txt_sdt, txt_emailND, txt_matKhau, txt_soDuTaiKhoan;
-    private JButton btn_edit, btn_save, btn_cancel, btn_close;
+    public JButton btn_edit, btn_save, btn_cancel, btn_close;
 
     private static final Color PRIMARY_COLOR = new Color(74, 144, 226);
     private static final Color SUCCESS_COLOR = new Color(72, 207, 173);
@@ -22,11 +25,10 @@ public class view_Account extends JPanel {
     private static final Color BORDER_COLOR = new Color(222, 226, 230);
     private static final Color ACCENT_COLOR = new Color(102, 126, 234);
     view_main vMain;
+    ctl_Account controller;
 
 
     public view_Account(view_main vMain) {
-        // this.maNguoiDung = maNguoiDung;
-        // this.maVaiTro = maVaiTro;
         this.vMain = vMain;
 
         setLayout(new BorderLayout());
@@ -34,6 +36,8 @@ public class view_Account extends JPanel {
 
         initializeComponents();
         setupLayout();
+
+        controller = new ctl_Account(this, vMain);
     }
 
     public void populateFields(String maND, String tenND, String ngaySinh,
@@ -47,9 +51,20 @@ public class view_Account extends JPanel {
         txt_soDuTaiKhoan.setText(soDuTaiKhoan);
     }
 
+    public void populateFields(String maND, String tenND, String ngaySinh,
+                               String sdt, String email, String matKhau) {
+        txt_maND.setText(maND);
+        txt_tenND.setText(tenND);
+        txt_ngaySinh.setText(ngaySinh);
+        txt_sdt.setText(sdt);
+        txt_emailND.setText(email);
+        txt_matKhau.setText(matKhau);
+    }
+
+
     private void initializeComponents() {
-        lbe_maND = createStyledLabel("Mã quản lý");
-        lbe_tenND = createStyledLabel("Tên quản lý");
+        lbe_maND = createStyledLabel("Mã người dùng");
+        lbe_tenND = createStyledLabel("Tên người dùng");
         lbe_ngaySinh = createStyledLabel("Ngày sinh");
         lbe_sdt = createStyledLabel("Số điện thoại");
         lbe_emailND = createStyledLabel("Email");

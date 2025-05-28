@@ -26,7 +26,6 @@ import MODEL.ENTITY.*;
 
 public class ctl_DoanhThu implements ActionListener {
     private view_DoanhThu vDoanhThu;
-    private JPanel form;
     private HoaDonDAO hdDAO;
     private NguoiDungDAO nDungDAO;
     private DatPhongDAO dPhongDAO;
@@ -48,7 +47,6 @@ public class ctl_DoanhThu implements ActionListener {
 
     public ctl_DoanhThu(view_DoanhThu vDoanhThu, view_main vMain) {
         this.vDoanhThu = vDoanhThu;
-        this.form = form;
         this.vMain = vMain;
         this.hdDAO = new HoaDonDAO();
         this.nDungDAO = new NguoiDungDAO();
