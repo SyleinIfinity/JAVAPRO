@@ -65,7 +65,7 @@ public class ctl_main implements ActionListener {
             show(new view_DatPhong(vMain));
         }
         if (source == vMain.btn_TraPhong) {
-            // show(new view_TraPhong(vMain));
+            show(new view_TraPhong(vMain));
         }
     }
 
