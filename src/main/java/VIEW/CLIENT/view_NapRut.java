@@ -548,16 +548,16 @@ public class view_NapRut extends JPanel {
         return vMain;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            view_main vMain = new view_main("testUser", "testRole");
-            JFrame frame = new JFrame("Test Nạp/Rút");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1100, 700);
-            frame.setLocationRelativeTo(null);
-            frame.setLayout(new BorderLayout());
-            frame.add(new view_NapRut(vMain), BorderLayout.CENTER);
-            frame.setVisible(true);
-        });
-    }
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> {
+    //         view_main vMain = new view_main("testUser", "testRole");
+    //         JFrame frame = new JFrame("Test Nạp/Rút");
+    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    //         frame.setSize(1100, 700);
+    //         frame.setLocationRelativeTo(null);
+    //         frame.setLayout(new BorderLayout());
+    //         frame.add(new view_NapRut(vMain), BorderLayout.CENTER);
+    //         frame.setVisible(true);
+    //     });
+    // }
 }

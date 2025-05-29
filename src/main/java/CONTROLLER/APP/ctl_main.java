@@ -13,7 +13,7 @@ import MODEL.ENTITY.NguoiDung;
 import VIEW.*;
 import VIEW.STAFF.*;
 import VIEW.ADMIN.*;
-// import VIEW.CLIENT.*;
+import VIEW.CLIENT.*;
 import VIEW.view_main;
 
 public class ctl_main implements ActionListener {
@@ -59,10 +59,10 @@ public class ctl_main implements ActionListener {
             show(new view_TrangThaiPhong(vMain));
         }
         if (source == vMain.btn_NapRut) {
-            // show(new view_NapRut(vMain));
+            show(new view_NapRut(vMain));
         }
         if (source == vMain.btn_DatPhong) {
-            // show(new view_DatPhong(vMain));
+            show(new view_DatPhong(vMain));
         }
         if (source == vMain.btn_TraPhong) {
             // show(new view_TraPhong(vMain));
