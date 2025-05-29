@@ -62,7 +62,7 @@ public class ctl_main implements ActionListener {
             show(new view_NapRut(vMain));
         }
         if (source == vMain.btn_DatPhong) {
-            // show(new view_DatPhong(vMain));
+            show(new view_DatPhong(vMain));
         }
         if (source == vMain.btn_TraPhong) {
             show(new view_TraPhong(vMain));
