@@ -7,7 +7,6 @@ import javax.swing.table.*;
 import VIEW.view_main;
 
 import java.awt.*;
-
 import java.util.Date;
 
 public class view_KhachHang extends JPanel {
@@ -80,8 +79,10 @@ public class view_KhachHang extends JPanel {
         cmbLoc.setBackground(Color.WHITE);
         cmbLoc.setPreferredSize(new Dimension(150, 30));
         
-        // Thêm sự kiện lọc ngay khi thay đổi giá trị
-        
+        // Thêm các mục vào combobox lọc
+        cmbLoc.addItem("Tất cả");
+        cmbLoc.addItem("Khóa");
+        cmbLoc.addItem("Đang hoạt động");
 
         filterPanel.add(lblFilter);
         filterPanel.add(cmbLoc);
@@ -120,9 +121,6 @@ public class view_KhachHang extends JPanel {
         tblKhachHang.setRowSelectionAllowed(true);
         tblKhachHang.setColumnSelectionAllowed(false);
         tblKhachHang.setFillsViewportHeight(true);
-
-        // Thêm sự kiện khi click vào một hàng trong bảng
-        
 
         JTableHeader header = tblKhachHang.getTableHeader();
         header.setPreferredSize(new Dimension(header.getWidth(), 45));
@@ -271,6 +269,9 @@ public class view_KhachHang extends JPanel {
         cmbTrangThai = new JComboBox<>();
         cmbTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cmbTrangThai.setBackground(Color.WHITE);
+        // Thêm các mục vào combobox trạng thái
+        cmbTrangThai.addItem("Khóa");
+        cmbTrangThai.addItem("Đang hoạt động");
         formPanel.add(cmbTrangThai, gbc);
         
         return formPanel;
@@ -339,9 +340,6 @@ public class view_KhachHang extends JPanel {
 
         btnSua = taoStyledButton("Sửa", new Color(52, 152, 219));
 
-        // Thêm sự kiện cho nút Sửa
-
-
         buttonPanel.add(btnSua);
 
         return buttonPanel;
@@ -369,8 +367,6 @@ public class view_KhachHang extends JPanel {
         button.setBorderPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-
-
         return button;
     }
 
@@ -380,5 +376,4 @@ public class view_KhachHang extends JPanel {
         int blue = Math.max(0, Math.round(color.getBlue() * (1 - fraction)));
         return new Color(red, green, blue);
     }
-
 }

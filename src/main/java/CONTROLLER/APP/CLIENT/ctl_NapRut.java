@@ -27,6 +27,8 @@ public class ctl_NapRut implements ActionListener{
 
         } else if (source == vNapRut.btnRutTien) {
 
+        } else if (source == vNapRut.sendOtpBtn) {
+            GuiOTP();
         }
     }
 
@@ -45,7 +47,7 @@ public class ctl_NapRut implements ActionListener{
     long otpExpireTime = 0; // thời điểm OTP hết hạn tính theo milliseconds
 
 
-    public void GuiOTP(JButton sendOtpBtn){
+    public void GuiOTP(){
         otp = randomOTP(6);
         otp = "Mã OTP xác thực: " + otp;
 
@@ -62,17 +64,17 @@ public class ctl_NapRut implements ActionListener{
         otpExpireTime = System.currentTimeMillis() + 60_000;
 
         // Disable nút và đếm ngược
-        sendOtpBtn.setEnabled(false);
+        vNapRut.sendOtpBtn.setEnabled(false);
         final int[] countdown = {60};
 
         Timer timer = new Timer(1000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (countdown[0] > 0) {
-                    sendOtpBtn.setText("Gửi lại (" + countdown[0]-- + "s)");
+                    vNapRut.sendOtpBtn.setText("Gửi lại (" + countdown[0]-- + "s)");
                 } else {
                     ((Timer) evt.getSource()).stop();
-                    sendOtpBtn.setEnabled(true);
-                    sendOtpBtn.setText("Gửi OTP");
+                    vNapRut.sendOtpBtn.setEnabled(true);
+                    vNapRut.sendOtpBtn.setText("Gửi OTP");
 
                     // Hết hiệu lực sau 60s
                     otp = "";

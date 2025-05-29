@@ -122,7 +122,7 @@ public class NguoiDungDAO {
                 return nd.getMatKhau(); // Đăng nhập thành công
             }
         }
-        return null; // Sai tài khoản hoặc mật khẩu
+        return null;
     }
 
     public boolean checkGmail(String email){
