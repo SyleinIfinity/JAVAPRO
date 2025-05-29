@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
+import CONTROLLER.APP.CLIENT.ctl_NapRut;
+
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -31,6 +34,7 @@ public class view_NapRut extends JPanel {
     public JTextField txtSoTienNap;
     public JComboBox<String> cbPhuongThucNap;
     public JButton btnNapTien;
+    public JButton sendOtpBtn; // Nút gửi mã OTP
     // Tab Rút
     public JTextField txtSoTienRut;
     public JButton btnRutTien;
@@ -40,6 +44,7 @@ public class view_NapRut extends JPanel {
     // Enhanced components
     private JLabel balanceIcon;
     private JPanel headerPanel;
+    ctl_NapRut controller;
 
     public view_NapRut(view_main vMain) {
         this.vMain = vMain;
@@ -49,6 +54,8 @@ public class view_NapRut extends JPanel {
         
         initializeComponents();
         setupLayout();
+
+        controller = new ctl_NapRut(this, vMain);
     }
     
     private void initializeComponents() {
@@ -350,7 +357,7 @@ public class view_NapRut extends JPanel {
         otpField.setPreferredSize(new Dimension(200, 35));
         otpField.setMaximumSize(new Dimension(200, 35));
         
-        JButton sendOtpBtn = createSecondaryButton("📧 Gửi mã");
+        sendOtpBtn = createSecondaryButton("📧 Gửi mã");
         sendOtpBtn.setPreferredSize(new Dimension(120, 35));
         
         JPanel otpInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -548,16 +555,16 @@ public class view_NapRut extends JPanel {
         return vMain;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            view_main vMain = new view_main("testUser", "testRole");
-            JFrame frame = new JFrame("Test Nạp/Rút");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1100, 700);
-            frame.setLocationRelativeTo(null);
-            frame.setLayout(new BorderLayout());
-            frame.add(new view_NapRut(vMain), BorderLayout.CENTER);
-            frame.setVisible(true);
-        });
-    }
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> {
+    //         view_main vMain = new view_main("testUser", "testRole");
+    //         JFrame frame = new JFrame("Test Nạp/Rút");
+    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    //         frame.setSize(1100, 700);
+    //         frame.setLocationRelativeTo(null);
+    //         frame.setLayout(new BorderLayout());
+    //         frame.add(new view_NapRut(vMain), BorderLayout.CENTER);
+    //         frame.setVisible(true);
+    //     });
+    // }
 }

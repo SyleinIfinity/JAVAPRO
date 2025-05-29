@@ -62,7 +62,7 @@ public class ChiNhanhKhachSanDAO {
 
     public int capNhatChiNhanhKhachSan(ChiNhanhKhachSan cnks){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatChiNhanhKhachSan(?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatChiNhanhKhachSan(?,?,?,?)}");
             stmt.setString(1, cnks.getMaChiNhanh());
             stmt.setString(2, cnks.getTenChiNhanh());
             stmt.setString(3, cnks.getDiaChi());

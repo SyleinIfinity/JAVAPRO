@@ -27,7 +27,7 @@ public class view_main extends JFrame {
     }
 
     public void setMaNguoiDung(String maNguoiDung){
-        this.maNguoiDung = maNguoiDung; 
+        this.maNguoiDung = maNguoiDung;
     }
 
     public String getMaVaiTro(){
