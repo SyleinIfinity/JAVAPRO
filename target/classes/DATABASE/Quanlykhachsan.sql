@@ -55,7 +55,15 @@ CREATE TABLE ChiNhanhKhachSan
     diaChi NVARCHAR(255) NULL,
     SDT VARCHAR(10) UNIQUE CHECK (SDT LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
 );
-
+Go
+--Bảng dịch vụ
+CREATE TABLE DichVu
+(
+	maDichVu varchar(100) PRIMARY KEY,
+	tenDichVu NVARCHAR(255) not null,
+	giaDichVu decimal(15,2),
+	moTa NVARCHAR(255)
+);
 Go
 -- Bảng Loại phòng
 CREATE TABLE LoaiPhong
@@ -82,26 +90,6 @@ CREATE TABLE Phong
 );
 
 Go
---Bảng Loại Dịch Vụ
-CREATE TABLE LoaiDichVu
-(
-	maLoaiDichVu char(5) PRIMARY KEY,
-	tenLoaiDichVu NVARCHAR(255) not null,
-	giaDichVu decimal(15,2),
-	moTa NVARCHAR(255)
-);
-
-Go
---Bảng dịch vụ
-CREATE TABLE DichVu
-(
-	maDichVu char(5) PRIMARY KEY,
-	tenDichVu NVARCHAR(255) not null,
-	maLoaiDichVu char(5),
-	FOREIGN KEY (maLoaiDichVu) REFERENCES LoaiDichVu(maLoaiDichVu)
-);
-
-Go
 -- Bảng Đặt phòng
 CREATE TABLE DatPhong
 (
@@ -109,7 +97,7 @@ CREATE TABLE DatPhong
     maNguoiDung CHAR(5),
     maPhong CHAR(5),
 	soNguoi int,
-    dichVuSuDung CHAR(5),
+    dichVuSuDung varchar(100),
     ngayThuePhong DATETIME NOT NULL,
     ngayTraPhong DATETIME NOT NULL,
     trangThai NVARCHAR(20) CHECK (trangThai IN (N'Đã đặt', N'Hoàn thành', N'Hủy')) NOT NULL,
@@ -117,8 +105,7 @@ CREATE TABLE DatPhong
 	--check (check_out_date <= getdate()),
 	-- check (ngayThuePhong < ngayTraPhong),
     FOREIGN KEY (maNguoiDung) REFERENCES NguoiDung(maNguoiDung),
-    FOREIGN KEY (maPhong) REFERENCES Phong(maPhong),
-    FOREIGN KEY (dichVuSuDung) REFERENCES DichVu(maDichVu)
+    FOREIGN KEY (maPhong) REFERENCES Phong(maPhong)
 );
 
 Go
@@ -163,6 +150,30 @@ VALUES
 ('CN009', N'Khách sạn Hương Tràm', N'123 Nguyễn Trãi, Vũng Tàu', '0254388123'),
 ('CN010', N'Khách sạn Trúc Xanh', N'345 CMT8, Bình Dương', '0274388123');
 GO
+-- Bảng Dịch vụ
+INSERT INTO DichVu (maDichVu, tenDichVu, giaDichVu, moTa)
+VALUES
+    ('DV001', N'Giặt ủi', 50000, N'Dịch vụ giặt ủi quần áo trong ngày'),
+    ('DV002', N'Đưa đón sân bay', 250000, N'Dịch vụ đưa đón tận nơi tại sân bay'),
+    ('DV003', N'Bữa sáng', 80000, N'Bữa sáng buffet tại nhà hàng khách sạn'),
+    ('DV004', N'Spa thư giãn', 300000, N'Massage toàn thân và xông hơi'),
+    ('DV005', N'Thuê xe máy', 120000, N'Thuê xe máy trong 1 ngày'),
+    ('DV006', N'Gọi món tại phòng', 50000, N'Phục vụ đồ ăn tại phòng'),
+    ('DV007', N'Dọn phòng thêm', 30000, N'Dọn dẹp phòng ngoài lịch mặc định'),
+    ('DV008', N'Massage chân', 150000, N'Massage chân trong 30 phút'),
+    ('DV009', N'Gửi hành lý', 0, N'Giữ hành lý miễn phí sau trả phòng'),
+    ('DV010', N'Karaoke', 200000, N'Phòng karaoke riêng trong 1 giờ'),
+    ('DV011', N'Bể bơi', 0, N'Sử dụng bể bơi miễn phí cho khách lưu trú'),
+    ('DV012', N'Thuê xe ô tô', 500000, N'Thuê xe có tài xế trong thành phố'),
+    ('DV013', N'Đặt tour du lịch', 1000000, N'Tour tham quan địa phương nguyên ngày'),
+    ('DV014', N'Phòng họp', 700000, N'Thuê phòng họp trong 3 giờ'),
+    ('DV015', N'Internet tốc độ cao', 0, N'Wifi miễn phí toàn khách sạn'),
+    ('DV016', N'Cà phê sáng', 40000, N'Cà phê mang đi vào buổi sáng'),
+    ('DV017', N'Sân tennis', 100000, N'Thuê sân chơi tennis 1 giờ'),
+    ('DV018', N'Vé khu vui chơi', 200000, N'Vé vào khu giải trí liên kết'),
+    ('DV019', N'Cho thuê áo tắm', 30000, N'Thuê đồ bơi và áo tắm'),
+    ('DV020', N'Giữ trẻ', 150000, N'Trông trẻ theo giờ tại khu vui chơi');
+GO
 INSERT INTO LoaiPhong (maLoaiPhong, tenLoaiPhong, soLuongToiDa, moTa, giaPhong)
 VALUES 
     ('LP001', N'Phòng đơn', 1, N'Phòng dành cho 1 người', 300000),
@@ -178,30 +189,6 @@ VALUES
     ('P004', '202', 'LP004', 2, 'CN002', N'Trống'),
     ('P005', '301', 'LP002', 3, 'CN003', N'Bảo trì');
 GO
-INSERT INTO LoaiDichVu (maLoaiDichVu, tenLoaiDichVu, giaDichVu, moTa)
-VALUES 
-    ('LDV01', N'Dịch vụ ăn uống', 100000, N'Bao gồm ăn sáng/trưa/tối'),
-    ('LDV02', N'Dịch vụ giặt ủi', 50000, N'Giặt ủi quần áo'),
-    ('LDV03', N'Dịch vụ spa', 200000, N'Spa thư giãn'),
-    ('LDV04', N'Dịch vụ xe đưa đón', 150000, N'Xe đưa đón sân bay');
-go
-INSERT INTO DichVu (maDichVu, tenDichVu, maLoaiDichVu)
-VALUES 
-    ('DV001', N'Bữa sáng buffet', 'LDV01'),
-    ('DV002', N'Giặt nhanh 24h', 'LDV02'),
-    ('DV003', N'Massage thư giãn', 'LDV03'),
-    ('DV004', N'Đưa đón sân bay', 'LDV04'),
-    ('DV005', N'Dọn phòng hàng ngày', 'LDV01'),
-    ('DV006', N'Thuê xe đạp', 'LDV04'),
-    ('DV007', N'Bữa tối tại phòng', 'LDV01'),
-    ('DV008', N'Giặt hấp cao cấp', 'LDV02'),
-    ('DV009', N'Massage chân', 'LDV03'),
-    ('DV010', N'Trông trẻ', 'LDV04'),
-    ('DV011', N'Spa cao cấp', 'LDV03'),
-    ('DV012', N'Bữa trưa tự chọn', 'LDV01'),
-    ('DV013', N'Giặt đồ trẻ em', 'LDV02'),
-    ('DV014', N'Dẫn tour địa phương', 'LDV04');
-go
 INSERT INTO DatPhong (maDatPhong, maNguoiDung, maPhong, soNguoi, dichVuSuDung, ngayThuePhong, ngayTraPhong, trangThai)
 VALUES 
 ('DP001', 'ND002', 'P001', 1, 'DV001', '2025-06-01', '2025-06-03', N'Đã đặt'),
@@ -218,7 +205,7 @@ GO
 
 Go
 
--------------Dich Vu-------------------
+-----------------------------------------------Dich Vu----------------------------------------------------
 CREATE PROCEDURE sp_LayDanhSachDichVu
 AS
 BEGIN
@@ -228,94 +215,66 @@ GO
 
 --insert
 CREATE PROCEDURE sp_ThemDichVu
-    @maDichVu CHAR(5),
+    -- @maDichVu CHAR(5),
     @tenDichVu NVARCHAR(255),
-    @maLoaiDichVu CHAR(5)
+    @giaDichVu DECIMAL(15,2),
+    @moTa NVARCHAR(255)
 AS
 BEGIN
-    INSERT INTO DichVu VALUES (@maDichVu, @tenDichVu, @maLoaiDichVu)
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maDichVu, 3, LEN(maDichVu)) AS INT)), 0) + 1 FROM DichVu;
+    SET @newMa = 'DV' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO DichVu VALUES (@newMa, @tenDichVu, @giaDichVu, @moTa)
 END;
 go
 
 --update
 CREATE PROCEDURE sp_CapNhatDichVu
-    @maDichVu CHAR(5),
+    @maDichVu varchar(100),
     @tenDichVu NVARCHAR(255),
-    @maLoaiDichVu CHAR(5)
+    @giaDichVu DECIMAL(15,2),
+    @moTa NVARCHAR(255)
 AS
 BEGIN
     UPDATE DichVu
     SET tenDichVu = @tenDichVu,
-        maLoaiDichVu = @maLoaiDichVu
+        giaDichVu = @giaDichVu,
+        moTa = @moTa
     WHERE maDichVu = @maDichVu
 END
 go
 --delete
 CREATE PROCEDURE sp_XoaDichVu
-    @maDichVu CHAR(5)
+    @maDichVu varchar(100)
 AS
 BEGIN
     DELETE FROM DichVu WHERE maDichVu = @maDichVu
-END
-GO
--------------Loai dich vu------------------
---insert
-CREATE PROCEDURE sp_ThemLoaiDichVu
-    @maLoaiDichVu CHAR(5),
-    @tenLoaiDichVu NVARCHAR(255),
-    @giaDichVu DECIMAL(15,2),
-    @moTa NVARCHAR(255)
-AS
-BEGIN
-    INSERT INTO LoaiDichVu VALUES (@maLoaiDichVu, @tenLoaiDichVu, @giaDichVu, @moTa)
-END
-GO
---update
-CREATE PROCEDURE sp_CapNhatLoaiDichVu
-    @maLoaiDichVu CHAR(5),
-    @tenLoaiDichVu NVARCHAR(255),
-    @giaDichVu DECIMAL(15,2),
-    @moTa NVARCHAR(255)
-AS
-BEGIN
-    UPDATE LoaiDichVu
-    SET tenLoaiDichVu = @tenLoaiDichVu,
-        giaDichVu = @giaDichVu,
-        moTa = @moTa
-    WHERE maLoaiDichVu = @maLoaiDichVu
-END
-GO
---delete
-CREATE PROCEDURE sp_XoaLoaiDichVu
-    @maLoaiDichVu CHAR(5)
-AS
-BEGIN
-    DELETE FROM LoaiDichVu WHERE maLoaiDichVu = @maLoaiDichVu
-END
-GO
---select
-CREATE PROCEDURE sp_LayDanhSachLoaiDichVu
-AS
-BEGIN
-    SELECT * FROM LoaiDichVu
 END
 GO
 
 --------------Nguoi Dung-----------------
 --insert
 CREATE PROCEDURE sp_ThemNguoiDung
-    @maNguoiDung CHAR(5),
     @tenNguoiDung NVARCHAR(100),
     @ngaySinh VARCHAR(15),
     @SDT VARCHAR(10),
     @email NVARCHAR(100),
     @matKhau NVARCHAR(255),
-    @soDuTaiKhoan DECIMAL(20,2),
     @maVaiTro CHAR(5),
     @trangThai BIT
 AS
 BEGIN
-    INSERT INTO NguoiDung VALUES (@maNguoiDung, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, @soDuTaiKhoan, @maVaiTro, @trangThai)
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maNguoiDung, 3, LEN(maNguoiDung)) AS INT)), 0) + 1 FROM NguoiDung;
+    SET @newMa = 'ND' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO NguoiDung VALUES (@newMa, @tenNguoiDung, @ngaySinh, @SDT, @email, @matKhau, 0, @maVaiTro, @trangThai)
 END
 GO
 --update
@@ -327,7 +286,8 @@ CREATE PROCEDURE sp_CapNhatNguoiDung
     @email NVARCHAR(100),
     @matKhau NVARCHAR(255),
     @soDuTaiKhoan DECIMAL(20,2),
-    @maVaiTro CHAR(5)
+    @maVaiTro CHAR(5),
+    @trangThai bit
 AS
 BEGIN
     UPDATE NguoiDung
@@ -337,7 +297,8 @@ BEGIN
         email = @email,
         matKhau = @matKhau,
         soDuTaiKhoan = @soDuTaiKhoan,
-        maVaiTro = @maVaiTro
+        maVaiTro = @maVaiTro,
+        trangThai = @trangThai
     WHERE maNguoiDung = @maNguoiDung
 END
 GO
@@ -401,13 +362,20 @@ GO
 ---------------------------------------------------------Chi Nhanh Khach San ---------------------------
 --insert
 CREATE PROCEDURE sp_ThemChiNhanhKhachSan
-    @maChiNhanh CHAR(5),
+    -- @maChiNhanh CHAR(5),
     @tenChiNhanh NVARCHAR(100),
     @diaChi NVARCHAR(255),
     @SDT VARCHAR(10)
 AS
 BEGIN
-    INSERT INTO ChiNhanhKhachSan VALUES (@maChiNhanh, @tenChiNhanh, @diaChi, @SDT)
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maChiNhanh, 3, LEN(maChiNhanh)) AS INT)), 0) + 1 FROM ChiNhanhKhachSan;
+    SET @newMa = 'CN' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO ChiNhanhKhachSan VALUES (@newMa, @tenChiNhanh, @diaChi, @SDT)
 END
 GO
 
@@ -496,7 +464,7 @@ GO
 --------------------------------------------------------------Phong------------------------------
 --insert
 CREATE PROCEDURE sp_ThemPhong
-    @maPhong CHAR(5),
+    -- @maPhong CHAR(5),
     @soPhong VARCHAR(10),
     @maLoaiPhong CHAR(5),
     @soTang INT,
@@ -504,7 +472,14 @@ CREATE PROCEDURE sp_ThemPhong
     @trangThai NVARCHAR(20)
 AS
 BEGIN
-    INSERT INTO Phong VALUES (@maPhong, @soPhong, @maLoaiPhong, @soTang, @maChiNhanh, @trangThai)
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maPhong, 3, LEN(maPhong)) AS INT)), 0) + 1 FROM Phong;
+    SET @newMa = 'P' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
+    INSERT INTO Phong VALUES (@newMa, @soPhong, @maLoaiPhong, @soTang, @maChiNhanh, @trangThai)
 END
 GO
 
@@ -548,7 +523,7 @@ GO
 -----------------------------------------------------Dat Phong---------------------------
 --insert
 CREATE PROCEDURE sp_ThemDatPhong
-    @maDatPhong CHAR(5),
+    -- @maDatPhong CHAR(5),
     @maNguoiDung CHAR(5),
     @maPhong CHAR(5),
     @soNguoi INT,
@@ -558,8 +533,15 @@ CREATE PROCEDURE sp_ThemDatPhong
     @trangThai NVARCHAR(20)
 AS
 BEGIN
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maDatPhong, 3, LEN(maDatPhong)) AS INT)), 0) + 1 FROM DatPhong;
+    SET @newMa = 'DP' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
     INSERT INTO DatPhong 
-    VALUES (@maDatPhong, @maNguoiDung, @maPhong, @soNguoi, @dichVuSuDung, @ngayThuePhong, @ngayTraPhong, @trangThai)
+    VALUES (@newMa, @maNguoiDung, @maPhong, @soNguoi, @dichVuSuDung, @ngayThuePhong, @ngayTraPhong, @trangThai)
 END
 GO
 
@@ -607,15 +589,22 @@ GO
 --------------------------------------------------------Hóa Đơn------------------------------------
 --insert
 CREATE PROCEDURE sp_ThemHoaDon
-    @maHoaDon CHAR(5),
+    -- @maHoaDon CHAR(5),
     @maDatPhong CHAR(5),
     @maDichVu CHAR(5),
     @nhanVienPhuTrach CHAR(5),
     @tongTien DECIMAL(15,2)
 AS
 BEGIN
+
+    DECLARE @nextId INT;
+    DECLARE @newMa NVARCHAR(10);
+
+    SELECT @nextId = ISNULL(MAX(CAST(SUBSTRING(maHoaDon, 3, LEN(maHoaDon)) AS INT)), 0) + 1 FROM HoaDon;
+    SET @newMa = 'HD' + RIGHT('000' + CAST(@nextId AS VARCHAR), 3);
+
     INSERT INTO HoaDon(maHoaDon, maDatPhong, maDichVu, nhanVienPhuTrach, tongTien)
-    VALUES (@maHoaDon, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien)
+    VALUES (@newMa, @maDatPhong, @maDichVu, @nhanVienPhuTrach, @tongTien)
 END
 GO
 
@@ -653,6 +642,23 @@ BEGIN
     SELECT * FROM HoaDon
 END
 GO
+
+CREATE PROCEDURE sp_LayHoaDonTheoNgayVaChiNhanh
+    @TuNgay DATE,
+    @DenNgay DATE,
+    @TenChiNhanh NVARCHAR(100)
+AS
+BEGIN
+    SELECT hd.*
+    FROM HoaDon hd
+    JOIN DatPhong dp ON hd.maDatPhong = dp.maDatPhong
+    JOIN Phong p ON dp.maPhong = p.maPhong
+    JOIN ChiNhanhKhachSan cn ON p.maChiNhanh = cn.maChiNhanh
+    WHERE hd.ngayGiaoDich BETWEEN @TuNgay AND @DenNgay
+      AND cn.tenChiNhanh = @TenChiNhanh
+END
+
+
 
 -------Trigger-------Trigger-------Trigger-------Trigger-------Trigger-------Trigger-------
 

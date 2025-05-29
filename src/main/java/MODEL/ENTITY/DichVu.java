@@ -3,16 +3,25 @@ package MODEL.ENTITY;
 public class DichVu {
     private String maDichVu;    
     private String tenDichVu;
-    private String maLoaiDichVu;
+    private Double giaDichVu;
+    private String moTa;
 
     public DichVu(){
 
     }
     
-    public DichVu(String maDichVu, String tenDichVu, String maLoaiDichVu) {
+    public DichVu(String maDichVu, String tenDichVu, Double giaDichVu, String moTa) {
         this.maDichVu = maDichVu;
         this.tenDichVu = tenDichVu;
-        this.maLoaiDichVu = maLoaiDichVu;
+        this.giaDichVu = giaDichVu;
+        this.moTa = moTa;
+    }
+
+        public DichVu(String tenDichVu, Double giaDichVu, String moTa) {
+        // this.maDichVu = maDichVu;
+        this.tenDichVu = tenDichVu;
+        this.giaDichVu = giaDichVu;
+        this.moTa = moTa;
     }
 
     public String getMaDichVu() {
@@ -30,18 +39,28 @@ public class DichVu {
     public void setTenDichVu(String tenDichVu) {
         this.tenDichVu = tenDichVu;
     }
-
-    public String getMaLoaiDichVu() {
-        return maLoaiDichVu;
+    public Double getGiaDichVu() {
+        return giaDichVu;
     }
 
-    public void setMaLoaiDichVu(String maLoaiDichVu) {
-        this.maLoaiDichVu = maLoaiDichVu;
+    public void setGiaDichVu(Double giaDichVu) {
+        this.giaDichVu = giaDichVu;
+    }
+    public String getMoTa() {
+        return moTa;
+    }
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
 
     @Override
     public String toString() {
-        return "dichvu [maDichVu=" + maDichVu + ", tenDichVu=" + tenDichVu + ", maLoaiDichVu=" + maLoaiDichVu + "]";
+        return "DichVu{" +
+                "maDichVu='" + maDichVu + '\'' +
+                ", tenDichVu='" + tenDichVu + '\'' +
+                ", giaDichVu=" + giaDichVu +
+                ", moTa='" + moTa + '\'' +
+                '}';
     }
     
 }
