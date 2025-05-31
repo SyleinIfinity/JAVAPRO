@@ -97,7 +97,7 @@ public class view_Phong extends JPanel {
         JLabel lblFilter = new JLabel("Lọc theo:");
         lblFilter.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        cmbLoc = new JComboBox<>(new String[]{"Tất cả", "Trống", "Đã đặt", "Đang sử dụng", "Bảo trì"});
+        cmbLoc = new JComboBox<>(new String[]{"Tất cả", "Trống", "Đã đặt trước", "Có người ở", "Bảo trì"});
         cmbLoc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cmbLoc.setBackground(Color.WHITE);
 
@@ -194,7 +194,7 @@ public class view_Phong extends JPanel {
         pnForm.add(lblTrangThai, gbc);
 
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        cmbTrangThai = new JComboBox<>(new String[]{"Trống", "Đã đặt", "Đang sử dụng", "Bảo trì"});
+        cmbTrangThai = new JComboBox<>(new String[]{"Trống", "Đã đặt trước", "Có người ở", "Bảo trì"});
         cmbTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cmbTrangThai.setBackground(Color.WHITE);
         cmbTrangThai.setPreferredSize(new Dimension(200, 35));
