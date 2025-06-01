@@ -67,7 +67,7 @@ public class PhongDAO {
 
     public int capNhatPhong(Phong p){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?)}");
             stmt.setString(1, p.getMaPhong());
             stmt.setString(2, p.getSoPhong());
             stmt.setString(3, p.getMaLoaiPhong());
@@ -76,6 +76,13 @@ public class PhongDAO {
             stmt.setString(6, p.getTrangThai());
 
             int row = stmt.executeUpdate();
+            
+            if (row > 0) {
+                // Update the record in our HashMap
+                listPHONG.put(p.getMaPhong(), p);
+                System.out.println("Cập nhật phòng " + p.getMaPhong() + " thành công");
+            }
+            
             return row;
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,6 +103,35 @@ public class PhongDAO {
         }
     }
     
+    // Method to refresh data from database
+    public void refreshData() {
+        try {
+            // Clear current data
+            listPHONG.clear();
+            
+            // Reload from database
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachPhong}");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Phong p = new Phong(
+                    rs.getString("maPhong"),
+                    rs.getString("soPhong"),
+                    rs.getString("maLoaiPhong"),
+                    rs.getInt("soTang"),
+                    rs.getString("maChiNhanh"),
+                    rs.getString("trangThai")
+                );
+                listPHONG.put(p.getMaPhong(), p);
+            }
+            
+            System.out.println("Dữ liệu phòng đã được cập nhật");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi khi cập nhật dữ liệu phòng");
+        }
+    }
+
     public static void main(String[] args) {
         PhongDAO pD = new PhongDAO();
     }

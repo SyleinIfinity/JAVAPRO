@@ -3,6 +3,8 @@ package VIEW.STAFF;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import VIEW.view_main;
 
@@ -17,18 +19,20 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 public class view_DonDatPhong extends JPanel {
     private JTextField txtSoNguoi;
-    private JComboBox<String> cbMaDatPhong;
-    private JComboBox<Record> cbMaChiNhanh, cbMaPhong, cbDichVu;
+    private JTextField txtMaDatPhong;
+    public JComboBox<Record> cbMaChiNhanh, cbMaPhong, cbDichVu;
     private JSpinner spinnerNgayThue, spinnerNgayTra;
-    private JTable table;
+    public JTable table;
     private DefaultTableModel tableModel;
     private Color mauChinh = new Color(52, 152, 219);
     private Color mauPhu = new Color(41, 128, 185);
     private Color mauNen = new Color(236, 240, 241);
     private Color mauNhan = new Color(230, 126, 34);
     private List<Object[]> originalData = new ArrayList<>();
+    private JButton btnDat, btnHuy;
 
     view_main vMain;
+    private CONTROLLER.APP.STAFF.ctl_DonDatPhong controller;
 
     public view_DonDatPhong(view_main vMain) {
         setLayout(new BorderLayout());
@@ -53,6 +57,9 @@ public class view_DonDatPhong extends JPanel {
         contentPanel.add(rightPanel, BorderLayout.CENTER);
 
         add(contentPanel, BorderLayout.CENTER);
+        
+        // Initialize controller
+        controller = new CONTROLLER.APP.STAFF.ctl_DonDatPhong(this, vMain);
     }
 
     private JPanel taoHeaderPanel() {
@@ -111,16 +118,21 @@ public class view_DonDatPhong extends JPanel {
 
         gbc.gridx = 1;
         gbc.weightx = 1.0;
-        cbMaDatPhong = new JComboBox<>();
-        cbMaDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        cbMaDatPhong.setBackground(Color.WHITE);
-        formPanel.add(cbMaDatPhong, gbc);
+        txtMaDatPhong = new JTextField();
+        txtMaDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtMaDatPhong.setEnabled(false);
+        txtMaDatPhong.setBackground(new Color(240, 240, 240));
+        txtMaDatPhong.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(189, 195, 199)),
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        formPanel.add(txtMaDatPhong, gbc);
 
         // Mã phòng
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0;
-        JLabel lblMaPhong = new JLabel("Mã phòng:");
+        JLabel lblMaPhong = new JLabel("Phòng:");
         lblMaPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
         formPanel.add(lblMaPhong, gbc);
 
@@ -206,25 +218,15 @@ public class view_DonDatPhong extends JPanel {
         
         inputPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Button panel với 4 button được thiết kế lại
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 15, 15));
+        // Button panel với 2 button (removed Duyệt và Cập nhật)
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 15, 15));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        JButton btnDat = taoButtonDep("Đặt", mauChinh);
-        JButton btnCapNhat = taoButtonDep("Cập nhật", mauPhu);
-        JButton btnDuyet = taoButtonDep("Duyệt", mauNhan);
-        JButton btnHuy = taoButtonDep("Hủy", new Color(231, 76, 60));
-        
-        // Thêm ActionListener mẫu cho các nút
-        btnDat.addActionListener(e -> JOptionPane.showMessageDialog(this, "Chức năng Đặt đang được triển khai!"));
-        btnCapNhat.addActionListener(e -> JOptionPane.showMessageDialog(this, "Chức năng Cập nhật đang được triển khai!"));
-        btnDuyet.addActionListener(e -> JOptionPane.showMessageDialog(this, "Chức năng Duyệt đang được triển khai!"));
-        btnHuy.addActionListener(e -> JOptionPane.showMessageDialog(this, "Chức năng Hủy đang được triển khai!"));
+        btnDat = taoButtonDep("Đặt", mauChinh);
+        btnHuy = taoButtonDep("Hủy", new Color(231, 76, 60));
         
         buttonPanel.add(btnDat);
-        buttonPanel.add(btnCapNhat);
-        buttonPanel.add(btnDuyet);
         buttonPanel.add(btnHuy);
         
         inputPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -342,19 +344,7 @@ public class view_DonDatPhong extends JPanel {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBackground(mauNen);
 
-        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        filterPanel.setBackground(mauNen);
-        JLabel lblFilter = new JLabel("Lọc theo trạng thái:");
-        lblFilter.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        filterPanel.add(lblFilter);
-
-        String[] trangThaiOptions = {"Tất cả", "Chờ duyệt", "Đã duyệt", "Đã hủy"};
-        JComboBox<String> cbFilterTrangThai = new JComboBox<>(trangThaiOptions);
-        cbFilterTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        cbFilterTrangThai.setBackground(Color.WHITE);
-        filterPanel.add(cbFilterTrangThai);
-
-        String[] columnNames = {"Mã đặt phòng", "Mã khách hàng", "Mã chi nhánh", "Mã phòng", "Số người", "Dịch vụ", "Ngày thuê", "Ngày trả", "Trạng thái"};
+        String[] columnNames = {"Mã đặt phòng", "Mã khách hàng", "Mã chi nhánh", "Mã phòng", "Số người", "Dịch vụ", "Ngày thuê", "Ngày trả"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -370,6 +360,18 @@ public class view_DonDatPhong extends JPanel {
         table.setGridColor(new Color(189, 195, 199));
         table.setShowGrid(true);
         table.setFillsViewportHeight(true);
+
+        // Add row selection listener
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow >= 0) {
+                        loadSelectedRowData(selectedRow);
+                    }
+                }
+            }
+        });
 
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(header.getWidth(), 45));
@@ -393,16 +395,10 @@ public class view_DonDatPhong extends JPanel {
 
         caiDatTableColumns();
 
-        cbFilterTrangThai.addActionListener(e -> {
-            String selectedTrangThai = (String) cbFilterTrangThai.getSelectedItem();
-            filterTableByTrangThai(selectedTrangThai);
-        });
-
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199)));
         scrollPane.getViewport().setBackground(Color.WHITE);
 
-        tablePanel.add(filterPanel, BorderLayout.NORTH);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
         return tablePanel;
@@ -410,7 +406,7 @@ public class view_DonDatPhong extends JPanel {
 
     private void caiDatTableColumns() {
         // Điều chỉnh độ rộng cột theo thứ tự mới
-        int[] columnWidths = {120, 120, 100, 100, 80, 150, 120, 120, 100}; // Mã đặt phòng, Mã khách hàng, Mã chi nhánh, Mã phòng, Số người, Dịch vụ, Ngày thuê, Ngày trả, Trạng thái
+        int[] columnWidths = {120, 120, 100, 100, 80, 150, 120, 120}; // Mã đặt phòng, Mã khách hàng, Mã chi nhánh, Mã phòng, Số người, Dịch vụ, Ngày thuê, Ngày trả
         TableColumnModel columnModel = table.getColumnModel();
         int columnCount = Math.min(columnWidths.length, columnModel.getColumnCount());
 
@@ -436,7 +432,7 @@ public class view_DonDatPhong extends JPanel {
                         setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                     }
                     
-                    if (column == 0 || column == 1 || column == 2 || column == 3 || column == 4 || column == 8) {
+                    if (column == 0 || column == 1 || column == 2 || column == 3 || column == 4) {
                         setHorizontalAlignment(SwingConstants.CENTER);
                     } else {
                         setHorizontalAlignment(SwingConstants.LEFT);
@@ -448,67 +444,121 @@ public class view_DonDatPhong extends JPanel {
         }
     }
 
-    private void filterTableByTrangThai(String trangThai) {
-        if (originalData.isEmpty()) {
-            return;
-        }
-        tableModel.setRowCount(0);
-        for (Object[] row : originalData) {
-            if (trangThai.equals("Tất cả") || (row[8] != null && row[8].equals(trangThai))) { // Cột "Trạng thái" giờ là cột 8
-                tableModel.addRow(row);
-            }
-        }
-    }
+    // Method to load selected row data into form fields
+    private void loadSelectedRowData(int row) {
+        if (row < 0 || row >= tableModel.getRowCount()) return;
 
-    private void hienThiThongTinDatPhong(int row) {
-        // Chọn Mã chi nhánh (cột 2)
+        String maDatPhong = tableModel.getValueAt(row, 0) != null ? tableModel.getValueAt(row, 0).toString() : "";
+        String maKhachHang = tableModel.getValueAt(row, 1) != null ? tableModel.getValueAt(row, 1).toString() : "";
         String maChiNhanh = tableModel.getValueAt(row, 2) != null ? tableModel.getValueAt(row, 2).toString() : "";
+        String maPhong = tableModel.getValueAt(row, 3) != null ? tableModel.getValueAt(row, 3).toString() : "";
+        String soNguoi = tableModel.getValueAt(row, 4) != null ? tableModel.getValueAt(row, 4).toString() : "";
+        String ngayThueStr = tableModel.getValueAt(row, 6) != null ? tableModel.getValueAt(row, 6).toString() : "";
+        String ngayTraStr = tableModel.getValueAt(row, 7) != null ? tableModel.getValueAt(row, 7).toString() : "";
+        
+        // Update form fields
+        txtMaDatPhong.setText(maDatPhong);
+        
+        txtSoNguoi.setText(soNguoi);
+        
+        controller.loadDetailedDataForRow(maDatPhong, maKhachHang, maChiNhanh, maPhong, ngayThueStr, ngayTraStr);
+    }
+    
+    // Methods for managing combo boxes
+    public void clearMaDatPhongComboBox() {
+        // No longer needed since we changed to textfield
+    }
+    
+    public void addMaDatPhongItem(String maDatPhong) {
+        // No longer needed since we changed to textfield
+    }
+    
+    public void clearChiNhanhComboBox() {
+        cbMaChiNhanh.removeAllItems();
+    }
+    
+    public void addChiNhanhItem(String[] data) {
+        cbMaChiNhanh.addItem(new Record(data));
+    }
+    
+    public void clearKhachHangComboBox() {
+        cbDichVu.removeAllItems();
+    }
+    
+    public void addKhachHangItem(String[] data) {
+        cbDichVu.addItem(new Record(data));
+    }
+    
+    public void clearPhongComboBox() {
+        cbMaPhong.removeAllItems();
+    }
+    
+    public void addPhongItem(String[] data) {
+        cbMaPhong.addItem(new Record(data));
+    }
+    
+    // Methods to set formatted values to combo boxes
+    public void setChiNhanhWithDetail(String maChiNhanh, String tenChiNhanh) {
         for (int i = 0; i < cbMaChiNhanh.getItemCount(); i++) {
             Record item = cbMaChiNhanh.getItemAt(i);
-            if (item != null && item.getColumns() != null && item.getColumns().length > 0 && item.getColumns()[0].equals(maChiNhanh)) {
+            if (item.getColumns()[0].equals(maChiNhanh)) {
                 cbMaChiNhanh.setSelectedIndex(i);
-                break;
+                return;
             }
         }
-
-        cbMaDatPhong.setSelectedItem(tableModel.getValueAt(row, 0) != null ? tableModel.getValueAt(row, 0).toString() : "");
-
-        String maPhong = tableModel.getValueAt(row, 3) != null ? tableModel.getValueAt(row, 3).toString() : "";
+        
+        // If not found, add it
+        cbMaChiNhanh.addItem(new Record(new String[]{maChiNhanh, tenChiNhanh}));
+        cbMaChiNhanh.setSelectedIndex(cbMaChiNhanh.getItemCount() - 1);
+    }
+    
+    public void setPhongWithDetail(String maPhong, String tenPhong, String tang) {
         for (int i = 0; i < cbMaPhong.getItemCount(); i++) {
             Record item = cbMaPhong.getItemAt(i);
-            if (item != null && item.getColumns() != null && item.getColumns().length > 0 && item.getColumns()[0].equals(maPhong)) {
+            if (item.getColumns()[0].equals(maPhong)) {
                 cbMaPhong.setSelectedIndex(i);
-                break;
+                return;
             }
         }
-
-        txtSoNguoi.setText(tableModel.getValueAt(row, 4) != null ? tableModel.getValueAt(row, 4).toString() : "");
-
-        String maKhachHang = tableModel.getValueAt(row, 1) != null ? tableModel.getValueAt(row, 1).toString() : "";
+        
+        // If not found, add it
+        cbMaPhong.addItem(new Record(new String[]{maPhong, tenPhong, tang}));
+        cbMaPhong.setSelectedIndex(cbMaPhong.getItemCount() - 1);
+    }
+    
+    public void setKhachHangWithDetail(String maKhachHang, String tenKhachHang) {
         for (int i = 0; i < cbDichVu.getItemCount(); i++) {
             Record item = cbDichVu.getItemAt(i);
-            if (item != null && item.getColumns() != null && item.getColumns().length > 0 && item.getColumns()[0].equals(maKhachHang)) {
+            if (item.getColumns()[0].equals(maKhachHang)) {
                 cbDichVu.setSelectedIndex(i);
-                break;
+                return;
             }
         }
+        
+        // If not found, add it
+        cbDichVu.addItem(new Record(new String[]{maKhachHang, tenKhachHang}));
+        cbDichVu.setSelectedIndex(cbDichVu.getItemCount() - 1);
+    }
+    
+    public void setNgayThue(Date date) {
+        spinnerNgayThue.setValue(date);
+    }
+    
+    public void setNgayTra(Date date) {
+        spinnerNgayTra.setValue(date);
+    }
 
-        try {
-            String ngayThueStr = tableModel.getValueAt(row, 6) != null ? tableModel.getValueAt(row, 6).toString() : "";
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            if (!ngayThueStr.isEmpty()) {
-                Date ngayThue = dateFormat.parse(ngayThueStr);
-                spinnerNgayThue.setValue(ngayThue);
-            }
-            
-            String ngayTraStr = tableModel.getValueAt(row, 7) != null ? tableModel.getValueAt(row, 7).toString() : "";
-            if (!ngayTraStr.isEmpty()) {
-                Date ngayTra = dateFormat.parse(ngayTraStr);
-                spinnerNgayTra.setValue(ngayTra);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày tháng: " + e.getMessage());
-        }
+    // Clear all form fields to prepare for new entry
+    public void clearFormFields() {
+        txtMaDatPhong.setText("");
+        txtSoNguoi.setText("");
+        cbMaChiNhanh.setSelectedIndex(cbMaChiNhanh.getItemCount() > 0 ? -1 : 0);
+        cbMaPhong.setSelectedIndex(cbMaPhong.getItemCount() > 0 ? -1 : 0);
+        cbDichVu.setSelectedIndex(cbDichVu.getItemCount() > 0 ? -1 : 0);
+        
+        // Set dates to current date
+        spinnerNgayThue.setValue(new Date());
+        spinnerNgayTra.setValue(new Date());
     }
 
     private void loadChiNhanhData(Connection conn) {
@@ -571,7 +621,7 @@ public class view_DonDatPhong extends JPanel {
 
     private void loadTableDataFromSQL(Connection conn) {
         try {
-            String sql = "SELECT MaDatPhong, MaKhachHang, MaChiNhanh, MaPhong, SoLuongNguoi, DichVu, NgayThue, NgayTra, TrangThai FROM DonDatPhong";
+            String sql = "SELECT MaDatPhong, MaKhachHang, MaChiNhanh, MaPhong, SoLuongNguoi, DichVu, NgayThue, NgayTra FROM DonDatPhong";
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql)) {
                 tableModel.setRowCount(0);
@@ -585,8 +635,7 @@ public class view_DonDatPhong extends JPanel {
                         rs.getInt("SoLuongNguoi"),                                             
                         rs.getString("DichVu") != null ? rs.getString("DichVu") : "",          
                         rs.getString("NgayThue") != null ? rs.getString("NgayThue") : "",       
-                        rs.getString("NgayTra") != null ? rs.getString("NgayTra") : "",         
-                        rs.getString("TrangThai") != null ? rs.getString("TrangThai") : ""      
+                        rs.getString("NgayTra") != null ? rs.getString("NgayTra") : ""         
                     };
                     originalData.add(row);
                     tableModel.addRow(row);
@@ -604,8 +653,53 @@ public class view_DonDatPhong extends JPanel {
         return new Color(red, green, blue);
     }
 
+    // Method to be called from controller to update the table data
+    public void updateTableData(Object[][] data, String[] columnNames) {
+        // Reset the table model with new data
+        tableModel.setRowCount(0);
+        
+        // Add rows from the data array
+        for (Object[] row : data) {
+            tableModel.addRow(row);
+        }
+        
+        // Store the original data for filtering functionality
+        originalData.clear();
+        for (Object[] row : data) {
+            originalData.add(row.clone());
+        }
+        
+        // Notify that the table data has been updated
+        tableModel.fireTableDataChanged();
+    }
 
-    class Record {
+    // Getter methods for the controller
+    public JButton getBtnDat() {
+        return btnDat;
+    }
+    
+    public JButton getBtnHuy() {
+        return btnHuy;
+    }
+    
+    public JTextField getTxtSoNguoi() {
+        return txtSoNguoi;
+    }
+    
+    public JTextField getTxtMaDatPhong() {
+        return txtMaDatPhong;
+    }
+    
+    public JSpinner getSpinnerNgayThue() {
+        return spinnerNgayThue;
+    }
+    
+    public JSpinner getSpinnerNgayTra() {
+        return spinnerNgayTra;
+    }
+
+    // Make Record class public and static
+    public static class Record {
         private String[] columns;
 
         public Record(String[] columns) {

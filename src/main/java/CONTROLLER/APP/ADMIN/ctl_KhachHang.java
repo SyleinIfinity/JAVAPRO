@@ -145,12 +145,21 @@ public class ctl_KhachHang {
             tableModel.removeRow(0);
         }
         
+        // Sắp xếp danh sách người dùng theo mã người dùng (tăng dần)
+        java.util.List<NguoiDung> danhSachNguoiDung = new java.util.ArrayList<>(dsNguoiDung.values());
+        java.util.Collections.sort(danhSachNguoiDung, new java.util.Comparator<NguoiDung>() {
+            @Override
+            public int compare(NguoiDung nd1, NguoiDung nd2) {
+                return nd1.getMaNguoiDung().compareTo(nd2.getMaNguoiDung());
+            }
+        });
+        
         // Đổ dữ liệu mới vào bảng
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         int rowToSelect = -1; // Hàng cần chọn sau khi cập nhật
         int rowCounter = 0;   // Biến đếm hàng
         
-        for (NguoiDung nd : dsNguoiDung.values()) {
+        for (NguoiDung nd : danhSachNguoiDung) {
             String trangThaiND = nd.isTrangThai() == 1 ? "Đang hoạt động" : "Khóa";
             
             // Lọc theo trạng thái nếu không chọn "Tất cả"
