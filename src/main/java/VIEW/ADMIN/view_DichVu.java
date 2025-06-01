@@ -4,16 +4,19 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import CONTROLLER.APP.ADMIN.ctl_DichVu; 
 import VIEW.view_main;
 
 import java.awt.*;
 import java.awt.event.*;
 
-public class view_NhanVien extends JPanel {
+public class view_DichVu extends JPanel {
     private JPanel pnForm;
-    private JTable tblNhanVien;
-    private JTextField txtMaNhanVien, txtTenNhanVien, txtNgaySinh, txtSDT, txtEmail, txtMatKhau, txtTrangThai;
-    private JButton btnThem, btnSua, btnXoa, btnTimKiem;
+    // Đổi từ private thành public để controller có thể truy cập
+    public JTable tblDichVu;
+    private JTextField txtMaDichVu, txtTenDichVu, txtGiaDichVu, txtMoTa;
+    // Đổi từ private thành public để controller có thể truy cập
+    public JButton btnThem, btnSua, btnXoa, btnTimKiem;
     private DefaultTableModel model;
     private Color mauChinh = new Color(219, 112, 147);
     private Color mauPhu = new Color(241, 142, 172);
@@ -22,23 +25,21 @@ public class view_NhanVien extends JPanel {
     public String maNguoiDung;
     public String maVaiTro;
     view_main vMain;
+    
+    // Thêm controller
+    private ctl_DichVu controller;
 
-    public view_NhanVien(view_main vMain) {
+    public view_DichVu(view_main vMain) {
         setLayout(new BorderLayout());
         setBackground(mauNen);
         this.vMain = vMain;
-
-
 
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
 
         JPanel contentPanel = new JPanel(new BorderLayout(15, 15));
         contentPanel.setBackground(mauNen);
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
-
-        JPanel searchPanel = taoSearchFilterPanel();
-        contentPanel.add(searchPanel, BorderLayout.NORTH);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel tablePanel = taoTablePanel();
         contentPanel.add(tablePanel, BorderLayout.CENTER);
@@ -48,10 +49,10 @@ public class view_NhanVien extends JPanel {
         JPanel buttonPanel = taoButtonPanel();
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // themDuLieuMau();
+        // Khởi tạo controller sau khi tạo xong giao diện
+        controller = new ctl_DichVu(this);
 
         setVisible(true);
-        
     }
 
     private JPanel taoHeaderPanel() {
@@ -59,7 +60,7 @@ public class view_NhanVien extends JPanel {
         headerPanel.setBackground(mauChinh);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        JLabel lblTitle = new JLabel("QUẢN LÝ NHÂN VIÊN", SwingConstants.CENTER);
+        JLabel lblTitle = new JLabel("QUẢN LÝ DỊCH VỤ", SwingConstants.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lblTitle.setForeground(Color.WHITE);
 
@@ -67,61 +68,33 @@ public class view_NhanVien extends JPanel {
         return headerPanel;
     }
 
-    private JPanel taoSearchFilterPanel() {
-        JPanel searchPanel = new JPanel(new BorderLayout(10, 0));
-        searchPanel.setBackground(mauNen);
-        searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-        JPanel searchInputPanel = new JPanel(new BorderLayout(10, 0));
-        searchInputPanel.setBackground(mauNen);
-
-        JLabel lblSearch = new JLabel("Tìm kiếm:");
-        lblSearch.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        JTextField txtTimKiem = new JTextField();
-        txtTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtTimKiem.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(189, 195, 199)),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
-
-        searchInputPanel.add(lblSearch, BorderLayout.WEST);
-        searchInputPanel.add(txtTimKiem, BorderLayout.CENTER);
-
-        JPanel filterPanel = new JPanel(new BorderLayout(10, 0));
-        filterPanel.setBackground(mauNen);
-
-        searchPanel.add(searchInputPanel, BorderLayout.CENTER);
-        searchPanel.add(filterPanel, BorderLayout.EAST);
-
-        return searchPanel;
-    }
-
     private JPanel taoTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBackground(mauNen);
 
-        String[] columnNames = {"Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại", "Email", "Trạng thái"};
+        String[] columnNames = {"Mã dịch vụ", "Tên dịch vụ", "Giá dịch vụ", "Mô tả"};
         model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Cột 0 (Mã nhân viên) không chỉnh sửa, các cột còn lại chỉnh sửa được
-                return column != 0;
+                // Tất cả các cột đều không thể chỉnh sửa trực tiếp trên bảng
+                // Sử dụng dialog để chỉnh sửa
+                return false;
             }
         };
 
-        tblNhanVien = new JTable(model);
-        tblNhanVien.setRowHeight(40);
-        tblNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        tblNhanVien.setSelectionBackground(new Color(241, 196, 15, 100));
-        tblNhanVien.setSelectionForeground(Color.BLACK);
-        tblNhanVien.setShowGrid(true);
-        tblNhanVien.setGridColor(new Color(189, 195, 199));
-        tblNhanVien.setRowSelectionAllowed(true);
-        tblNhanVien.setColumnSelectionAllowed(false);
-        tblNhanVien.setFillsViewportHeight(true);
+        tblDichVu = new JTable(model);
+        tblDichVu.setRowHeight(40);
+        tblDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tblDichVu.setSelectionBackground(new Color(241, 196, 15, 100));
+        tblDichVu.setSelectionForeground(Color.BLACK);
+        tblDichVu.setShowGrid(true);
+        tblDichVu.setGridColor(new Color(189, 195, 199));
+        tblDichVu.setRowSelectionAllowed(true);
+        tblDichVu.setColumnSelectionAllowed(false);
+        tblDichVu.setFillsViewportHeight(true);
+        tblDichVu.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        JTableHeader header = tblNhanVien.getTableHeader();
+        JTableHeader header = tblDichVu.getTableHeader();
         header.setPreferredSize(new Dimension(header.getWidth(), 45));
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -143,7 +116,7 @@ public class view_NhanVien extends JPanel {
 
         caiDatTableColumns();
 
-        JScrollPane scrollPane = new JScrollPane(tblNhanVien);
+        JScrollPane scrollPane = new JScrollPane(tblDichVu);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199)));
         scrollPane.getViewport().setBackground(Color.WHITE);
 
@@ -152,8 +125,8 @@ public class view_NhanVien extends JPanel {
     }
 
     private void caiDatTableColumns() {
-        int[] columnWidths = {120, 200, 100, 140, 200, 140};
-        TableColumnModel columnModel = tblNhanVien.getColumnModel();
+        int[] columnWidths = {120, 200, 150, 200};
+        TableColumnModel columnModel = tblDichVu.getColumnModel();
 
         for (int i = 0; i < columnWidths.length; i++) {
             TableColumn col = columnModel.getColumn(i);
@@ -168,40 +141,20 @@ public class view_NhanVien extends JPanel {
                         c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(245, 245, 245));
                     }
                     setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-                    setHorizontalAlignment(column == 0 ? JLabel.CENTER : JLabel.LEFT);
+                    
+                    // Căn giữa cột mã dịch vụ, căn trái các cột khác
+                    if (column == 0) {
+                        setHorizontalAlignment(JLabel.CENTER);
+                    } else if (column == 2) { // Cột giá - căn phải
+                        setHorizontalAlignment(JLabel.RIGHT);
+                    } else {
+                        setHorizontalAlignment(JLabel.LEFT);
+                    }
+                    
                     return c;
                 }
             });
         }
-
-        // Gán editor cho từng cột
-        columnModel.getColumn(1).setCellEditor(taoTextFieldEditor()); // Tên nhân viên
-        columnModel.getColumn(2).setCellEditor(taoTextFieldEditor()); // Ngày sinh
-        columnModel.getColumn(3).setCellEditor(taoTextFieldEditor()); // Số điện thoại
-        columnModel.getColumn(4).setCellEditor(taoTextFieldEditor()); // Email
-
-        // Trạng thái dùng JComboBox
-        String[] trangThaiOptions = {"Đang hoạt động", "Không hoạt động", "Bị khóa"};
-        columnModel.getColumn(5).setCellEditor(taoStyledComboBoxEditor(trangThaiOptions));
-    }
-
-    private DefaultCellEditor taoTextFieldEditor() {
-        JTextField textField = new JTextField();
-        textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        textField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(189, 195, 199)),
-                BorderFactory.createEmptyBorder(2, 10, 2, 10)
-        ));
-        return new DefaultCellEditor(textField);
-    }
-
-    private DefaultCellEditor taoStyledComboBoxEditor(String[] options) {
-        JComboBox<String> comboBox = new JComboBox<>(options);
-        comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        comboBox.setBackground(Color.WHITE);
-        DefaultCellEditor editor = new DefaultCellEditor(comboBox);
-        editor.setClickCountToStart(1);
-        return editor;
     }
 
     private JPanel taoButtonPanel() {
@@ -215,10 +168,28 @@ public class view_NhanVien extends JPanel {
         btnXoa = taoStyledButton("Xóa", new Color(231, 76, 60));
         btnTimKiem = taoStyledButton("Tìm Kiếm", new Color(149, 165, 166));
 
+        // Thêm tooltip cho buttons
+        btnThem.setToolTipText("Thêm dịch vụ mới");
+        btnSua.setToolTipText("Sửa dịch vụ đã chọn");
+        btnXoa.setToolTipText("Xóa dịch vụ đã chọn");
+        btnTimKiem.setToolTipText("Tìm kiếm dịch vụ");
+
         buttonPanel.add(btnThem);
         buttonPanel.add(btnSua);
         buttonPanel.add(btnXoa);
         buttonPanel.add(btnTimKiem);
+
+        // Thêm nút làm mới
+        JButton btnLamMoi = taoStyledButton("Làm mới", new Color(155, 89, 182));
+        btnLamMoi.setToolTipText("Làm mới dữ liệu");
+        btnLamMoi.addActionListener(e -> {
+            if (controller != null) {
+                controller.refreshData();
+                JOptionPane.showMessageDialog(this, "Đã làm mới dữ liệu!", 
+                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        buttonPanel.add(btnLamMoi);
 
         return buttonPanel;
     }
@@ -226,7 +197,7 @@ public class view_NhanVien extends JPanel {
     private JButton taoStyledButton(String text, Color bgColor) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        button.setPreferredSize(new Dimension(150, 45));
+        button.setPreferredSize(new Dimension(120, 45));
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
@@ -254,35 +225,20 @@ public class view_NhanVien extends JPanel {
         return new Color(red, green, blue);
     }
 
-    // private void themDuLieuMau() {
-    //     model.addRow(new Object[]{"NV001", "Nguyễn Văn A", "1990-01-01", "0123456789", "a.nguyen@email.com", "Đang hoạt động"});
-    //     model.addRow(new Object[]{"NV002", "Trần Thị B", "1992-05-15", "0987654321", "b.tran@email.com", "Không hoạt động"});
-    //     model.addRow(new Object[]{"", "", "", "", "", ""});
-    //     model.addRow(new Object[]{"", "", "", "", "", ""});
-    // }
-    public JTable getTblNhanVien() {
-    return tblNhanVien;
-}
+    // Phương thức để controller có thể truy cập DefaultTableModel
+    public DefaultTableModel getTableModel() {
+        return model;
+    }
 
-public DefaultTableModel getModel() {
-    return model;
-}
+    // Phương thức để làm mới dữ liệu từ bên ngoài
+    public void refreshData() {
+        if (controller != null) {
+            controller.refreshData();
+        }
+    }
 
-public JButton getBtnThem() {
-    return btnThem;
-}
-
-public JButton getBtnSua() {
-    return btnSua;
-}
-
-public JButton getBtnXoa() {
-    return btnXoa;
-}
-
-public JButton getBtnTimKiem() {
-    return btnTimKiem;
-}
-
-
+    // Phương thức để lấy controller (nếu cần)
+    public ctl_DichVu getController() {
+        return controller;
+    }
 }

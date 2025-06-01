@@ -3,16 +3,18 @@ package MODEL.ENTITY;
 public class DichVu {
     private String maDichVu;    
     private String tenDichVu;
-    private String maLoaiDichVu;
+    private String giaDichVu;
+    private String moTa;
 
     public DichVu(){
 
     }
     
-    public DichVu(String maDichVu, String tenDichVu, String maLoaiDichVu) {
+    public DichVu(String maDichVu, String tenDichVu, String giaDichVu, String moTa) {
         this.maDichVu = maDichVu;
         this.tenDichVu = tenDichVu;
-        this.maLoaiDichVu = maLoaiDichVu;
+        this.giaDichVu = giaDichVu;
+        this.moTa = moTa;
     }
 
     public String getMaDichVu() {
@@ -31,17 +33,26 @@ public class DichVu {
         this.tenDichVu = tenDichVu;
     }
 
-    public String getMaLoaiDichVu() {
-        return maLoaiDichVu;
+    public String getGiaDichVu() {
+        return giaDichVu;
     }
 
-    public void setMaLoaiDichVu(String maLoaiDichVu) {
-        this.maLoaiDichVu = maLoaiDichVu;
+    // Sửa lỗi: parameter name và assignment không đúng
+    public void setGiaDichVu(String giaDichVu) {
+        this.giaDichVu = giaDichVu;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    // Sửa lỗi: parameter name và assignment không đúng
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
 
     @Override
     public String toString() {
-        return "dichvu [maDichVu=" + maDichVu + ", tenDichVu=" + tenDichVu + ", maLoaiDichVu=" + maLoaiDichVu + "]";
+        return "DichVu [maDichVu=" + maDichVu + ", tenDichVu=" + tenDichVu + ", giaDichVu=" + giaDichVu + ", moTa=" + moTa + "]";
     }
-    
 }

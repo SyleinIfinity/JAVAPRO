@@ -38,7 +38,7 @@ public class ctl_main implements ActionListener {
             show(new view_ChiNhanh(vMain));
         }
         if (source == vMain.btn_DichVu) {
-            // show(new view_DichVu(vMain));
+            show(new view_DichVu(vMain));
         }
         if (source == vMain.btn_KhachHang) {
             show(new view_KhachHang(vMain));
