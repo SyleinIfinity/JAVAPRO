@@ -159,6 +159,31 @@ public class NguoiDungDAO {
         return true;
     }
 
+    public void reloadData() {
+        listNGUOIDUNG.clear();
+        try {
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachNguoiDung}");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                NguoiDung nd = new NguoiDung(
+                    rs.getString("maNguoiDung"),
+                    rs.getString("tenNguoiDung"),
+                    rs.getString("ngaySinh"),
+                    rs.getString("SDT"),
+                    rs.getString("email"),
+                    rs.getString("matKhau"),
+                    rs.getDouble("soDuTaiKhoan"),
+                    rs.getString("maVaiTro"),
+                    rs.getInt("trangThai")
+                );
+                listNGUOIDUNG.put(nd.getMaNguoiDung(), nd);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         NguoiDungDAO nguoiDungDAO = new NguoiDungDAO();
 
