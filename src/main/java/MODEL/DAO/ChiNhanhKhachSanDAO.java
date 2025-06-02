@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 
 import MODEL.ENTITY.ChiNhanhKhachSan;
+import MODEL.ENTITY.DatPhong;
+import MODEL.ENTITY.Phong;
 import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
 
 public class ChiNhanhKhachSanDAO {
@@ -87,6 +89,15 @@ public class ChiNhanhKhachSanDAO {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public ChiNhanhKhachSan getChiNhanhByTen(String tenChiNhanh) {
+        for (ChiNhanhKhachSan dp : listCHINHANHKHACHSAN.values()) {
+            if (dp.getTenChiNhanh().equals(tenChiNhanh)) {
+                return dp;
+            }
+        }
+        return null; // Trả về null nếu không tìm thấy
     }
 
     public static void main(String[] args) {

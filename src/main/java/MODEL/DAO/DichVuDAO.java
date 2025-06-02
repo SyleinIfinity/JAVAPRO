@@ -92,6 +92,15 @@ public class DichVuDAO {
         }
     }
 
+    public DichVu getDichVuByTen(String tenDichVu) {
+        for (DichVu dv : listDICHVU.values()) {
+            if (dv.getTenDichVu().equalsIgnoreCase(tenDichVu)) {
+                return dv;
+            }
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
+
     public static void main(String[] args) {
         DichVuDAO dvD = new DichVuDAO();
 

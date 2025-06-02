@@ -4,14 +4,18 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import CONTROLLER.APP.ADMIN.ctl_KhachHang;
 import VIEW.view_main;
 
 import java.awt.*;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class view_KhachHang extends JPanel {
     private JTable tblKhachHang;
-    private JTextField txtMaKhachHang, txtTenKhachHang, txtEmail, txtSoDienThoai, txtDiaChi;
+    private JTextField txtMaKhachHang, txtTenKhachHang, txtEmail, txtSoDienThoai;
     private JSpinner spnNgaySinh;
     private JComboBox<String> cmbTrangThai;
     private JButton btnSua;
@@ -23,6 +27,8 @@ public class view_KhachHang extends JPanel {
     public String maNguoiDung;
     public String maVaiTro;
     view_main vMain;
+    private JComboBox<String> cmbLoc;
+    private ctl_KhachHang controller;
 
     public view_KhachHang(view_main vMain) {
         setLayout(new BorderLayout());
@@ -49,6 +55,11 @@ public class view_KhachHang extends JPanel {
 
         JPanel buttonPanel = taoButtonPanel();
         add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Khởi tạo controller sau khi tất cả các thành phần đã được tạo
+        controller = new ctl_KhachHang(this);
+
+        cmbLoc = new JComboBox<>();
 
         setVisible(true);
     }
@@ -74,7 +85,7 @@ public class view_KhachHang extends JPanel {
         JLabel lblFilter = new JLabel("Lọc theo trạng thái:");
         lblFilter.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        JComboBox<String> cmbLoc = new JComboBox<>();
+        cmbLoc = new JComboBox<>();
         cmbLoc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cmbLoc.setBackground(Color.WHITE);
         cmbLoc.setPreferredSize(new Dimension(150, 30));
@@ -103,7 +114,7 @@ public class view_KhachHang extends JPanel {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBackground(mauNen);
 
-        String[] columnNames = {"Mã khách hàng", "Tên khách hàng", "Email", "Số điện thoại", "Ngày sinh", "Địa chỉ", "Trạng thái"};
+        String[] columnNames = {"Mã khách hàng", "Tên khách hàng", "Email", "Số điện thoại", "Ngày sinh", "Trạng thái"};
         model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -243,29 +254,14 @@ public class view_KhachHang extends JPanel {
         spnNgaySinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         formPanel.add(spnNgaySinh, gbc);
         
-        // Địa chỉ
+        // Trạng thái (ComboBox)
         gbc.gridx = 2;
         gbc.gridy = 2;
-        JLabel lblDiaChi = new JLabel("Địa chỉ:");
-        lblDiaChi.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        formPanel.add(lblDiaChi, gbc);
-        
-        gbc.gridx = 3;
-        txtDiaChi = new JTextField(15);
-        txtDiaChi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtDiaChi.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(189, 195, 199)),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        formPanel.add(txtDiaChi, gbc);
-        
-        // Trạng thái (ComboBox)
-        gbc.gridx = 0;
-        gbc.gridy = 3;
         JLabel lblTrangThai = new JLabel("Trạng thái:");
         lblTrangThai.setFont(new Font("Segoe UI", Font.BOLD, 14));
         formPanel.add(lblTrangThai, gbc);
         
-        gbc.gridx = 1;
+        gbc.gridx = 3;
         cmbTrangThai = new JComboBox<>();
         cmbTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cmbTrangThai.setBackground(Color.WHITE);
@@ -278,7 +274,7 @@ public class view_KhachHang extends JPanel {
     }
 
     private void caiDatTableColumns() {
-        int[] columnWidths = {100, 180, 150, 120, 100, 180, 120};
+        int[] columnWidths = {100, 180, 150, 120, 100, 120};
         TableColumnModel columnModel = tblKhachHang.getColumnModel();
 
         for (int i = 0; i < columnWidths.length; i++) {
@@ -319,17 +315,39 @@ public class view_KhachHang extends JPanel {
         // Xử lý hiển thị ngày sinh từ chuỗi sang Date
         try {
             String ngaySinhStr = model.getValueAt(row, 4) != null ? model.getValueAt(row, 4).toString() : "";
-            java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy");
             if (!ngaySinhStr.isEmpty()) {
-                Date ngaySinh = dateFormat.parse(ngaySinhStr);
-                spnNgaySinh.setValue(ngaySinh);
+                // Xử lý nhiều định dạng ngày có thể có
+                Date ngaySinh = null;
+                
+                // Thử với định dạng "yyyy-MM-dd HH:mm:ss.S"
+                try {
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                    ngaySinh = sdf1.parse(ngaySinhStr);
+                } catch (Exception e1) {
+                    // Thử với định dạng "yyyy-MM-dd"
+                    try {
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                        ngaySinh = sdf2.parse(ngaySinhStr);
+                    } catch (Exception e2) {
+                        // Thử với định dạng "dd/MM/yyyy"
+                        try {
+                            SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy");
+                            ngaySinh = sdf3.parse(ngaySinhStr);
+                        } catch (Exception e3) {
+                            e3.printStackTrace();
+                        }
+                    }
+                }
+                
+                if (ngaySinh != null) {
+                    spnNgaySinh.setValue(ngaySinh);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         
-        txtDiaChi.setText(model.getValueAt(row, 5) != null ? model.getValueAt(row, 5).toString() : "");
-        cmbTrangThai.setSelectedItem(model.getValueAt(row, 6) != null ? model.getValueAt(row, 6).toString() : "");
+        cmbTrangThai.setSelectedItem(model.getValueAt(row, 5) != null ? model.getValueAt(row, 5).toString() : "");
     }
 
     private JPanel taoButtonPanel() {
@@ -340,21 +358,58 @@ public class view_KhachHang extends JPanel {
 
         btnSua = taoStyledButton("Sửa", new Color(52, 152, 219));
 
+        
+        // Xóa tất cả action listeners hiện có
+        for (ActionListener al : btnSua.getActionListeners()) {
+            btnSua.removeActionListener(al);
+        }
+        
+        // Thêm sự kiện cho button Sửa
+        btnSua.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Button Sửa được nhấn");
+                
+                // Gọi trực tiếp controller để cập nhật thông tin
+                int selectedRow = tblKhachHang.getSelectedRow();
+                if (selectedRow >= 0) {
+                    // Vô hiệu hóa nút để tránh nhấn nhiều lần
+                    btnSua.setEnabled(false);
+                    
+                    try {
+                        // Gọi controller để cập nhật
+                        controller.capNhatThongTinKhachHang();
+                        
+                        // Chờ một chút để tránh nhiều thông báo xuất hiện cùng lúc
+                        Timer timer = new Timer(500, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // Kích hoạt lại nút sau khi hoàn tất
+                                btnSua.setEnabled(true);
+                            }
+                        });
+                        timer.setRepeats(false);
+                        timer.start();
+                        
+                    } catch (Exception ex) {
+                        btnSua.setEnabled(true);
+                        JOptionPane.showMessageDialog(view_KhachHang.this, 
+                                                  "Lỗi: " + ex.getMessage(), 
+                                                  "Lỗi", 
+                                                  JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(view_KhachHang.this, 
+                                              "Vui lòng chọn khách hàng cần cập nhật!", 
+                                              "Thông báo", 
+                                              JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
         buttonPanel.add(btnSua);
 
         return buttonPanel;
-    }
-
-    private void capNhatThongTinKhachHang() {
-        // Xử lý cập nhật thông tin khách hàng
-        int selectedRow = tblKhachHang.getSelectedRow();
-        if (selectedRow >= 0) {
-            // Thực hiện cập nhật thông tin từ form vào model
-            // Và lưu vào cơ sở dữ liệu
-            JOptionPane.showMessageDialog(this, "Cập nhật thông tin khách hàng thành công!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần cập nhật!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
     }
 
     private JButton taoStyledButton(String text, Color bgColor) {
@@ -375,5 +430,45 @@ public class view_KhachHang extends JPanel {
         int green = Math.max(0, Math.round(color.getGreen() * (1 - fraction)));
         int blue = Math.max(0, Math.round(color.getBlue() * (1 - fraction)));
         return new Color(red, green, blue);
+    }
+    // Các getter methods cho controller sử dụng
+    public JTable getTblKhachHang() {
+        return tblKhachHang;
+    }
+    
+    public JTextField getTxtMaKhachHang() {
+        return txtMaKhachHang;
+    }
+    
+    public JTextField getTxtTenKhachHang() {
+        return txtTenKhachHang;
+    }
+    
+    public JTextField getTxtEmail() {
+        return txtEmail;
+    }
+    
+    public JTextField getTxtSoDienThoai() {
+        return txtSoDienThoai;
+    }
+    
+    public JSpinner getSpnNgaySinh() {
+        return spnNgaySinh;
+    }
+    
+    public JComboBox<String> getCmbTrangThai() {
+        return cmbTrangThai;
+    }
+    
+    public JButton getBtnSua() {
+        return btnSua;
+    }
+    
+    public JComboBox<String> getCmbLoc() {
+        return cmbLoc;
+    }
+    
+    public DefaultTableModel getModel() {
+        return model;
     }
 }

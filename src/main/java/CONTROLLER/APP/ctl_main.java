@@ -38,7 +38,7 @@ public class ctl_main implements ActionListener {
             show(new view_ChiNhanh(vMain));
         }
         if (source == vMain.btn_DichVu) {
-            // show(new view_DichVu(vMain));
+            show(new view_DichVu(vMain));
         }
         if (source == vMain.btn_KhachHang) {
             show(new view_KhachHang(vMain));
@@ -93,13 +93,13 @@ public class ctl_main implements ActionListener {
             // this.vMain.btn_DoanhThu.setVisible(false);
         } else {
             if (this.vMain.maVaiTro.equals("VT001")) {
-                this.vMain.btn_DonDatPhong.setVisible(false);
-                this.vMain.btn_HoaDon.setVisible(false);
-                this.vMain.btn_TrangThaiPhong.setVisible(false);
+                // this.vMain.btn_DonDatPhong.setVisible(false);
+                // this.vMain.btn_HoaDon.setVisible(false);
+                // this.vMain.btn_TrangThaiPhong.setVisible(false);
 
-                this.vMain.btn_NapRut.setVisible(false);
-                this.vMain.btn_DatPhong.setVisible(false);
-                this.vMain.btn_TraPhong.setVisible(false);
+                // this.vMain.btn_NapRut.setVisible(false);
+                // this.vMain.btn_DatPhong.setVisible(false);
+                // this.vMain.btn_TraPhong.setVisible(false);
             } else if (this.vMain.maVaiTro.equals("TV002")) {
                 this.vMain.btn_Phong.setVisible(false);
                 this.vMain.btn_KhachSan.setVisible(false);

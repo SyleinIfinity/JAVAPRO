@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import CONTROLLER.APP.STAFF.ctl_HoaDon;
 import VIEW.view_main;
 
 import java.awt.*;
@@ -11,11 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class view_HoaDon extends JPanel {
-    private JTable tableHoaDon;
-    private DefaultTableModel tableModel;
-    private JSpinner dateFrom, dateTo;
-    private JComboBox<String> cboTrangThai, cboChiNhanh, cboNhanVien;
-    private JButton btnTraCuu, btnXuatHoaDon;
+    public JTable tableHoaDon;
+    // private DefaultTableModel tableModel;
+    public JSpinner dateFrom, dateTo;
+    public JButton btnTraCuu, btnXuatHoaDon;
     private Color mauChinh = new Color(41, 128, 185);
     private Color mauPhu = new Color(52, 152, 219);
     private Color mauNhan = new Color(230, 126, 34);
@@ -23,16 +23,16 @@ public class view_HoaDon extends JPanel {
     public String maNguoiDung;
     public String maVaiTro;
     view_main vMain;
+    ctl_HoaDon ctlHoaDon;
 
     public view_HoaDon(view_main vMain) {
         setLayout(new BorderLayout());
         setBackground(mauNen);
         this.vMain = vMain;
 
-        // this.maNguoiDung = maNguoiDung;
-        // this.maVaiTro = maVaiTro;
-
         initComponents();
+
+        ctlHoaDon = new ctl_HoaDon(this, vMain);
     }
     
     private void initComponents() {
@@ -69,7 +69,7 @@ public class view_HoaDon extends JPanel {
             mauChinh
         ));
         
-        // Panel cho nhân viên phụ trách và từ ngày
+        // Panel cho từ ngày
         JPanel panelRow1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         panelRow1.setBackground(mauNen);
         
@@ -85,18 +85,6 @@ public class view_HoaDon extends JPanel {
         dateFrom.setPreferredSize(new Dimension(200, 30));
         dateFrom.setBackground(Color.WHITE);
         panelRow1.add(dateFrom);
-        
-        // Thêm combobox nhân viên phụ trách
-        JLabel lblNhanVien = new JLabel("Nhân viên:");
-        lblNhanVien.setForeground(mauChinh);
-        lblNhanVien.setPreferredSize(new Dimension(100, 30));
-        panelRow1.add(lblNhanVien);
-        
-        String[] nhanVien = {"Tất cả", "NV001 - Nguyễn Văn A", "NV002 - Trần Thị B", "NV003 - Lê Văn C"};
-        cboNhanVien = new JComboBox<>(nhanVien);
-        cboNhanVien.setPreferredSize(new Dimension(200, 30));
-        cboNhanVien.setBackground(Color.WHITE);
-        panelRow1.add(cboNhanVien);
         
         // Panel cho đến ngày
         JPanel panelRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
@@ -154,14 +142,13 @@ public class view_HoaDon extends JPanel {
         
         // Bảng hóa đơn
         String[] columns = {"STT", "Mã hóa đơn", "Ngày tạo", "Khách hàng", "Tổng tiền", "Trạng thái", "Chi nhánh"};
-        tableModel = new DefaultTableModel(columns, 0) {
+        tableHoaDon = new JTable(new DefaultTableModel(columns, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 0 ? Integer.class : String.class;
             }
-        };
-        tableHoaDon = new JTable(tableModel);
-        styleTable(tableHoaDon);
+        });
+        // styleTable(tableHoaDon);
         
         JScrollPane scrollPane = new JScrollPane(tableHoaDon);
         scrollPane.setBorder(BorderFactory.createLineBorder(mauChinh, 2));
@@ -192,37 +179,5 @@ public class view_HoaDon extends JPanel {
                 button.setBackground(mauChinh);
             }
         });
-    }
-    
-    private void styleTable(JTable table) {
-        // Style cho header
-        JTableHeader header = table.getTableHeader();
-        header.setBackground(mauChinh);
-        header.setForeground(Color.WHITE);
-        header.setFont(new Font("Arial", Font.BOLD, 12));
-        
-        // Style cho table
-        table.setRowHeight(25);
-        table.setFont(new Font("Arial", Font.PLAIN, 12));
-        table.setSelectionBackground(mauPhu);
-        table.setSelectionForeground(Color.WHITE);
-        table.setGridColor(mauChinh);
-        table.setShowGrid(true);
-        
-        // Căn giữa các cột
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);   // STT
-        table.getColumnModel().getColumn(1).setPreferredWidth(150);  // Mã hóa đơn
-        table.getColumnModel().getColumn(2).setPreferredWidth(100);  // Ngày tạo
-        table.getColumnModel().getColumn(3).setPreferredWidth(200);  // Khách hàng
-        table.getColumnModel().getColumn(4).setPreferredWidth(150);  // Tổng tiền
-        table.getColumnModel().getColumn(5).setPreferredWidth(100);  // Trạng thái
-        table.getColumnModel().getColumn(6).setPreferredWidth(150);  // Chi nhánh
-        
-        // Căn giữa cho các cột
-        javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
     }
 }

@@ -3,214 +3,201 @@ package VIEW.CLIENT;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-
-import CONTROLLER.APP.CLIENT.ctl_NapRut;
-
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.util.Locale;
 import VIEW.view_main;
+import CONTROLLER.APP.CLIENT.ctl_NapRut;
 
 public class view_NapRut extends JPanel {
-    private view_main vMain;
-    private JTabbedPane tabbedPane;
+    // ========== KHAI BÁO MÀU SẮC ==========
+    private static final Color MAU_CHINH = new Color(33, 150, 243);
+    private static final Color MAU_THANH_CONG = new Color(76, 175, 80);
+    private static final Color MAU_LOI = new Color(244, 67, 54);
+    private static final Color MAU_CANH_BAO = new Color(255, 152, 0);
+    private static final Color MAU_NEN_NHAT = new Color(248, 249, 250);
+    private static final Color MAU_VIEN = new Color(224, 224, 224);
+    private static final Color MAU_VAN_BAN = new Color(33, 37, 41);
+    private static final Color MAU_VAN_BAN_PHU = new Color(108, 117, 125);
     
-    // Enhanced color scheme
-    private static final Color PRIMARY_COLOR = new Color(33, 150, 243);
-    private static final Color SUCCESS_COLOR = new Color(76, 175, 80);
-    private static final Color ERROR_COLOR = new Color(244, 67, 54);
-    private static final Color WARNING_COLOR = new Color(255, 152, 0);
-    private static final Color LIGHT_GRAY = new Color(248, 249, 250);
-    private static final Color BORDER_COLOR = new Color(224, 224, 224);
-    private static final Color TEXT_COLOR = new Color(33, 37, 41);
-    private static final Color SECONDARY_TEXT = new Color(108, 117, 125);
+    // ========== KHAI BÁO THÀNH PHẦN GIAO DIỆN ==========
+    // Thành phần chung
+    private view_main giaoDienChinh;
+    private JTabbedPane tabChucNang;
+    private JLabel lblBieuTuongSoDu, lblSoDu;
+    private JPanel pnlTieuDe;
+    ctl_NapRut boDieuKhien;
     
-    // Tab Nạp
+    // Tab Nạp tiền
     public JTextField txtSoTienNap;
-    public JComboBox<String> cbPhuongThucNap;
+    public JComboBox<String> cboPhuongThucNap;
     public JButton btnNapTien;
-    public JButton sendOtpBtn; // Nút gửi mã OTP
-    // Tab Rút
+    public JButton btnGuiMaOTP;
+    public JTextField txtMaOTP;
+    public JPasswordField txtMatKhau;
+    public JLabel lblSoTaiKhoan;
+    
+    // Tab Rút tiền
     public JTextField txtSoTienRut;
     public JButton btnRutTien;
-    // Số dư
-    public JLabel lbeSoDu;
-    
-    // Enhanced components
-    private JLabel balanceIcon;
-    private JPanel headerPanel;
-    ctl_NapRut controller;
 
-    public view_NapRut(view_main vMain) {
-        this.vMain = vMain;
+    public view_NapRut(view_main giaoDienChinh) {
+        this.giaoDienChinh = giaoDienChinh;
+        thietLapKichThuoc();
+        thietLapGiaoDien();
+
+        // boDieuKhien = new ctl_NapRut(this, giaoDienChinh);
+    }
+    
+    private void thietLapKichThuoc() {
         setPreferredSize(new Dimension(1080, 880));
         setLayout(new BorderLayout());
-        setBackground(LIGHT_GRAY);
-        
-        initializeComponents();
-        setupLayout();
-
-        controller = new ctl_NapRut(this, vMain);
+        setBackground(MAU_NEN_NHAT);
     }
     
-    private void initializeComponents() {
-        // Create header panel
-        headerPanel = createHeaderPanel();
-        
-        // Create enhanced tabbed pane
-        tabbedPane = createEnhancedTabbedPane();
+    private void thietLapGiaoDien() {
+        khoiTaoThanhPhan();
+        cauHinhLayout();
     }
     
-    private void setupLayout() {
-        // Add components with proper spacing
-        add(headerPanel, BorderLayout.NORTH);
-        
-        JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(LIGHT_GRAY);
-        contentPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
-        contentPanel.add(tabbedPane, BorderLayout.CENTER);
-        
-        add(contentPanel, BorderLayout.CENTER);
+    private void khoiTaoThanhPhan() {
+        pnlTieuDe = taoPanelTieuDe();
+        tabChucNang = taoTabChucNang();
     }
     
-    private JPanel createHeaderPanel() {
+    private void cauHinhLayout() {
+        add(pnlTieuDe, BorderLayout.NORTH);
+        
+        JPanel pnlNoiDung = new JPanel(new BorderLayout());
+        pnlNoiDung.setBackground(MAU_NEN_NHAT);
+        pnlNoiDung.setBorder(new EmptyBorder(10, 20, 20, 20));
+        pnlNoiDung.add(tabChucNang, BorderLayout.CENTER);
+        
+        add(pnlNoiDung, BorderLayout.CENTER);
+    }
+    
+    private JPanel taoPanelTieuDe() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         panel.setBorder(new EmptyBorder(15, 40, 15, 40));
         
-        // Title with enhanced styling - smaller font
-        JLabel title = new JLabel("NẠP/RÚT TIỀN", JLabel.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        title.setForeground(TEXT_COLOR);
+        JLabel tieuDe = new JLabel("NẠP/RÚT TIỀN", JLabel.CENTER);
+        tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        tieuDe.setForeground(MAU_VAN_BAN);
         
-        // Balance section with card-like appearance
-        JPanel balanceCard = createBalanceCard();
+        JPanel pnlSoDu = taoPanelSoDu();
         
-        panel.add(title, BorderLayout.NORTH);
+        panel.add(tieuDe, BorderLayout.NORTH);
         panel.add(Box.createVerticalStrut(10), BorderLayout.CENTER);
-        panel.add(balanceCard, BorderLayout.SOUTH);
+        panel.add(pnlSoDu, BorderLayout.SOUTH);
         
         return panel;
     }
     
-    private JPanel createBalanceCard() {
-        JPanel card = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 8));
-        card.setBackground(new Color(232, 245, 233));
-        card.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(SUCCESS_COLOR, 1, true),
+    private JPanel taoPanelSoDu() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 8));
+        panel.setBackground(new Color(232, 245, 233));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(MAU_THANH_CONG, 1, true),
             new EmptyBorder(10, 15, 10, 15)
         ));
         
-        // Balance icon - smaller
-        balanceIcon = new JLabel("💰");
-        balanceIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+        lblBieuTuongSoDu = new JLabel("💰");
+        lblBieuTuongSoDu.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
         
-        // Balance text - smaller
-        lbeSoDu = new JLabel("Số dư hiện tại: 0 VNĐ");
-        lbeSoDu.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lbeSoDu.setForeground(SUCCESS_COLOR);
+        lblSoDu = new JLabel("Số dư hiện tại: 0 VNĐ");
+        lblSoDu.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblSoDu.setForeground(MAU_THANH_CONG);
         
-        card.add(balanceIcon);
-        card.add(lbeSoDu);
+        panel.add(lblBieuTuongSoDu);
+        panel.add(lblSoDu);
         
-        return card;
+        return panel;
     }
     
-    private JTabbedPane createEnhancedTabbedPane() {
-        JTabbedPane pane = new JTabbedPane();
-        pane.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        pane.setBackground(Color.WHITE);
-        pane.setForeground(TEXT_COLOR);
+    private JTabbedPane taoTabChucNang() {
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        tabbedPane.setBackground(Color.WHITE);
+        tabbedPane.setForeground(MAU_VAN_BAN);
         
-        // Enhanced tab styling
-        pane.setUI(new javax.swing.plaf.basic.BasicTabbedPaneUI() {
+        tabbedPane.setUI(new javax.swing.plaf.basic.BasicTabbedPaneUI() {
             @Override
             protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex,
                                         int x, int y, int w, int h, boolean isSelected) {
                 if (isSelected) {
-                    g.setColor(PRIMARY_COLOR);
+                    g.setColor(MAU_CHINH);
                     g.fillRect(x, y + h - 3, w, 3);
                 }
             }
         });
         
-        pane.addTab("💳 Nạp tiền", createEnhancedNapPanel());
-        pane.addTab("💸 Rút tiền", createEnhancedRutPanel());
+        tabbedPane.addTab("💳 Nạp tiền", taoTabNapTien());
+        tabbedPane.addTab("💸 Rút tiền", taoTabRutTien());
         
-        return pane;
+        return tabbedPane;
     }
 
-    private JPanel createEnhancedNapPanel() {
+    private JPanel taoTabNapTien() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(new EmptyBorder(20, 30, 30, 30));
         
-        // Create scrollable panel for form content
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(Color.WHITE);
         
-        // Account number section
-        JPanel accountSection = createSectionPanel("Thông tin tài khoản", createAccountInfoPanel());
-        accountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(accountSection);
+        // Thông tin tài khoản
+        formPanel.add(taoSection("Thông tin tài khoản", taoPanelThongTinTaiKhoan()));
         formPanel.add(Box.createVerticalStrut(20));
         
-        // Amount section
-        JPanel amountInputPanel = new JPanel(new BorderLayout());
-        amountInputPanel.setBackground(Color.WHITE);
+        // Số tiền nạp
+        JPanel pnlSoTien = new JPanel(new BorderLayout());
+        pnlSoTien.setBackground(Color.WHITE);
         
-        txtSoTienNap = createEnhancedTextField("Nhập số tiền...", true);
+        txtSoTienNap = new JTextField();
         txtSoTienNap.setPreferredSize(new Dimension(300, 35));
         
-        JLabel currencyLabel = new JLabel(" VNĐ");
-        currencyLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        currencyLabel.setForeground(SECONDARY_TEXT);
+        JLabel lblDonVi = new JLabel(" VNĐ");
+        lblDonVi.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblDonVi.setForeground(MAU_VAN_BAN_PHU);
         
-        amountInputPanel.add(txtSoTienNap, BorderLayout.WEST);
-        amountInputPanel.add(currencyLabel, BorderLayout.CENTER);
+        pnlSoTien.add(txtSoTienNap, BorderLayout.WEST);
+        pnlSoTien.add(lblDonVi, BorderLayout.CENTER);
         
-        JPanel amountSection = createSectionPanel("Số tiền nạp", amountInputPanel);
-        amountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(amountSection);
+        formPanel.add(taoSection("Số tiền nạp", pnlSoTien));
         formPanel.add(Box.createVerticalStrut(20));
         
-        // Payment method section
-        cbPhuongThucNap = createEnhancedComboBox(new String[]{
+        // Phương thức thanh toán
+        cboPhuongThucNap = taoComboBox(new String[]{
             "🏦 Chuyển khoản ngân hàng", 
             "📱 Ví điện tử", 
             "💳 Thẻ tín dụng"
         });
         
-        JPanel paymentSection = createSectionPanel("Phương thức thanh toán", cbPhuongThucNap);
-        paymentSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(paymentSection);
+        formPanel.add(taoSection("Phương thức thanh toán", cboPhuongThucNap));
         formPanel.add(Box.createVerticalStrut(20));
         
-        // Security section
-        JPanel securityPanel = createSecurityPanel();
-        JPanel securitySection = createSectionPanel("Xác thực bảo mật", securityPanel);
-        securitySection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(securitySection);
+        // Xác thực bảo mật
+        formPanel.add(taoSection("Xác thực bảo mật", taoPanelBaoMat()));
         formPanel.add(Box.createVerticalStrut(25));
         
-        // Button section
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Nút nạp tiền
+        JPanel pnlNut = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        pnlNut.setBackground(Color.WHITE);
+        pnlNut.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        btnNapTien = createEnhancedButton("💰 NẠP TIỀN", SUCCESS_COLOR);
-        buttonPanel.add(btnNapTien);
+        btnNapTien = taoNut("💰 NẠP TIỀN", MAU_THANH_CONG);
+        pnlNut.add(btnNapTien);
         
-        formPanel.add(buttonPanel);
-        formPanel.add(Box.createVerticalStrut(20)); // Extra space at bottom
+        formPanel.add(pnlNut);
+        formPanel.add(Box.createVerticalStrut(20));
         
-        // Add form panel to scroll pane
         JScrollPane scrollPane = new JScrollPane(formPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -221,72 +208,61 @@ public class view_NapRut extends JPanel {
         return mainPanel;
     }
 
-    private JPanel createEnhancedRutPanel() {
+    private JPanel taoTabRutTien() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(new EmptyBorder(20, 30, 30, 30));
         
-        // Create scrollable panel for form content
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(Color.WHITE);
         
-        // Account number section
-        JPanel accountSection = createSectionPanel("Thông tin tài khoản", createAccountInfoPanel());
-        accountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(accountSection);
+        // Thông tin tài khoản
+        formPanel.add(taoSection("Thông tin tài khoản", taoPanelThongTinTaiKhoan()));
         formPanel.add(Box.createVerticalStrut(20));
         
-        // Amount section
-        JPanel amountInputPanel = new JPanel(new BorderLayout());
-        amountInputPanel.setBackground(Color.WHITE);
+        // Số tiền rút
+        JPanel pnlSoTien = new JPanel(new BorderLayout());
+        pnlSoTien.setBackground(Color.WHITE);
         
-        txtSoTienRut = createEnhancedTextField("Nhập số tiền...", true);
+        txtSoTienRut = new JTextField();
         txtSoTienRut.setPreferredSize(new Dimension(300, 35));
         
-        JLabel currencyLabel = new JLabel(" VNĐ");
-        currencyLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        currencyLabel.setForeground(SECONDARY_TEXT);
+        JLabel lblDonVi = new JLabel(" VNĐ");
+        lblDonVi.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblDonVi.setForeground(MAU_VAN_BAN_PHU);
         
-        amountInputPanel.add(txtSoTienRut, BorderLayout.WEST);
-        amountInputPanel.add(currencyLabel, BorderLayout.CENTER);
+        pnlSoTien.add(txtSoTienRut, BorderLayout.WEST);
+        pnlSoTien.add(lblDonVi, BorderLayout.CENTER);
         
-        JPanel amountSection = createSectionPanel("Số tiền rút", amountInputPanel);
-        amountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(amountSection);
+        formPanel.add(taoSection("Số tiền rút", pnlSoTien));
         formPanel.add(Box.createVerticalStrut(20));
         
-        // Payment method section
-        JComboBox<String> cbPhuongThucRut = createEnhancedComboBox(new String[]{
+        // Phương thức rút
+        JComboBox<String> cboPhuongThucRut = taoComboBox(new String[]{
             "🏦 Chuyển khoản ngân hàng", 
             "📱 Ví điện tử", 
             "💳 Thẻ tín dụng"
         });
         
-        JPanel paymentSection = createSectionPanel("Phương thức rút", cbPhuongThucRut);
-        paymentSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(paymentSection);
+        formPanel.add(taoSection("Phương thức rút", cboPhuongThucRut));
         formPanel.add(Box.createVerticalStrut(20));
         
-        // Security section
-        JPanel securityPanel = createSecurityPanel();
-        JPanel securitySection = createSectionPanel("Xác thực bảo mật", securityPanel);
-        securitySection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        formPanel.add(securitySection);
+        // Xác thực bảo mật
+        formPanel.add(taoSection("Xác thực bảo mật", taoPanelBaoMat()));
         formPanel.add(Box.createVerticalStrut(25));
         
-        // Button section
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Nút rút tiền
+        JPanel pnlNut = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        pnlNut.setBackground(Color.WHITE);
+        pnlNut.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        btnRutTien = createEnhancedButton("💸 RÚT TIỀN", ERROR_COLOR);
-        buttonPanel.add(btnRutTien);
+        btnRutTien = taoNut("💸 RÚT TIỀN", MAU_LOI);
+        pnlNut.add(btnRutTien);
         
-        formPanel.add(buttonPanel);
-        formPanel.add(Box.createVerticalStrut(20)); // Extra space at bottom
+        formPanel.add(pnlNut);
+        formPanel.add(Box.createVerticalStrut(20));
         
-        // Add form panel to scroll pane
         JScrollPane scrollPane = new JScrollPane(formPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -297,274 +273,216 @@ public class view_NapRut extends JPanel {
         return mainPanel;
     }
     
-    private JPanel createAccountInfoPanel() {
+    private JPanel taoPanelThongTinTaiKhoan() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(LIGHT_GRAY);
+        panel.setBackground(MAU_NEN_NHAT);
         panel.setBorder(new EmptyBorder(12, 15, 12, 15));
         panel.setPreferredSize(new Dimension(400, 60));
         
-        JLabel accountLabel = new JLabel("🏛️ Số tài khoản:");
-        accountLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        accountLabel.setForeground(SECONDARY_TEXT);
+        JLabel lblTieuDe = new JLabel("🏛️ Số tài khoản:");
+        lblTieuDe.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblTieuDe.setForeground(MAU_VAN_BAN_PHU);
         
-        JLabel accountNumber = new JLabel("0123456789");
-        accountNumber.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        accountNumber.setForeground(TEXT_COLOR);
+        lblSoTaiKhoan = new JLabel("0123456789");
+        lblSoTaiKhoan.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblSoTaiKhoan.setForeground(MAU_VAN_BAN);
         
         JPanel content = new JPanel(new GridLayout(2, 1, 0, 3));
-        content.setBackground(LIGHT_GRAY);
-        content.add(accountLabel);
-        content.add(accountNumber);
+        content.setBackground(MAU_NEN_NHAT);
+        content.add(lblTieuDe);
+        content.add(lblSoTaiKhoan);
         
         panel.add(content, BorderLayout.WEST);
         return panel;
     }
     
-    private JPanel createSecurityPanel() {
+    private JPanel taoPanelBaoMat() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.WHITE);
         
-        // Password section
-        JPanel passwordSection = new JPanel();
-        passwordSection.setLayout(new BoxLayout(passwordSection, BoxLayout.Y_AXIS));
-        passwordSection.setBackground(Color.WHITE);
-        passwordSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Phần mật khẩu
+        JPanel pnlMatKhau = new JPanel();
+        pnlMatKhau.setLayout(new BoxLayout(pnlMatKhau, BoxLayout.Y_AXIS));
+        pnlMatKhau.setBackground(Color.WHITE);
+        pnlMatKhau.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        passwordField.setPreferredSize(new Dimension(300, 35));
-        passwordField.setMaximumSize(new Dimension(300, 35));
-        passwordField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(BORDER_COLOR, 1),
+        txtMatKhau = new JPasswordField();
+        txtMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtMatKhau.setPreferredSize(new Dimension(300, 35));
+        txtMatKhau.setMaximumSize(new Dimension(300, 35));
+        txtMatKhau.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(MAU_VIEN, 1),
             new EmptyBorder(8, 12, 8, 12)
         ));
         
-        JPanel passwordFieldSection = createFieldWithLabel("🔒 Mật khẩu:", passwordField);
-        passwordFieldSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        passwordSection.add(passwordFieldSection);
-        
-        panel.add(passwordSection);
+        pnlMatKhau.add(taoFieldVoiNhan("🔒 Mật khẩu:", txtMatKhau));
+        panel.add(pnlMatKhau);
         panel.add(Box.createVerticalStrut(15));
         
-        // OTP section
-        JPanel otpSection = new JPanel();
-        otpSection.setLayout(new BoxLayout(otpSection, BoxLayout.Y_AXIS));
-        otpSection.setBackground(Color.WHITE);
-        otpSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Phần OTP
+        JPanel pnlOTP = new JPanel();
+        pnlOTP.setLayout(new BoxLayout(pnlOTP, BoxLayout.Y_AXIS));
+        pnlOTP.setBackground(Color.WHITE);
+        pnlOTP.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        JTextField otpField = createEnhancedTextField("Nhập mã OTP...", false);
-        otpField.setPreferredSize(new Dimension(200, 35));
-        otpField.setMaximumSize(new Dimension(200, 35));
+        txtMaOTP = new JTextField();
+        txtMaOTP.setPreferredSize(new Dimension(200, 35));
+        txtMaOTP.setMaximumSize(new Dimension(200, 35));
         
-        sendOtpBtn = createSecondaryButton("📧 Gửi mã");
-        sendOtpBtn.setPreferredSize(new Dimension(120, 35));
+        btnGuiMaOTP = taoNutPhu("📧 Gửi mã");
+        btnGuiMaOTP.setPreferredSize(new Dimension(120, 35));
+        // btnGuiMaOTP.addActionListener(e -> {
+        //     if (boDieuKhien != null) {
+        //         // boDieuKhien.guiMaOTP(btnGuiMaOTP);
+        //         boDieuKhien.guiMaOTP();
+        //     }
+        // });
         
-        JPanel otpInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        otpInputPanel.setBackground(Color.WHITE);
-        otpInputPanel.add(otpField);
-        otpInputPanel.add(sendOtpBtn);
+        JPanel pnlNhapOTP = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        pnlNhapOTP.setBackground(Color.WHITE);
+        pnlNhapOTP.add(txtMaOTP);
+        pnlNhapOTP.add(btnGuiMaOTP);
         
-        JPanel otpFieldSection = createFieldWithLabel("🔐 Mã OTP:", otpInputPanel);
-        otpFieldSection.setAlignmentX(Component.LEFT_ALIGNMENT);
-        otpSection.add(otpFieldSection);
-        
-        panel.add(otpSection);
+        pnlOTP.add(taoFieldVoiNhan("🔐 Mã OTP:", pnlNhapOTP));
+        panel.add(pnlOTP);
         
         return panel;
     }
     
-    private JPanel createFieldWithLabel(String labelText, JComponent field) {
+    private JPanel taoFieldVoiNhan(String nhan, JComponent field) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.WHITE);
         panel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        label.setForeground(TEXT_COLOR);
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel lblNhan = new JLabel(nhan);
+        lblNhan.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblNhan.setForeground(MAU_VAN_BAN);
+        lblNhan.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        // Field wrapper with proper alignment
-        JPanel fieldWrapper = new JPanel(new BorderLayout());
-        fieldWrapper.setBackground(Color.WHITE);
-        fieldWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
-        fieldWrapper.add(field, BorderLayout.WEST);
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(Color.WHITE);
+        wrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+        wrapper.add(field, BorderLayout.WEST);
         
-        panel.add(label);
+        panel.add(lblNhan);
         panel.add(Box.createVerticalStrut(5));
-        panel.add(fieldWrapper);
+        panel.add(wrapper);
         
         return panel;
     }
     
-    private JPanel createSectionPanel(String title, JComponent component) {
-        JPanel sectionPanel = new JPanel();
-        sectionPanel.setLayout(new BoxLayout(sectionPanel, BoxLayout.Y_AXIS));
-        sectionPanel.setBackground(Color.WHITE);
-        sectionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    private JPanel taoSection(String tieuDe, JComponent component) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        // Section title
-        JLabel sectionTitle = new JLabel(title);
-        sectionTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        sectionTitle.setForeground(PRIMARY_COLOR);
-        sectionTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel lblTieuDe = new JLabel(tieuDe);
+        lblTieuDe.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblTieuDe.setForeground(MAU_CHINH);
+        lblTieuDe.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        sectionPanel.add(sectionTitle);
-        sectionPanel.add(Box.createVerticalStrut(10));
+        panel.add(lblTieuDe);
+        panel.add(Box.createVerticalStrut(10));
         
-        // Component wrapper with proper alignment
-        JPanel componentWrapper = new JPanel(new BorderLayout());
-        componentWrapper.setBackground(Color.WHITE);
-        componentWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
-        componentWrapper.add(component, BorderLayout.WEST);
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(Color.WHITE);
+        wrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+        wrapper.add(component, BorderLayout.WEST);
         
-        sectionPanel.add(componentWrapper);
+        panel.add(wrapper);
         
-        return sectionPanel;
+        return panel;
     }
     
-    private JTextField createEnhancedTextField(String placeholder, boolean isNumeric) {
-        JTextField field = new JTextField();
-        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        field.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(BORDER_COLOR, 1),
-            new EmptyBorder(10, 15, 10, 15)
-        ));
-        
-        // Placeholder functionality
-        field.setForeground(SECONDARY_TEXT);
-        field.setText(placeholder);
-        
-        field.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (field.getText().equals(placeholder)) {
-                    field.setText("");
-                    field.setForeground(TEXT_COLOR);
-                }
-                field.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(PRIMARY_COLOR, 2),
-                    new EmptyBorder(9, 14, 9, 14)
-                ));
-            }
-            
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (field.getText().isEmpty()) {
-                    field.setForeground(SECONDARY_TEXT);
-                    field.setText(placeholder);
-                }
-                field.setBorder(BorderFactory.createCompoundBorder(
-                    new LineBorder(BORDER_COLOR, 1),
-                    new EmptyBorder(10, 15, 10, 15)
-                ));
-            }
-        });
-        
-        return field;
-    }
-    
-    private JComboBox<String> createEnhancedComboBox(String[] items) {
+    private JComboBox<String> taoComboBox(String[] items) {
         JComboBox<String> combo = new JComboBox<>(items);
         combo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         combo.setPreferredSize(new Dimension(350, 40));
         combo.setMaximumSize(new Dimension(350, 40));
-        combo.setBorder(new LineBorder(BORDER_COLOR, 1));
+        combo.setBorder(new LineBorder(MAU_VIEN, 1));
         combo.setBackground(Color.WHITE);
         return combo;
     }
     
-    private JButton createEnhancedButton(String text, Color bgColor) {
+    private JButton taoNut(String text, Color mauNen) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 16));
         button.setPreferredSize(new Dimension(200, 50));
-        button.setBackground(bgColor);
+        button.setBackground(mauNen);
         button.setForeground(Color.WHITE);
         button.setBorder(null);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Hover effect
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.darker());
+                button.setBackground(mauNen.darker());
             }
             
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
+                button.setBackground(mauNen);
             }
         });
         
         return button;
     }
     
-    private JButton createSecondaryButton(String text) {
+    private JButton taoNutPhu(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         button.setPreferredSize(new Dimension(120, 35));
         button.setBackground(Color.WHITE);
-        button.setForeground(PRIMARY_COLOR);
-        button.setBorder(new LineBorder(PRIMARY_COLOR, 1));
+        button.setForeground(MAU_CHINH);
+        button.setBorder(new LineBorder(MAU_CHINH, 1));
         button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(PRIMARY_COLOR);
+                button.setBackground(MAU_CHINH);
                 button.setForeground(Color.WHITE);
             }
             
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(Color.WHITE);
-                button.setForeground(PRIMARY_COLOR);
+                button.setForeground(MAU_CHINH);
             }
         });
         
         return button;
     }
 
-    // Getter cho mã người dùng
+    private void khoiTaoBoDieuKhien() {
+        boDieuKhien = new ctl_NapRut(this, giaoDienChinh);
+    }
+
+    // ========== CÁC PHƯƠNG THỨC GETTER ==========
     public String getMaNguoiDung() {
-        return vMain != null ? vMain.getMaNguoiDung() : null;
+        return giaoDienChinh != null ? giaoDienChinh.getMaNguoiDung() : null;
     }
 
-    // Getter cho mã vai trò
     public String getMaVaiTro() {
-        return vMain != null ? vMain.getMaVaiTro() : null;
+        return giaoDienChinh != null ? giaoDienChinh.getMaVaiTro() : null;
     }
 
-    // Enhanced setter cho số dư tài khoản with number formatting
-    public void setSoDu(String soDu) {
+    public void capNhatSoDu(String soDu) {
         try {
-            // Try to format the number if it's numeric
             long amount = Long.parseLong(soDu.replaceAll("[^0-9]", ""));
             NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
-            lbeSoDu.setText("Số dư hiện tại: " + formatter.format(amount) + " VNĐ");
+            lblSoDu.setText("Số dư hiện tại: " + formatter.format(amount) + " VNĐ");
         } catch (NumberFormatException e) {
-            // If formatting fails, use original format
-            lbeSoDu.setText("Số dư hiện tại: " + soDu + " VNĐ");
+            lblSoDu.setText("Số dư hiện tại: " + soDu + " VNĐ");
         }
     }
 
-    public view_main getMainView() {
-        return vMain;
+    public view_main getGiaoDienChinh() {
+        return giaoDienChinh;
     }
-
-    // public static void main(String[] args) {
-    //     SwingUtilities.invokeLater(() -> {
-    //         view_main vMain = new view_main("testUser", "testRole");
-    //         JFrame frame = new JFrame("Test Nạp/Rút");
-    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //         frame.setSize(1100, 700);
-    //         frame.setLocationRelativeTo(null);
-    //         frame.setLayout(new BorderLayout());
-    //         frame.add(new view_NapRut(vMain), BorderLayout.CENTER);
-    //         frame.setVisible(true);
-    //     });
-    // }
 }

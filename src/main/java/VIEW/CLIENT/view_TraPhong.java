@@ -4,10 +4,11 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import VIEW.view_main;
+import CONTROLLER.APP.CLIENT.ctl_TraPhong;
 
 import java.awt.*;
 import java.util.Vector;
+import VIEW.view_main;
 
 public class view_TraPhong extends JPanel {
     private JTable table;
@@ -19,32 +20,67 @@ public class view_TraPhong extends JPanel {
     private Color mauNen = new Color(236, 240, 241);
     private Color mauNhan = new Color(230, 126, 34);
     private DefaultTableModel tableModel;
-    view_main vMain;
+    private view_main vMain;
 
     public view_TraPhong(view_main vMain) {
-
         setLayout(new BorderLayout());
         setBackground(mauNen);
         this.vMain = vMain;
-
+    
         // Header panel
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
-
+    
         // Main content panel
         JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
         contentPanel.setBackground(mauNen);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+    
         // Left panel (table with filter)
         JPanel leftPanel = taoTablePanel();
         contentPanel.add(leftPanel, BorderLayout.CENTER);
-
+    
         // Right panel (detail view)
         JPanel rightPanel = taoDetailPanel();
         contentPanel.add(rightPanel, BorderLayout.EAST);
-
+    
         add(contentPanel, BorderLayout.CENTER);
+        
+        // Thêm controller
+        new ctl_TraPhong(this, vMain);
+    }
+
+    // Phương thức để cập nhật dữ liệu vào bảng
+    public void updateTableData(Vector<Vector<Object>> data) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+        
+        for (Vector<Object> row : data) {
+            model.addRow(row);
+        }
+    }
+
+    // Phương thức để cập nhật danh sách chi nhánh vào combobox
+    public void updateBranchList(Vector<String> branches) {
+        branchComboBox.removeAllItems();
+        branchComboBox.addItem("Tất cả");
+        
+        for (String branch : branches) {
+            branchComboBox.addItem(branch);
+        }
+    }
+
+    // Phương thức để hiển thị thông tin chi tiết
+    public void showDetailInfo(String info) {
+        detailArea.setText(info);
+    }
+
+    public void refreshData() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+        branchComboBox.removeAllItems();
+        branchComboBox.addItem("Tất cả");
+        detailArea.setText("Chọn một phòng để xem thông tin chi tiết...");
     }
 
     private JPanel taoHeaderPanel() {
@@ -52,7 +88,7 @@ public class view_TraPhong extends JPanel {
         headerPanel.setBackground(mauPhu);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        JLabel lblTitle = new JLabel("QUẢN LÝ TRẢ PHÒNG", SwingConstants.CENTER);
+        JLabel lblTitle = new JLabel("TRẢ PHÒNG", SwingConstants.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lblTitle.setForeground(Color.WHITE);
 
@@ -74,17 +110,9 @@ public class view_TraPhong extends JPanel {
         filterPanel.add(lblFilter);
 
         branchComboBox = new JComboBox<>();
-        branchComboBox.addItem("Tất cả");
-        // Sample branches (replace with actual branch data from your database)
-        branchComboBox.addItem("Chi nhánh 1");
-        branchComboBox.addItem("Chi nhánh 2");
-        branchComboBox.addItem("Chi nhánh 3");
         branchComboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         branchComboBox.setPreferredSize(new Dimension(200, 30));
         filterPanel.add(branchComboBox);
-
-        // Add filter action listener
-        branchComboBox.addActionListener(e -> filterTableByBranch());
 
         tablePanel.add(filterPanel, BorderLayout.NORTH);
 
@@ -153,18 +181,6 @@ public class view_TraPhong extends JPanel {
         tablePanel.add(buttonPanel, BorderLayout.SOUTH);
 
         return tablePanel;
-    }
-
-    private void filterTableByBranch() {
-        String selectedBranch = (String) branchComboBox.getSelectedItem();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-
-        if (!selectedBranch.equals("Tất cả")) {
-            sorter.setRowFilter(RowFilter.regexFilter(selectedBranch, 2)); // Filter on "Chi nhánh" column (index 2)
-        } else {
-            sorter.setRowFilter(null); // Show all rows
-        }
     }
 
     private JPanel taoDetailPanel() {
@@ -280,5 +296,44 @@ public class view_TraPhong extends JPanel {
         int green = Math.max(0, (int) (color.getGreen() * (1 - fraction)));
         int blue = Math.max(0, (int) (color.getBlue() * (1 - fraction)));
         return new Color(red, green, blue);
+    }
+
+    // Getter methods for controller to access components
+    public JTable getTable() {
+        return table;
+    }
+
+    public JTextArea getDetailArea() {
+        return detailArea;
+    }
+
+    public JButton getBtnXem() {
+        return btnXem;
+    }
+
+    public JButton getBtnTraPhong() {
+        return btnTraPhong;
+    }
+
+    public JComboBox<String> getBranchComboBox() {
+        return branchComboBox;
+    }
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+    
+    // Phương thức mới để lấy dòng được chọn
+    public int getSelectedRow() {
+        return table.getSelectedRow();
+    }
+    
+    // Phương thức mới để lấy mã đặt phòng từ dòng được chọn
+    public String getSelectedBookingID() {
+        int row = getSelectedRow();
+        if (row >= 0) {
+            return tableModel.getValueAt(row, 0).toString();
+        }
+        return null;
     }
 }

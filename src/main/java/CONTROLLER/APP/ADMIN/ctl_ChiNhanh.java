@@ -15,7 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import com.google.api.services.gmail.model.Message;
+// import com.google.api.services.gmail.model.Message;
 
 public class ctl_ChiNhanh implements ActionListener {
     private view_ChiNhanh view;
