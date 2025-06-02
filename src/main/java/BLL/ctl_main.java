@@ -14,6 +14,7 @@ import GUI.*;
 import GUI.ADMIN.*;
 import GUI.CLIENT.*;
 import GUI.STAFF.*;
+import UTILS.BUTTONS.RoundedButton;
 
 public class ctl_main implements ActionListener {
     private view_main vMain;
@@ -100,27 +101,70 @@ public class ctl_main implements ActionListener {
                 this.vMain.btn_DatPhong.setVisible(false);
                 this.vMain.btn_TraPhong.setVisible(false);
             } else if (this.vMain.maVaiTro.equals("VT002")) {
-                this.vMain.btn_Phong.setVisible(false);
-                this.vMain.btn_KhachSan.setVisible(false);
-                this.vMain.btn_DichVu.setVisible(false);
-                this.vMain.btn_KhachHang.setVisible(false);
-                this.vMain.btn_NhanVien.setVisible(false);
-                this.vMain.btn_DoanhThu.setVisible(false);
+                // Ẩn hết nút cũ
+                this.vMain.pn_down.removeAll();
 
+                // Thêm lại các nút theo đúng vị trí VT002 cần dùng
+                RoundedButton[] vt002Btns = new RoundedButton[]{
+                    this.vMain.btn_TrangChu,
+                    this.vMain.btn_DonDatPhong,
+                    this.vMain.btn_HoaDon,
+                    this.vMain.btn_TrangThaiPhong
+                };
+
+                for (int i = 0; i < vt002Btns.length; i++) {
+                    RoundedButton btn = vt002Btns[i];
+                    btn.setVisible(true);
+                    btn.setBounds(5, 5 + i * 40, 190, 35);
+                    this.vMain.pn_down.add(btn);
+                }
+
+                this.vMain.pn_down.repaint();
+                this.vMain.pn_down.revalidate();
+
+                // Ẩn các nút không liên quan khác (phòng, khách sạn, vv.)
                 this.vMain.btn_NapRut.setVisible(false);
                 this.vMain.btn_DatPhong.setVisible(false);
                 this.vMain.btn_TraPhong.setVisible(false);
-            } else if (this.vMain.maVaiTro.equals("VT003")) {
-                this.vMain.btn_Phong.setVisible(false);
-                this.vMain.btn_KhachSan.setVisible(false);
-                this.vMain.btn_DichVu.setVisible(false);
-                this.vMain.btn_KhachHang.setVisible(false);
-                this.vMain.btn_NhanVien.setVisible(false);
-                this.vMain.btn_DoanhThu.setVisible(false);
+            }
+            else if (this.vMain.maVaiTro.equals("VT003")) {
 
-                this.vMain.btn_DonDatPhong.setVisible(false);
-                this.vMain.btn_HoaDon.setVisible(false);
-                this.vMain.btn_TrangThaiPhong.setVisible(false);
+                // Ẩn hết nút cũ
+                this.vMain.pn_down.removeAll();
+
+                // Thêm lại các nút theo đúng vị trí VT002 cần dùng
+                RoundedButton[] vt002Btns = new RoundedButton[]{
+                    this.vMain.btn_TrangChu,
+                    this.vMain.btn_NapRut,
+                    this.vMain.btn_DatPhong,
+                    this.vMain.btn_TraPhong
+                };
+
+                for (int i = 0; i < vt002Btns.length; i++) {
+                    RoundedButton btn = vt002Btns[i];
+                    btn.setVisible(true);
+                    btn.setBounds(5, 5 + i * 40, 190, 35);
+                    this.vMain.pn_down.add(btn);
+                }
+
+                this.vMain.pn_down.repaint();
+                this.vMain.pn_down.revalidate();
+
+                // Ẩn các nút không liên quan khác (phòng, khách sạn, vv.)
+                // this.vMain.btn_NapRut.setVisible(false);
+                // this.vMain.btn_DatPhong.setVisible(false);
+                // this.vMain.btn_TraPhong.setVisible(false);
+
+                // this.vMain.btn_Phong.setVisible(false);
+                // this.vMain.btn_KhachSan.setVisible(false);
+                // this.vMain.btn_DichVu.setVisible(false);
+                // this.vMain.btn_KhachHang.setVisible(false);
+                // this.vMain.btn_NhanVien.setVisible(false);
+                // this.vMain.btn_DoanhThu.setVisible(false);
+
+                // this.vMain.btn_DonDatPhong.setVisible(false);
+                // this.vMain.btn_HoaDon.setVisible(false);
+                // this.vMain.btn_TrangThaiPhong.setVisible(false);
             } else {
 
             }

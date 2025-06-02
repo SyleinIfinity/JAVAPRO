@@ -114,6 +114,7 @@ public class view_main extends JFrame {
         }
         
         btn_TrangChu = btnArr[0];
+
         btn_Phong = btnArr[1];
         btn_KhachSan = btnArr[2];
         btn_DichVu = btnArr[3];
