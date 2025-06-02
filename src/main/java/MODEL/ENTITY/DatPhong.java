@@ -26,6 +26,18 @@ public class DatPhong {
         this.trangThai = trangThai;
     }
 
+    public DatPhong(String maNguoiDung, String maPhong, String soNguoi, String dichVuSuDung,
+        String ngayThuePhong, String ngayTraPhong) {
+        this.maDatPhong = maDatPhong;
+        this.maNguoiDung = maNguoiDung;
+        this.maPhong = maPhong;
+        this.soNguoi = soNguoi;
+        this.dichVuSuDung = dichVuSuDung;
+        this.ngayThuePhong = ngayThuePhong;
+        this.ngayTraPhong = ngayTraPhong;
+        this.trangThai = trangThai;
+    }
+
     public String getMaDatPhong() {
         return maDatPhong;
     }

@@ -405,8 +405,7 @@ public class view_DonDatPhong extends JPanel {
     }
 
     private void caiDatTableColumns() {
-        // Điều chỉnh độ rộng cột theo thứ tự mới
-        int[] columnWidths = {120, 120, 100, 100, 80, 150, 120, 120}; // Mã đặt phòng, Mã khách hàng, Mã chi nhánh, Mã phòng, Số người, Dịch vụ, Ngày thuê, Ngày trả
+        int[] columnWidths = {120, 120, 100, 100, 80, 150, 120, 120};
         TableColumnModel columnModel = table.getColumnModel();
         int columnCount = Math.min(columnWidths.length, columnModel.getColumnCount());
 
@@ -444,7 +443,6 @@ public class view_DonDatPhong extends JPanel {
         }
     }
 
-    // Method to load selected row data into form fields
     private void loadSelectedRowData(int row) {
         if (row < 0 || row >= tableModel.getRowCount()) return;
 
@@ -458,13 +456,10 @@ public class view_DonDatPhong extends JPanel {
         
         // Update form fields
         txtMaDatPhong.setText(maDatPhong);
-        
         txtSoNguoi.setText(soNguoi);
-        
         controller.loadDetailedDataForRow(maDatPhong, maKhachHang, maChiNhanh, maPhong, ngayThueStr, ngayTraStr);
     }
     
-    // Methods for managing combo boxes
     public void clearMaDatPhongComboBox() {
         // No longer needed since we changed to textfield
     }
@@ -497,7 +492,6 @@ public class view_DonDatPhong extends JPanel {
         cbMaPhong.addItem(new Record(data));
     }
     
-    // Methods to set formatted values to combo boxes
     public void setChiNhanhWithDetail(String maChiNhanh, String tenChiNhanh) {
         for (int i = 0; i < cbMaChiNhanh.getItemCount(); i++) {
             Record item = cbMaChiNhanh.getItemAt(i);
@@ -507,7 +501,6 @@ public class view_DonDatPhong extends JPanel {
             }
         }
         
-        // If not found, add it
         cbMaChiNhanh.addItem(new Record(new String[]{maChiNhanh, tenChiNhanh}));
         cbMaChiNhanh.setSelectedIndex(cbMaChiNhanh.getItemCount() - 1);
     }
@@ -521,7 +514,6 @@ public class view_DonDatPhong extends JPanel {
             }
         }
         
-        // If not found, add it
         cbMaPhong.addItem(new Record(new String[]{maPhong, tenPhong, tang}));
         cbMaPhong.setSelectedIndex(cbMaPhong.getItemCount() - 1);
     }
@@ -535,7 +527,6 @@ public class view_DonDatPhong extends JPanel {
             }
         }
         
-        // If not found, add it
         cbDichVu.addItem(new Record(new String[]{maKhachHang, tenKhachHang}));
         cbDichVu.setSelectedIndex(cbDichVu.getItemCount() - 1);
     }
@@ -548,7 +539,6 @@ public class view_DonDatPhong extends JPanel {
         spinnerNgayTra.setValue(date);
     }
 
-    // Clear all form fields to prepare for new entry
     public void clearFormFields() {
         txtMaDatPhong.setText("");
         txtSoNguoi.setText("");
@@ -556,7 +546,6 @@ public class view_DonDatPhong extends JPanel {
         cbMaPhong.setSelectedIndex(cbMaPhong.getItemCount() > 0 ? -1 : 0);
         cbDichVu.setSelectedIndex(cbDichVu.getItemCount() > 0 ? -1 : 0);
         
-        // Set dates to current date
         spinnerNgayThue.setValue(new Date());
         spinnerNgayTra.setValue(new Date());
     }
@@ -653,27 +642,18 @@ public class view_DonDatPhong extends JPanel {
         return new Color(red, green, blue);
     }
 
-    // Method to be called from controller to update the table data
     public void updateTableData(Object[][] data, String[] columnNames) {
-        // Reset the table model with new data
         tableModel.setRowCount(0);
-        
-        // Add rows from the data array
         for (Object[] row : data) {
             tableModel.addRow(row);
         }
-        
-        // Store the original data for filtering functionality
         originalData.clear();
         for (Object[] row : data) {
             originalData.add(row.clone());
         }
-        
-        // Notify that the table data has been updated
         tableModel.fireTableDataChanged();
     }
 
-    // Getter methods for the controller
     public JButton getBtnDat() {
         return btnDat;
     }
@@ -698,7 +678,6 @@ public class view_DonDatPhong extends JPanel {
         return spinnerNgayTra;
     }
 
-    // Make Record class public and static
     public static class Record {
         private String[] columns;
 
@@ -718,5 +697,4 @@ public class view_DonDatPhong extends JPanel {
             return String.join("|", columns);
         }
     }
-
 }

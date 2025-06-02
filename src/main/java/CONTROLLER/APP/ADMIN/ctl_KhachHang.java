@@ -160,6 +160,11 @@ public class ctl_KhachHang {
         int rowCounter = 0;   // Biến đếm hàng
         
         for (NguoiDung nd : danhSachNguoiDung) {
+            // Chỉ hiển thị người dùng có mã vai trò là VT003 (khách hàng)
+            if (!"VT003".equals(nd.getMaVaiTro())) {
+                continue;
+            }
+            
             String trangThaiND = nd.isTrangThai() == 1 ? "Đang hoạt động" : "Khóa";
             
             // Lọc theo trạng thái nếu không chọn "Tất cả"
