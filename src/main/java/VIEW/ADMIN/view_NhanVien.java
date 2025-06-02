@@ -4,7 +4,12 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import CONTROLLER.APP.ADMIN.ctl_NhanVien;
 import VIEW.view_main;
+import MODEL.DAO.NguoiDungDAO;
+import MODEL.DAO.VaiTroDAO;
+import MODEL.ENTITY.NguoiDung;
+import MODEL.ENTITY.VaiTro;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,13 +27,18 @@ public class view_NhanVien extends JPanel {
     public String maNguoiDung;
     public String maVaiTro;
     view_main vMain;
+    
+    // Thêm DAO
+    private NguoiDungDAO nguoiDungDAO;
+    private VaiTroDAO vaiTroDAO;
 
     public view_NhanVien(view_main vMain) {
         setLayout(new BorderLayout());
         setBackground(mauNen);
         this.vMain = vMain;
-
-
+        
+        // Khởi tạo DAO
+        initializeDAO();
 
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
@@ -48,10 +58,17 @@ public class view_NhanVien extends JPanel {
         JPanel buttonPanel = taoButtonPanel();
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // themDuLieuMau();
+        // Load dữ liệu từ database thay vì dữ liệu mẫu
+        loadDataFromDatabase();
 
         setVisible(true);
-        
+        new ctl_NhanVien(this);
+    }
+    
+    // Khởi tạo DAO
+    private void initializeDAO() {
+        nguoiDungDAO = new NguoiDungDAO();
+        vaiTroDAO = new VaiTroDAO();
     }
 
     private JPanel taoHeaderPanel() {
@@ -254,35 +271,144 @@ public class view_NhanVien extends JPanel {
         return new Color(red, green, blue);
     }
 
-    // private void themDuLieuMau() {
-    //     model.addRow(new Object[]{"NV001", "Nguyễn Văn A", "1990-01-01", "0123456789", "a.nguyen@email.com", "Đang hoạt động"});
-    //     model.addRow(new Object[]{"NV002", "Trần Thị B", "1992-05-15", "0987654321", "b.tran@email.com", "Không hoạt động"});
-    //     model.addRow(new Object[]{"", "", "", "", "", ""});
-    //     model.addRow(new Object[]{"", "", "", "", "", ""});
-    // }
+    // ========== CÁC PHƯƠNG THỨC LOAD DỮ LIỆU TỪ DATABASE ==========
+    
+    // Phương thức load dữ liệu từ database vào bảng
+    public void loadDataFromDatabase() {
+        try {
+            // Khởi tạo DAO nếu chưa có
+            if (nguoiDungDAO == null) {
+                nguoiDungDAO = new NguoiDungDAO();
+            }
+            if (vaiTroDAO == null) {
+                vaiTroDAO = new VaiTroDAO();
+            }
+            
+            // Xóa dữ liệu cũ trong bảng
+            model.setRowCount(0);
+            
+            // Lấy dữ liệu từ DAO và đổ vào bảng
+            for (NguoiDung nd : nguoiDungDAO.getListNGUOIDUNG().values()) {
+                if (nd.getMaVaiTro().equals("VT002")) {
+                    
+                                    // Chuyển đổi trạng thái từ int sang String
+                                    String trangThai;
+                                    switch (nd.isTrangThai()) {
+                                        case 1:
+                                            trangThai = "Đang hoạt động";
+                                            break;
+                                        case 0:
+                                            trangThai = "Không hoạt động";
+                                            break;
+                                        case -1:
+                                            trangThai = "Bị khóa";
+                                            break;
+                                        default:
+                                            trangThai = "Không xác định";
+                                            break;
+                                    }
+                                    
+                                    // Tạo dòng dữ liệu mới
+                                    Object[] row = {
+                                        nd.getMaNguoiDung(),        // Mã nhân viên
+                                        nd.getTenNguoiDung(),       // Tên nhân viên
+                                        nd.getNgaySinh(),           // Ngày sinh
+                                        nd.getSDT(),                // Số điện thoại
+                                        nd.getEmail(),              // Email
+                                        trangThai                   // Trạng thái
+                                    };
+                    
+                                    // Thêm dòng vào model
+                                    model.addRow(row);
+                }
+                
+            }
+            
+            // Thông báo load thành công
+            System.out.println("Đã load " + model.getRowCount() + " nhân viên vào bảng.");
+            
+            // Refresh table để hiển thị dữ liệu mới
+            tblNhanVien.revalidate();
+            tblNhanVien.repaint();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Lỗi khi tải dữ liệu từ database: " + e.getMessage(), 
+                "Lỗi", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Phương thức refresh dữ liệu (tải lại từ database)
+    public void refreshData() {
+        try {
+            // Tạo lại DAO để lấy dữ liệu mới nhất
+            nguoiDungDAO = new NguoiDungDAO();
+            vaiTroDAO = new VaiTroDAO();
+            
+            // Load lại dữ liệu
+            loadDataFromDatabase();
+            
+            JOptionPane.showMessageDialog(this, 
+                "Đã làm mới dữ liệu thành công!", 
+                "Thông báo", 
+                JOptionPane.INFORMATION_MESSAGE);
+                
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Lỗi khi làm mới dữ liệu: " + e.getMessage(), 
+                "Lỗi", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Phương thức lấy NguoiDung được chọn trong bảng
+    public NguoiDung getSelectedNguoiDung() {
+        int selectedRow = tblNhanVien.getSelectedRow();
+        if (selectedRow == -1) {
+            return null;
+        }
+        
+        // Lấy mã nhân viên từ dòng được chọn
+        String maNguoiDung = (String) model.getValueAt(selectedRow, 0);
+        
+        // Trả về đối tượng NguoiDung
+        return nguoiDungDAO.getNguoiDung(maNguoiDung);
+    }
+
+    // ========== GETTER METHODS ==========
+    
     public JTable getTblNhanVien() {
-    return tblNhanVien;
-}
+        return tblNhanVien;
+    }
 
-public DefaultTableModel getModel() {
-    return model;
-}
+    public DefaultTableModel getModel() {
+        return model;
+    }
 
-public JButton getBtnThem() {
-    return btnThem;
-}
+    public JButton getBtnThem() {
+        return btnThem;
+    }
 
-public JButton getBtnSua() {
-    return btnSua;
-}
+    public JButton getBtnSua() {
+        return btnSua;
+    }
 
-public JButton getBtnXoa() {
-    return btnXoa;
-}
+    public JButton getBtnXoa() {
+        return btnXoa;
+    }
 
-public JButton getBtnTimKiem() {
-    return btnTimKiem;
-}
+    public JButton getBtnTimKiem() {
+        return btnTimKiem;
+    }
+    
+    public NguoiDungDAO getNguoiDungDAO() {
+        return nguoiDungDAO;
+    }
 
-
+    public VaiTroDAO getVaiTroDAO() {
+        return vaiTroDAO;
+    }
 }
