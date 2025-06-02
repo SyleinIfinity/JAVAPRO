@@ -219,10 +219,6 @@ public class ctl_DatPhong implements ActionListener {
         int result = datPhongDAO.themDatPhong(datPhong);
         if (result > 0) {
             JOptionPane.showMessageDialog(vDatPhong, "Đặt phòng thành công!");
-            // Cập nhật trạng thái phòng
-            NguoiDung nguoiDung = nguoiDungDAO.getNguoiDung(vMain.getMaNguoiDung());
-            nguoiDung.setSoDuTaiKhoan(tinhTien());
-            nguoiDungDAO.capNhatNguoiDung(nguoiDung);
             phong.setTrangThai("Có người ở");
             phongDAO.capNhatPhong(phong);
             // Load lại danh sách phòng
