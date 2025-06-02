@@ -77,15 +77,18 @@ public class PhongDAO {
 
             int row = stmt.executeUpdate();
             
+
             if (row > 0) {
                 // Update the record in our HashMap
                 listPHONG.put(p.getMaPhong(), p);
                 System.out.println("Cập nhật phòng " + p.getMaPhong() + " thành công");
+
             }
             
             return row;
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Lỗi cập nhật phòng: " + e.getMessage());
             return -1;
         }
     }
@@ -103,6 +106,7 @@ public class PhongDAO {
         }
     }
     
+
     // Method to refresh data from database
     public void refreshData() {
         try {
@@ -113,6 +117,8 @@ public class PhongDAO {
             CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachPhong}");
             ResultSet rs = stmt.executeQuery();
 
+    // Add method to refresh data from database
+    
             while (rs.next()) {
                 Phong p = new Phong(
                     rs.getString("maPhong"),
@@ -131,6 +137,31 @@ public class PhongDAO {
             System.out.println("Lỗi khi cập nhật dữ liệu phòng");
         }
     }
+
+    public void refreshFromDatabase() {
+        listPHONG.clear();
+        try {
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachPhong}");
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Phong p = new Phong(
+                    rs.getString("maPhong"),
+                    rs.getString("soPhong"),
+                    rs.getString("maLoaiPhong"),
+                    rs.getInt("soTang"),
+                    rs.getString("maChiNhanh"),
+                    rs.getString("trangThai")
+                );
+                listPHONG.put(p.getMaPhong(), p);
+            }
+            System.out.println("Refresh data thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi refresh data");
+        }
+    }
+
 
     public static void main(String[] args) {
         PhongDAO pD = new PhongDAO();
