@@ -25,7 +25,8 @@ public class DichVuDAO {
                 DichVu dv = new DichVu(
                     rs.getString("maDichVu"),
                     rs.getString("tenDichVu"),
-                    rs.getString("maLoaiDichVu")
+                    rs.getDouble("giaDichVu"),
+                    rs.getString("moTa")
                 );
                 listDICHVU.put(dv.getMaDichVu(), dv);
             }
@@ -48,9 +49,10 @@ public class DichVuDAO {
     public int themDichVu(DichVu dv){
         try {
             CallableStatement stmt = conn.prepareCall("{Call sp_ThemDichVu(?,?,?)}");
-            stmt.setString(1, dv.getMaDichVu());
-            stmt.setString(2, dv.getTenDichVu());
-            stmt.setString(3, dv.getMaLoaiDichVu());
+            // stmt.setString(1, dv.getMaDichVu());
+            stmt.setString(1, dv.getTenDichVu());
+            stmt.setDouble(2, dv.getGiaDichVu());
+            stmt.setString(3, dv.getMoTa());
 
             int row = stmt.executeUpdate();
             return row;
@@ -62,10 +64,11 @@ public class DichVuDAO {
 
     public int capNhatDichVu(DichVu dv){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatDichVu(?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatDichVu(?,?,?,?)}");
             stmt.setString(1, dv.getMaDichVu());
             stmt.setString(2, dv.getTenDichVu());
-            stmt.setString(3, dv.getMaLoaiDichVu());
+            stmt.setDouble(3, dv.getGiaDichVu());
+            stmt.setString(4, dv.getMoTa());
 
             int row = stmt.executeUpdate();
 
@@ -87,6 +90,15 @@ public class DichVuDAO {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public DichVu getDichVuByTen(String tenDichVu) {
+        for (DichVu dv : listDICHVU.values()) {
+            if (dv.getTenDichVu().equalsIgnoreCase(tenDichVu)) {
+                return dv;
+            }
+        }
+        return null; // Trả về null nếu không tìm thấy
     }
 
     public static void main(String[] args) {

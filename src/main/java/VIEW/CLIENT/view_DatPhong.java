@@ -4,21 +4,43 @@ import java.util.Date;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import CONTROLLER.APP.CLIENT.ctl_DatPhong;
+import MODEL.DAO.PhongDAO;
+import MODEL.ENTITY.Phong;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import VIEW.view_main;
 
 
 public class view_DatPhong extends JPanel {
+    // References
     private view_main vMain;
-    private JComboBox<String> cbChiNhanh;
-    private JButton btnTim, btnKiemTra, btnDat;
-    private JPanel panelPhongList;
-    private JTextField tfPhong;
+    private ctl_DatPhong controller;
+
+    // UI Components - Main
+    private JPanel mainContentPanel;
+    private JPanel bookingPanel;
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
     private ButtonGroup roomButtonGroup;
-    
+    public JPanel panelPhongList;
+
+    // UI Components - Input Fields
+    public JComboBox<String> cbChiNhanh, cbDichVu;
+    public JTextField tfPhong, tangMay, loaiPhong, tfSoNguoi, tfPhongBooking;
+    public JRadioButton radioChon;
+    public JSpinner spinnerCheckIn, spinnerCheckOut;
+    public JLabel lblTongTien;
+
+    // UI Components - Buttons
+    public JButton btnTim, btnKiemTra, btnDat;
+
     // Color scheme
     private static final Color PRIMARY_COLOR = new Color(46, 125, 50);
     private static final Color SECONDARY_COLOR = new Color(33, 150, 243);
@@ -30,12 +52,6 @@ public class view_DatPhong extends JPanel {
     private static final Color TEXT_SECONDARY = new Color(108, 117, 125);
     private static final Color SELECTED_COLOR = new Color(227, 242, 253);
     private static final Color HOVER_COLOR = new Color(240, 248, 255);
-    
-    // Main content panel and booking panel
-    private JPanel mainContentPanel;
-    private JPanel bookingPanel;
-    private CardLayout cardLayout;
-    private JPanel cardPanel;
 
     public view_DatPhong(view_main vMain) {
         this.vMain = vMain;
@@ -52,8 +68,13 @@ public class view_DatPhong extends JPanel {
         
         initializeComponents();
         
+        // cbDichVu = createModernComboBox(new String[]{"Không có", "Dịch vụ A", "Dịch vụ B", "Dịch vụ C"});
+
         cardPanel.add(mainContentPanel, "main");
         add(cardPanel, BorderLayout.CENTER);
+
+        controller = new ctl_DatPhong(this, vMain);
+        // controller.LoadDichVu();
     }
 
     private void initializeComponents() {
@@ -119,9 +140,9 @@ public class view_DatPhong extends JPanel {
         scrollPane.getVerticalScrollBar().setUI(new ModernScrollBarUI());
 
         // Add sample rooms
-        for (int i = 0; i < 15; i++) {
-            panelPhongList.add(createModernRoomPanel("10" + String.format("%02d", i + 1)));
-        }
+        // for (int i = 0; i < 15; i++) {
+        //     panelPhongList.add(createModernRoomPanel("10" + String.format("%02d", i + 1)));
+        // }
 
         leftContainer.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(leftContainer, BorderLayout.CENTER);
@@ -147,12 +168,16 @@ public class view_DatPhong extends JPanel {
         tfPhong.setEditable(false);
         
         // Floor combobox
-        JComboBox<String> cbTangMay = createModernComboBox(new String[]{"Tầng 1", "Tầng 2", "Tầng 3"});
-        infoPanel.add(createInfoField("Tầng", cbTangMay));
+        tangMay = new JTextField();
+        tangMay.setPreferredSize(new Dimension(200, 25));
+        tangMay.setMaximumSize(new Dimension(200, 25));
+        infoPanel.add(createInfoField("Tầng", tangMay));
 
         // Room type combobox
-        JComboBox<String> cbLoaiPhong = createModernComboBox(new String[]{"Loại A", "Loại B", "Loại C"});
-        infoPanel.add(createInfoField("Loại phòng", cbLoaiPhong));
+        loaiPhong = new JTextField();
+        loaiPhong.setPreferredSize(new Dimension(200, 25));
+        loaiPhong.setMaximumSize(new Dimension(200, 25));
+        infoPanel.add(createInfoField("Loại phòng", loaiPhong));
 
         // Book button
         btnDat = createModernButton("🛏️ Đặt phòng", ACCENT_COLOR);
@@ -166,6 +191,7 @@ public class view_DatPhong extends JPanel {
                 return;
             }
             showBookingPanel();
+            controller.LoadDichVu();
         });
 
         infoPanel.add(Box.createVerticalStrut(25));
@@ -197,7 +223,7 @@ public class view_DatPhong extends JPanel {
         return fieldPanel;
     }
 
-    private JPanel createModernRoomPanel(String tenPhong) {
+    public JPanel createModernRoomPanel(String maPhong) {
         JPanel panel = new ModernCardPanel();
         panel.setLayout(new BorderLayout(5, 5));
         panel.setPreferredSize(new Dimension(120, 110));
@@ -210,43 +236,32 @@ public class view_DatPhong extends JPanel {
         JLabel lblIcon = new JLabel("🛏️", JLabel.CENTER);
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
         
-        JLabel lblTenPhong = new JLabel(tenPhong, JLabel.CENTER);
+        JLabel lblTenPhong = new JLabel(maPhong, JLabel.CENTER);
         lblTenPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblTenPhong.setForeground(TEXT_PRIMARY);
         
         topPanel.add(lblIcon, BorderLayout.CENTER);
         topPanel.add(lblTenPhong, BorderLayout.SOUTH);
-
-        // Selection radio button with modern styling
-        JRadioButton radioChon = new JRadioButton("Chọn");
-        radioChon.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        radioChon.setOpaque(false);
-        radioChon.setFocusPainted(false);
-        
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 5));
-        bottomPanel.setOpaque(false);
-        bottomPanel.add(radioChon);
-        
-        roomButtonGroup.add(radioChon);
-        
-        radioChon.addActionListener(e -> {
-            if (radioChon.isSelected()) {
-                tfPhong.setText(tenPhong);
-                updateRoomSelection(panel);
-            }
-        });
+        radioChon = new JRadioButton("Chọn");
         
         // Enhanced mouse interaction
-        panel.addMouseListener(new java.awt.event.MouseAdapter() {
+        panel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 radioChon.setSelected(true);
-                tfPhong.setText(tenPhong);
+                tfPhong.setText(maPhong);
+                // PhongDAO phongDAO = new PhongDAO();
+                // String ma = tfPhong.getText().split("-")[0].trim();
+                // System.out.println(ma);
+                // Phong phong = new Phong();
+                // phong = phongDAO.listPHONG().get(ma);
+                // tangMay.setText(String.valueOf(phong.getSoTang()));
+                // loaiPhong.setText(phong.getMaLoaiPhong());
                 updateRoomSelection(panel);
             }
             
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 if (!radioChon.isSelected()) {
                     panel.setBackground(HOVER_COLOR);
                     panel.repaint();
@@ -254,7 +269,7 @@ public class view_DatPhong extends JPanel {
             }
             
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 if (!radioChon.isSelected()) {
                     panel.setBackground(CARD_BACKGROUND);
                     panel.repaint();
@@ -263,7 +278,7 @@ public class view_DatPhong extends JPanel {
         });
 
         panel.add(topPanel, BorderLayout.CENTER);
-        panel.add(bottomPanel, BorderLayout.SOUTH);
+        // panel.add(bottomPanel, BorderLayout.SOUTH);
 
         return panel;
     }
@@ -280,7 +295,7 @@ public class view_DatPhong extends JPanel {
         panelPhongList.repaint();
     }
 
-    private void showBookingPanel() {
+    public void showBookingPanel() {
         bookingPanel = new JPanel(new BorderLayout(20, 20));
         bookingPanel.setBackground(BACKGROUND_COLOR);
         bookingPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
@@ -311,30 +326,30 @@ public class view_DatPhong extends JPanel {
         formPanel.setOpaque(false);
 
         // Form fields
-        JTextField tfPhongBooking = createModernTextField(tfPhong.getText());
+        tfPhongBooking = createModernTextField(tfPhong.getText());
         tfPhongBooking.setEditable(false);
         formPanel.add(createInfoField("Phòng đã chọn", tfPhongBooking));
 
-        JComboBox<String> cbTangBooking = createModernComboBox(new String[]{"Tầng 1", "Tầng 2", "Tầng 3"});
-        formPanel.add(createInfoField("Tầng", cbTangBooking));
+        // tangMay.setText("Tầng 1");
+        formPanel.add(createInfoField("Tầng", tangMay));
 
-        JComboBox<String> cbLoaiPhongBooking = createModernComboBox(new String[]{"Loại A", "Loại B", "Loại C"});
-        formPanel.add(createInfoField("Loại phòng", cbLoaiPhongBooking));
+        // JComboBox<String> cbLoaiPhongBooking = createModernComboBox(new String[]{"Loại A", "Loại B", "Loại C"});
+        formPanel.add(createInfoField("Loại phòng", loaiPhong));
 
-        JTextField tfSoNguoi = createModernTextField("");
+        tfSoNguoi = createModernTextField("");
         formPanel.add(createInfoField("Số người", tfSoNguoi));
 
-        JComboBox<String> cbDichVu = createModernComboBox(new String[]{"Không có", "Dịch vụ A", "Dịch vụ B", "Dịch vụ C"});
+        cbDichVu = createModernComboBox(new String[]{"Không có", "Dịch vụ A", "Dịch vụ B", "Dịch vụ C"});
         formPanel.add(createInfoField("Dịch vụ", cbDichVu));
 
         // Add Date Pickers using JSpinner
-        JSpinner spinnerCheckIn = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor editorCheckIn = new JSpinner.DateEditor(spinnerCheckIn, "dd/MM/yyyy");
+        spinnerCheckIn = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor editorCheckIn = new JSpinner.DateEditor(spinnerCheckIn, "dd/MM/yyyy HH:mm:ss");
         spinnerCheckIn.setEditor(editorCheckIn);
         formPanel.add(createInfoField("Ngày nhận phòng", spinnerCheckIn));
 
-        JSpinner spinnerCheckOut = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor editorCheckOut = new JSpinner.DateEditor(spinnerCheckOut, "dd/MM/yyyy");
+        spinnerCheckOut = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor editorCheckOut = new JSpinner.DateEditor(spinnerCheckOut, "dd/MM/yyyy HH:mm:ss");
         spinnerCheckOut.setEditor(editorCheckOut);
         formPanel.add(createInfoField("Ngày trả phòng", spinnerCheckOut));
 
@@ -349,14 +364,14 @@ public class view_DatPhong extends JPanel {
         JPanel bottomPanel = new JPanel(new BorderLayout(30, 20)); // Use BorderLayout for better alignment
         bottomPanel.setOpaque(false);
 
-        JLabel lblTongTien = new JLabel("💰 Tổng tiền: 0 VND");
+        lblTongTien = new JLabel("💰 Tổng tiền: 0 VND");
         lblTongTien.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblTongTien.setForeground(ACCENT_COLOR);
 
         JButton btnXacNhan = createModernButton("✓ Xác nhận đặt phòng", PRIMARY_COLOR);
         btnXacNhan.setPreferredSize(new Dimension(200, 45));
         btnXacNhan.addActionListener(e -> {
-            // Confirmation logic...
+            controller.datPhong();
         });
 
         // Add lblTongTien to the left and btnXacNhan to the right
@@ -555,26 +570,5 @@ public class view_DatPhong extends JPanel {
 
     public String getMaVaiTro() {
         return vMain != null ? vMain.getMaVaiTro() : null;
-    }
-
-    public static void main(String[] args) {
-        // Set system look and feel
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Modern Room Booking System");
-            view_main vMain = new view_main(null, null);
-            view_DatPhong datPhongPanel = new view_DatPhong(vMain);
-            
-            frame.setContentPane(datPhongPanel);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1080, 880);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
     }
 }

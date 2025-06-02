@@ -12,6 +12,12 @@ import java.text.ParseException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import MODEL.DAO.ChiNhanhKhachSanDAO;
 import MODEL.DAO.DatPhongDAO;
@@ -48,7 +54,7 @@ public class ctl_HoaDon implements ActionListener {
             if (selectedRow != -1) {
                 String maHD = view.tableHoaDon.getValueAt(selectedRow, 1).toString();
                 HoaDon hd = hoaDonDAO.getHoaDon(maHD);  // Cần viết hàm này nếu chưa có
-                // exportHoaDonToPDF(hd);
+                exportHoaDonToPDF(hd);
             } else {
                 JOptionPane.showMessageDialog(view, "Vui lòng chọn một hóa đơn để xuất PDF.");
             }
@@ -118,6 +124,55 @@ public class ctl_HoaDon implements ActionListener {
         view.tableHoaDon.setModel(model);
     }
 
+    private void exportHoaDonToPDF(HoaDon hd) {
+        try {
+            String fileName = "HoaDon_" + hd.getMaHoaDon() + ".pdf";
+            String dirPath = "src/main/resources/BILLs/";
+            java.io.File dir = new java.io.File(dirPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String fullPath = dirPath + fileName;
+
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(fullPath));
+            document.open();
+
+            // Sử dụng font Arial hỗ trợ tiếng Việt
+            String fontPath = "src/main/resources/fonts/ARIAL.TTF";
+            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font titleFont = new Font(baseFont, 18, Font.BOLD);
+            Font normalFont = new Font(baseFont, 12);
+
+            Paragraph title = new Paragraph("HÓA ĐƠN THANH TOÁN", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph(" ", normalFont)); // dòng trắng
+
+            // Lấy dữ liệu
+            DatPhong dp = datPhongDAO.getDatPhong(hd.getMaDatPhong());
+            NguoiDung nd = nguoiDungDAO.getNguoiDung(dp.getMaNguoiDung());
+            Phong phong = phongDAO.getPhong(dp.getMaPhong());
+            ChiNhanhKhachSan cn = chiNhanhDAO.getChiNhanhKhachSan(phong.getMaChiNhanh());
+
+            // Thêm thông tin vào PDF với font tiếng Việt
+            document.add(new Paragraph("Mã hóa đơn: " + hd.getMaHoaDon(), normalFont));
+            document.add(new Paragraph("Ngày giao dịch: " + hd.getNgayGiaoDich(), normalFont));
+            document.add(new Paragraph("Khách hàng: " + nd.getTenNguoiDung(), normalFont));
+            document.add(new Paragraph("Số người: " + dp.getSoNguoi(), normalFont));
+            document.add(new Paragraph("Phòng: " + phong.getSoPhong(), normalFont));
+            document.add(new Paragraph("Chi nhánh: " + cn.getTenChiNhanh(), normalFont));
+            document.add(new Paragraph("Tổng tiền: " + hd.getTongTien() + " VND", normalFont));
+
+            document.close();
+
+            JOptionPane.showMessageDialog(view, "Xuất hóa đơn thành công:\n" + fullPath);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(view, "Lỗi khi xuất hóa đơn PDF.");
+        }
+    }
 
 
 

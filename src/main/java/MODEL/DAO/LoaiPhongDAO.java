@@ -97,6 +97,15 @@ public class LoaiPhongDAO {
         }
     }
 
+    public LoaiPhong getLoaiPhongByTen(String tenLoaiPhong) {
+        for (LoaiPhong lp : listLOAIPHONG.values()) {
+            if (lp.getTenLoaiPhong().equals(tenLoaiPhong)) {
+                return lp;
+            }
+        }
+        return null; // Không tìm thấy loại phòng
+    }
+
     public static void main(String[] args) {
         LoaiPhongDAO lpD = new LoaiPhongDAO();
     

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import MODEL.ENTITY.DatPhong;
 import MODEL.ENTITY.Phong;
 import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
 
@@ -40,6 +41,16 @@ public class PhongDAO {
     }
 
     public HashMap<String, Phong> listPHONG(){
+        return listPHONG;
+    }
+
+        public HashMap<String, Phong> listPHONGByChiNhanh(String maChiNhanh){
+        HashMap<String, Phong> listPHONG = new HashMap<>();
+        for (Phong p : listPHONG.values()) {
+            if (p.getMaChiNhanh().equals(maChiNhanh)) {
+                listPHONG.put(p.getMaPhong(), p);
+            }
+        }
         return listPHONG;
     }
 
@@ -105,8 +116,6 @@ public class PhongDAO {
             return -1;
         }
     }
-    
-
     // Method to refresh data from database
     public void refreshData() {
         try {
@@ -161,7 +170,6 @@ public class PhongDAO {
             System.out.println("Lỗi refresh data");
         }
     }
-
 
     public static void main(String[] args) {
         PhongDAO pD = new PhongDAO();

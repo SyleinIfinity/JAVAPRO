@@ -357,6 +357,7 @@ public class view_KhachHang extends JPanel {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
 
         btnSua = taoStyledButton("Sửa", new Color(52, 152, 219));
+
         
         // Xóa tất cả action listeners hiện có
         for (ActionListener al : btnSua.getActionListeners()) {
@@ -430,7 +431,6 @@ public class view_KhachHang extends JPanel {
         int blue = Math.max(0, Math.round(color.getBlue() * (1 - fraction)));
         return new Color(red, green, blue);
     }
-
     // Các getter methods cho controller sử dụng
     public JTable getTblKhachHang() {
         return tblKhachHang;

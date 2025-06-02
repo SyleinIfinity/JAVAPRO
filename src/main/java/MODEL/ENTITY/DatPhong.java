@@ -27,8 +27,17 @@ public class DatPhong {
     }
 
     public DatPhong(String maNguoiDung, String maPhong, String soNguoi, String dichVuSuDung,
-        String ngayThuePhong, String ngayTraPhong) {
-        this.maDatPhong = maDatPhong;
+            String ngayThuePhong, String ngayTraPhong) {
+        this.maNguoiDung = maNguoiDung;
+        this.maPhong = maPhong;
+        this.soNguoi = soNguoi;
+        this.dichVuSuDung = dichVuSuDung;
+        this.ngayThuePhong = ngayThuePhong;
+        this.ngayTraPhong = ngayTraPhong;
+    }
+
+        public DatPhong(String maNguoiDung, String maPhong, String soNguoi, String dichVuSuDung,
+            String ngayThuePhong, String ngayTraPhong, String trangThai) {
         this.maNguoiDung = maNguoiDung;
         this.maPhong = maPhong;
         this.soNguoi = soNguoi;

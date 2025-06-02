@@ -12,8 +12,8 @@ import VIEW.view_main;
 public class view_ChiNhanh extends JPanel {
     public JTable table;
     // private DefaultTableModel tableModel;
-    private JButton addButton, editButton, deleteButton, refreshButton, clearButton;
-    private JTextField txtMaChiNhanh, txtTenChiNhanh, txtDiaChi, txtSDT;
+    public JButton addButton, editButton, deleteButton, refreshButton, clearButton;
+    public JTextField txtMaChiNhanh, txtTenChiNhanh, txtDiaChi, txtSDT;
 
     public String maNguoiDung;
     public String maVaiTro;
@@ -46,11 +46,6 @@ public class view_ChiNhanh extends JPanel {
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
         String[] columnNames = {"🏢 Mã Chi Nhánh", "🏨 Tên Chi Nhánh", "📍 Địa Chỉ", "📞 Số Điện Thoại"};
-        // tableModel = new DefaultTableModel(columnNames, 0) {
-        //     public boolean isCellEditable(int row, int column) {
-        //         return false;
-        //     }
-        // };
         table = new JTable(new DefaultTableModel(columnNames, 0));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.getTableHeader().setReorderingAllowed(false);

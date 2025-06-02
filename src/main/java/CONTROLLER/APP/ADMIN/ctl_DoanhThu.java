@@ -119,32 +119,37 @@ public class ctl_DoanhThu implements ActionListener {
             java.sql.Date fromDate = fromUtilDate != null ? new java.sql.Date(fromUtilDate.getTime()) : null;
             java.sql.Date toDate = toUtilDate != null ? new java.sql.Date(toUtilDate.getTime()) : null;
             
-            String chiNhanh = (String) vDoanhThu.cboChiNhanh.getSelectedItem();
-    
-            List<HoaDon> danhSach = hdDAO.getHoaDon(fromDate, toDate, chiNhanh);
-            DefaultTableModel model = (DefaultTableModel) vDoanhThu.tableDoanhThu.getModel();
-            model.setRowCount(0); // clear old data
-    
             long tongTien = 0;
-            int i = 1;
-            for (HoaDon hd : danhSach) {
-                NguoiDung nhanvien = nDungDAO.getNguoiDung(hd.getNhanVienPhuTrach());
-                DatPhong dp = dPhongDAO.getDatPhong(hd.getMaDatPhong());
-                NguoiDung khachHang = nDungDAO.getNguoiDung(dp.getMaNguoiDung());
-    
-                Object[] row = (new Object[]{
-                    i,
-                    hd.getMaHoaDon(),
-                    khachHang.getTenNguoiDung(),
-                    dp.getSoNguoi(),
-                    dp.getNgayThuePhong(),
-                    dp.getNgayTraPhong(),
-                    nhanvien.getTenNguoiDung(),
-                    hd.getTongTien()
-                });
-                i++;
-                model.addRow(row);
-                tongTien += hd.getTongTien();
+            String chiNhanh = (String) vDoanhThu.cboChiNhanh.getSelectedItem();
+            if (chiNhanh == "Tất cả") {
+                LoadthongTin();
+            }
+            else{
+                List<HoaDon> danhSach = hdDAO.getHoaDon(fromDate, toDate, chiNhanh);
+                DefaultTableModel model = (DefaultTableModel) vDoanhThu.tableDoanhThu.getModel();
+                model.setRowCount(0); // clear old data
+        
+                int i = 1;
+                for (HoaDon hd : danhSach) {
+                    NguoiDung nhanvien = nDungDAO.getNguoiDung(hd.getNhanVienPhuTrach());
+                    DatPhong dp = dPhongDAO.getDatPhong(hd.getMaDatPhong());
+                    NguoiDung khachHang = nDungDAO.getNguoiDung(dp.getMaNguoiDung());
+        
+                    Object[] row = (new Object[]{
+                        i,
+                        hd.getMaHoaDon(),
+                        khachHang.getTenNguoiDung(),
+                        dp.getSoNguoi(),
+                        dp.getNgayThuePhong(),
+                        dp.getNgayTraPhong(),
+                        nhanvien.getTenNguoiDung(),
+                        hd.getTongTien()
+                    });
+                    i++;
+                    model.addRow(row);
+                    tongTien += hd.getTongTien();
+
+                }
             }
     
             vDoanhThu.lblTongDoanhThu.setText("Tổng doanh thu: " + String.format("%,d VNĐ", tongTien));
