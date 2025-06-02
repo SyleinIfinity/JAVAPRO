@@ -29,7 +29,7 @@ public class LoaiPhongDAO {
                     rs.getString("tenLoaiPhong"),
                     rs.getInt   ("soLuongToiDa"),
                     rs.getString("moTa"),
-                    rs.getDouble("giaTien")
+                    rs.getDouble("giaPhong")
                 );
                 listLOAIPHONG.put(lp.getMaLoaiPhong(), lp);
             }

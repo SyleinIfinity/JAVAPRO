@@ -67,7 +67,8 @@ public class PhongDAO {
 
     public int capNhatPhong(Phong p){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?,?)}");
+            // Fixed: Removed extra parameter - should be 6 parameters, not 7
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?)}");
             stmt.setString(1, p.getMaPhong());
             stmt.setString(2, p.getSoPhong());
             stmt.setString(3, p.getMaLoaiPhong());
@@ -76,9 +77,17 @@ public class PhongDAO {
             stmt.setString(6, p.getTrangThai());
 
             int row = stmt.executeUpdate();
+            
+            // Update the local HashMap if database update is successful
+            if (row > 0) {
+                listPHONG.put(p.getMaPhong(), p);
+                System.out.println("Cập nhật phòng thành công: " + p.getMaPhong());
+            }
+            
             return row;
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Lỗi cập nhật phòng: " + e.getMessage());
             return -1;
         }
     }
@@ -93,6 +102,31 @@ public class PhongDAO {
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+    
+    // Add method to refresh data from database
+    public void refreshFromDatabase() {
+        listPHONG.clear();
+        try {
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachPhong}");
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Phong p = new Phong(
+                    rs.getString("maPhong"),
+                    rs.getString("soPhong"),
+                    rs.getString("maLoaiPhong"),
+                    rs.getInt("soTang"),
+                    rs.getString("maChiNhanh"),
+                    rs.getString("trangThai")
+                );
+                listPHONG.put(p.getMaPhong(), p);
+            }
+            System.out.println("Refresh data thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi refresh data");
         }
     }
     
