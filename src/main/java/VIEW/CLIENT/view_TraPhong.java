@@ -22,9 +22,9 @@ public class view_TraPhong extends JPanel {
     private DefaultTableModel tableModel;
     private view_main vMain;
 
-    public view_TraPhong(view_main vMain) {  // Sửa lại tham số từ view_main_whain thành view_main
+    public view_TraPhong(view_main vMain) {
         setLayout(new BorderLayout());
-        setBackground(mauNen);  // Sửa mauMen thành mauNen (theo code gốc)
+        setBackground(mauNen);
         this.vMain = vMain;
     
         // Header panel
@@ -32,23 +32,49 @@ public class view_TraPhong extends JPanel {
         add(headerPanel, BorderLayout.NORTH);
     
         // Main content panel
-        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));  // Sửa lại tham số
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
         contentPanel.setBackground(mauNen);
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));  // Sửa lại cách gọi
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
     
         // Left panel (table with filter)
-        JPanel leftPanel = taoTablePanel();  // Sửa JPanel_leftPanel thành JPanel leftPanel
+        JPanel leftPanel = taoTablePanel();
         contentPanel.add(leftPanel, BorderLayout.CENTER);
     
         // Right panel (detail view)
-        JPanel rightPanel = taoDetailPanel();  // Sửa JPanel_rightPanel thành JPanel rightPanel
+        JPanel rightPanel = taoDetailPanel();
         contentPanel.add(rightPanel, BorderLayout.EAST);
     
         add(contentPanel, BorderLayout.CENTER);
         
-        // Thêm controller - đây là cách đúng
-        new ctl_TraPhong(this, vMain);  // Sửa lại dấu ` thành dấu '
+        // Thêm controller
+        new ctl_TraPhong(this, vMain);
     }
+
+    // Phương thức để cập nhật dữ liệu vào bảng
+    public void updateTableData(Vector<Vector<Object>> data) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+        
+        for (Vector<Object> row : data) {
+            model.addRow(row);
+        }
+    }
+
+    // Phương thức để cập nhật danh sách chi nhánh vào combobox
+    public void updateBranchList(Vector<String> branches) {
+        branchComboBox.removeAllItems();
+        branchComboBox.addItem("Tất cả");
+        
+        for (String branch : branches) {
+            branchComboBox.addItem(branch);
+        }
+    }
+
+    // Phương thức để hiển thị thông tin chi tiết
+    public void showDetailInfo(String info) {
+        detailArea.setText(info);
+    }
+
     public void refreshData() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0); // Xóa dữ liệu cũ
@@ -56,12 +82,13 @@ public class view_TraPhong extends JPanel {
         branchComboBox.addItem("Tất cả");
         detailArea.setText("Chọn một phòng để xem thông tin chi tiết...");
     }
+
     private JPanel taoHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(mauPhu);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        JLabel lblTitle = new JLabel("QUẢN LÝ TRẢ PHÒNG", SwingConstants.CENTER);
+        JLabel lblTitle = new JLabel("TRẢ PHÒNG", SwingConstants.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
         lblTitle.setForeground(Color.WHITE);
 
@@ -296,4 +323,17 @@ public class view_TraPhong extends JPanel {
         return tableModel;
     }
     
+    // Phương thức mới để lấy dòng được chọn
+    public int getSelectedRow() {
+        return table.getSelectedRow();
+    }
+    
+    // Phương thức mới để lấy mã đặt phòng từ dòng được chọn
+    public String getSelectedBookingID() {
+        int row = getSelectedRow();
+        if (row >= 0) {
+            return tableModel.getValueAt(row, 0).toString();
+        }
+        return null;
+    }
 }
