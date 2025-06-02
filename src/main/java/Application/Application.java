@@ -1,6 +1,6 @@
 package Application;
 
-import VIEW.view_main;
+import GUI.view_main;
 
 public class Application {
     public static void main(String[] args) {
