@@ -345,10 +345,10 @@ public class ctl_DonDatPhong implements ActionListener {
         }
         
         NguoiDung khachHang = ndDAO.getNguoiDung(maKhachHang);
-        if (khachHang != null) {
+        if (khachHang != null && "VT003".equals(khachHang.getMaVaiTro())) {
             view.setKhachHangWithDetail(khachHang.getMaNguoiDung(), khachHang.getTenNguoiDung());
         } else {
-            view.setKhachHangWithDetail(maKhachHang, "Không tìm thấy");
+            view.setKhachHangWithDetail(maKhachHang, "Không tìm thấy hoặc không phải khách hàng");
         }
         
         Phong phong = pDAO.getPhong(maPhong);
@@ -380,8 +380,10 @@ public class ctl_DonDatPhong implements ActionListener {
         view.clearKhachHangComboBox();
         HashMap<String, NguoiDung> nguoiDungs = ndDAO.getListNGUOIDUNG();
         for (NguoiDung nd : nguoiDungs.values()) {
-            String[] data = new String[] {nd.getMaNguoiDung(), nd.getTenNguoiDung()};
-            view.addKhachHangItem(data);
+            if ("VT003".equals(nd.getMaVaiTro())) {
+                String[] data = new String[] {nd.getMaNguoiDung(), nd.getTenNguoiDung()};
+                view.addKhachHangItem(data);
+            }
         }
     }
 

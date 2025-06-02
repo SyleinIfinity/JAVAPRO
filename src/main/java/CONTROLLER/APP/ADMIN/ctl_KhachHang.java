@@ -54,7 +54,6 @@ public class ctl_KhachHang {
             txtTenKhachHang = (JTextField) getFieldValue(view, "txtTenKhachHang");
             txtEmail = (JTextField) getFieldValue(view, "txtEmail");
             txtSoDienThoai = (JTextField) getFieldValue(view, "txtSoDienThoai");
-            txtDiaChi = (JTextField) getFieldValue(view, "txtDiaChi");
             
             // Spinner và combobox
             spnNgaySinh = (JSpinner) getFieldValue(view, "spnNgaySinh");
