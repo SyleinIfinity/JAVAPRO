@@ -67,7 +67,6 @@ public class PhongDAO {
 
     public int capNhatPhong(Phong p){
         try {
-            // Fixed: Removed extra parameter - should be 6 parameters, not 7
             CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?)}");
             stmt.setString(1, p.getMaPhong());
             stmt.setString(2, p.getSoPhong());
@@ -78,10 +77,12 @@ public class PhongDAO {
 
             int row = stmt.executeUpdate();
             
-            // Update the local HashMap if database update is successful
+
             if (row > 0) {
+                // Update the record in our HashMap
                 listPHONG.put(p.getMaPhong(), p);
-                System.out.println("Cập nhật phòng thành công: " + p.getMaPhong());
+                System.out.println("Cập nhật phòng " + p.getMaPhong() + " thành công");
+
             }
             
             return row;
@@ -105,7 +106,38 @@ public class PhongDAO {
         }
     }
     
+
+    // Method to refresh data from database
+    public void refreshData() {
+        try {
+            // Clear current data
+            listPHONG.clear();
+            
+            // Reload from database
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachPhong}");
+            ResultSet rs = stmt.executeQuery();
+
     // Add method to refresh data from database
+    
+            while (rs.next()) {
+                Phong p = new Phong(
+                    rs.getString("maPhong"),
+                    rs.getString("soPhong"),
+                    rs.getString("maLoaiPhong"),
+                    rs.getInt("soTang"),
+                    rs.getString("maChiNhanh"),
+                    rs.getString("trangThai")
+                );
+                listPHONG.put(p.getMaPhong(), p);
+            }
+            
+            System.out.println("Dữ liệu phòng đã được cập nhật");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi khi cập nhật dữ liệu phòng");
+        }
+    }
+
     public void refreshFromDatabase() {
         listPHONG.clear();
         try {
@@ -129,7 +161,8 @@ public class PhongDAO {
             System.out.println("Lỗi refresh data");
         }
     }
-    
+
+
     public static void main(String[] args) {
         PhongDAO pD = new PhongDAO();
     }
