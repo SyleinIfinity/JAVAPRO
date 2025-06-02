@@ -62,6 +62,12 @@ public class DatPhongDAO {
             stmt.setString(6, dp.getNgayTraPhong());
             stmt.setString(7, dp.getTrangThai());
             int row = stmt.executeUpdate();
+            
+            if (row > 0) {
+                // Reload the data to get the new record with its generated ID
+                refreshData();
+            }
+            
             return row;
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,6 +88,11 @@ public class DatPhongDAO {
             stmt.setString(8, dp.getTrangThai());
             int row = stmt.executeUpdate();
 
+            if (row > 0) {
+                // Update the record in our HashMap
+                listDATPHONG.put(dp.getMaDatPhong(), dp);
+            }
+            
             return row;
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,10 +106,47 @@ public class DatPhongDAO {
             stmt.setString(1, maDatPhong);
 
             int row = stmt.executeUpdate();
+            
+            if (row > 0) {
+                // Remove the record from our HashMap
+                listDATPHONG.remove(maDatPhong);
+            }
+            
             return row;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+    
+    // Method to refresh data from database
+    public void refreshData() {
+        try {
+            // Clear current data
+            listDATPHONG.clear();
+            
+            // Reload from database
+            CallableStatement stmt = conn.prepareCall("{Call sp_LayDanhSachDatPhong}");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                DatPhong dp = new DatPhong(
+                    rs.getString("maDatPhong"),
+                    rs.getString("maNguoiDung"),
+                    rs.getString("maPhong"),
+                    rs.getString("soNguoi"),
+                    rs.getString("dichVuSuDung"),
+                    rs.getString("ngayThuePhong"),
+                    rs.getString("ngayTraPhong"),
+                    rs.getString("trangThai")
+                );
+                listDATPHONG.put(dp.getMaDatPhong(), dp);
+            }
+            
+            System.out.println("Dữ liệu đã được cập nhật");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi khi cập nhật dữ liệu");
         }
     }
 

@@ -148,7 +148,7 @@ public class view_HoaDon extends JPanel {
                 return columnIndex == 0 ? Integer.class : String.class;
             }
         });
-        styleTable(tableHoaDon);
+        // styleTable(tableHoaDon);
         
         JScrollPane scrollPane = new JScrollPane(tableHoaDon);
         scrollPane.setBorder(BorderFactory.createLineBorder(mauChinh, 2));
@@ -179,37 +179,5 @@ public class view_HoaDon extends JPanel {
                 button.setBackground(mauChinh);
             }
         });
-    }
-    
-    private void styleTable(JTable table) {
-        // Style cho header
-        JTableHeader header = table.getTableHeader();
-        header.setBackground(mauChinh);
-        header.setForeground(Color.WHITE);
-        header.setFont(new Font("Arial", Font.BOLD, 12));
-        
-        // Style cho table
-        table.setRowHeight(25);
-        table.setFont(new Font("Arial", Font.PLAIN, 12));
-        table.setSelectionBackground(mauPhu);
-        table.setSelectionForeground(Color.WHITE);
-        table.setGridColor(mauChinh);
-        table.setShowGrid(true);
-        
-        // Căn giữa các cột
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);   // STT
-        table.getColumnModel().getColumn(1).setPreferredWidth(150);  // Mã hóa đơn
-        table.getColumnModel().getColumn(2).setPreferredWidth(100);  // Ngày tạo
-        table.getColumnModel().getColumn(3).setPreferredWidth(200);  // Khách hàng
-        table.getColumnModel().getColumn(4).setPreferredWidth(150);  // Tổng tiền
-        table.getColumnModel().getColumn(5).setPreferredWidth(100);  // Trạng thái
-        table.getColumnModel().getColumn(6).setPreferredWidth(150);  // Chi nhánh
-        
-        // Căn giữa cho các cột
-        javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
     }
 }

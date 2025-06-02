@@ -84,7 +84,7 @@ CREATE TABLE Phong
     maLoaiPhong CHAR(5),
     soTang INT NOT NULL,
     maChiNhanh CHAR(5),
-    trangThai NVARCHAR(20) CHECK (trangThai IN (N'Trống', N'Có người ở', N'Đã đặt trước', N'Bảo trì')) NOT NULL,
+    trangThai NVARCHAR(20) DEFAULT N'Trống' CHECK (trangThai IN (N'Trống', N'Có người ở', N'Đã đặt trước', N'Bảo trì')) NOT NULL,
     FOREIGN KEY (maLoaiPhong) REFERENCES LoaiPhong(maLoaiPhong),
     FOREIGN KEY (maChiNhanh) REFERENCES ChiNhanhKhachSan(maChiNhanh)
 );
@@ -97,10 +97,17 @@ CREATE TABLE DatPhong
     maNguoiDung CHAR(5),
     maPhong CHAR(5),
 	soNguoi int,
+<<<<<<< HEAD
     dichVuSuDung varchar(100),
     ngayThuePhong DATETIME NOT NULL,
     ngayTraPhong DATETIME NOT NULL,
     trangThai NVARCHAR(20) DEFAULT N'Hoàn thành',
+=======
+    dichVuSuDung CHAR(5),
+    ngayThuePhong DATETIME NULL,
+    ngayTraPhong DATETIME NULL,
+    trangThai NVARCHAR(20) DEFAULT N'Đã đặt' CHECK  (trangThai IN (N'Đã đặt', N'Hoàn thành', N'Hủy')) NULL,
+>>>>>>> 60ddd627cccf055e42efb37cc5800dfee5f3f6b7
 	--check (check_in_date >= getdate()),
 	--check (check_out_date <= getdate()),
 	-- check (ngayThuePhong < ngayTraPhong),

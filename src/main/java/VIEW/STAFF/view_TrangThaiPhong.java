@@ -6,12 +6,16 @@ import java.awt.*;
 import java.awt.event.*;
 import MODEL.DAO.PhongDAO;
 import VIEW.view_main;
+import CONTROLLER.APP.STAFF.ctl_TrangThaiPhong;
 
 public class view_TrangThaiPhong extends JPanel {
     private JTable tblPhong;
-    private JButton btnSua, btnTimKiem;
+    private JButton btnSua, btnTimKiem, btnRefresh;
+    private JTextField txtTim;
+    private JComboBox<String> cmbFilter;
     private DefaultTableModel model;
     private PhongDAO phongDAO;
+    private ctl_TrangThaiPhong controller;
 
     private final Color mauChinh = new Color(179, 157, 219);
     private final Color mauPhu = new Color(209, 196, 233);
@@ -20,6 +24,7 @@ public class view_TrangThaiPhong extends JPanel {
 
     private final Color mauBtnSua = new Color(52, 152, 219);
     private final Color mauBtnTimKiem = new Color(149, 165, 166);
+    private final Color mauBtnRefresh = new Color(46, 204, 113);
 
     private view_main vMain;
 
@@ -28,12 +33,67 @@ public class view_TrangThaiPhong extends JPanel {
         setBackground(mauNen);
         this.vMain = vMain;
 
+        // Initialize components first
+        initializeComponents();
+        
+        // Initialize controller
+        this.controller = new ctl_TrangThaiPhong(this);
+        
+        // Setup event listeners
+        setupEventListeners();
+        
+        setVisible(true);
+    }
+    
+    private void initializeComponents() {
         add(taoHeaderPanel(), BorderLayout.NORTH);
         add(taoContentPanel(), BorderLayout.CENTER);
         add(taoButtonPanel(), BorderLayout.SOUTH);
-
-        // themDuLieuMau();
-        setVisible(true);
+    }
+    
+    private void setupEventListeners() {
+        // Search button event
+        btnTimKiem.addActionListener(e -> {
+            String keyword = txtTim.getText().trim();
+            controller.timKiemPhong(keyword);
+        });
+        
+        // Enter key for search
+        txtTim.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String keyword = txtTim.getText().trim();
+                    controller.timKiemPhong(keyword);
+                }
+            }
+        });
+        
+        // Filter combo box event
+        cmbFilter.addActionListener(e -> {
+            String selectedFilter = (String) cmbFilter.getSelectedItem();
+            controller.locTheoTrangThai(selectedFilter);
+        });
+        
+        // Edit button event
+        btnSua.addActionListener(e -> {
+            capNhatTrangThaiPhong();
+        });
+        
+        // Refresh button event
+        btnRefresh.addActionListener(e -> {
+            controller.refreshData();
+            txtTim.setText("");
+            cmbFilter.setSelectedIndex(0);
+            JOptionPane.showMessageDialog(this, "Dữ liệu đã được làm mới!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        });
+        
+        // Table selection event
+        tblPhong.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                btnSua.setEnabled(tblPhong.getSelectedRow() != -1);
+            }
+        });
     }
 
     private JPanel taoHeaderPanel() {
@@ -70,12 +130,13 @@ public class view_TrangThaiPhong extends JPanel {
         JLabel lblSearch = new JLabel("Tìm kiếm:");
         lblSearch.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        JTextField txtTim = new JTextField();
+        txtTim = new JTextField();
         txtTim.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         txtTim.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(189, 195, 199)),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
+        txtTim.setToolTipText("Nhập mã phòng, số phòng hoặc loại phòng để tìm kiếm");
 
         searchInput.add(lblSearch, BorderLayout.WEST);
         searchInput.add(txtTim, BorderLayout.CENTER);
@@ -86,11 +147,13 @@ public class view_TrangThaiPhong extends JPanel {
         JLabel lblFilter = new JLabel("Lọc theo:");
         lblFilter.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        JComboBox<String> cmb = new JComboBox<>(new String[]{"Tất cả", "Trống", "Đã đặt", "Đang sử dụng"});
-        cmb.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        // Updated filter options to match new status values
+        cmbFilter = new JComboBox<>(new String[]{"Tất cả", "Trống", "Đã đặt trước", "Có người ở", "Bảo trì"});
+        cmbFilter.setSelectedIndex(0);
+        cmbFilter.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
         filter.add(lblFilter, BorderLayout.WEST);
-        filter.add(cmb, BorderLayout.CENTER);
+        filter.add(cmbFilter, BorderLayout.CENTER);
 
         pnl.add(searchInput, BorderLayout.CENTER);
         pnl.add(filter, BorderLayout.EAST);
@@ -101,11 +164,12 @@ public class view_TrangThaiPhong extends JPanel {
         JPanel pnl = new JPanel(new BorderLayout());
         pnl.setBackground(mauNen);
 
-        String[] cols = {"Mã phòng", "Tên phòng", "Tầng", "Loại phòng", "Tình trạng"};
+        String[] cols = {"Mã phòng", "Số phòng", "Tầng", "Loại phòng", "Tình trạng"};
         model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) {
-                return "NV".equalsIgnoreCase(null) && c == 4;
+                // Only allow editing the status column
+                return c == 4;
             }
         };
 
@@ -113,6 +177,7 @@ public class view_TrangThaiPhong extends JPanel {
         tblPhong.setRowHeight(40);
         tblPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         tblPhong.setGridColor(new Color(200, 200, 200));
+        tblPhong.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JTableHeader hdr = tblPhong.getTableHeader();
         hdr.setPreferredSize(new Dimension(hdr.getWidth(), 45));
@@ -138,7 +203,7 @@ public class view_TrangThaiPhong extends JPanel {
     }
 
     private void caiDatTableColumns() {
-        int[] w = {100, 200, 80, 150, 150};
+        int[] w = {100, 150, 80, 200, 150};
         TableColumnModel cm = tblPhong.getColumnModel();
 
         for (int i = 0; i < w.length; i++) {
@@ -149,23 +214,51 @@ public class view_TrangThaiPhong extends JPanel {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                     JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                    label.setHorizontalAlignment(column == 0 ? CENTER : LEFT);
+                    label.setHorizontalAlignment(column == 0 || column == 2 ? CENTER : LEFT);
                     label.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
                     label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
                     label.setOpaque(true);
+                    
                     if (isSelected) {
-                        label.setBackground(new Color(255, 204, 102)); // màu vàng cam khi được chọn
+                        label.setBackground(new Color(255, 204, 102));
                         label.setForeground(Color.BLACK);
                     } else {
-                        label.setBackground(Color.WHITE); // mặc định là trắng
-                        label.setForeground(Color.BLACK);
+                        // Updated color coding for new status values
+                        if (column == 4 && value != null) {
+                            String status = value.toString();
+                            switch (status) {
+                                case "Trống":
+                                    label.setBackground(new Color(212, 237, 218)); // Light green
+                                    label.setForeground(new Color(21, 87, 36));     // Dark green
+                                    break;
+                                case "Đã đặt trước":
+                                    label.setBackground(new Color(255, 243, 205)); // Light yellow
+                                    label.setForeground(new Color(133, 100, 4));   // Dark yellow
+                                    break;
+                                case "Có người ở":
+                                    label.setBackground(new Color(248, 215, 218)); // Light red
+                                    label.setForeground(new Color(114, 28, 36));   // Dark red
+                                    break;
+                                case "Bảo trì":
+                                    label.setBackground(new Color(229, 229, 229)); // Light gray
+                                    label.setForeground(new Color(64, 64, 64));    // Dark gray
+                                    break;
+                                default:
+                                    label.setBackground(Color.WHITE);
+                                    label.setForeground(Color.BLACK);
+                            }
+                        } else {
+                            label.setBackground(Color.WHITE);
+                            label.setForeground(Color.BLACK);
+                        }
                     }
                     return label;
                 }
             });
         }
 
-        String[] tinhTrang = {"Trống", "Đã đặt", "Đang sử dụng"};
+        // Updated combo box editor for status column with new options
+        String[] tinhTrang = {"Trống", "Đã đặt trước", "Có người ở", "Bảo trì"};
         cm.getColumn(4).setCellEditor(new DefaultCellEditor(new JComboBox<>(tinhTrang)));
     }
 
@@ -174,11 +267,15 @@ public class view_TrangThaiPhong extends JPanel {
         pnl.setBackground(mauNen);
         pnl.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
 
-        btnSua = taoStyledButton("Sửa", mauBtnSua);
+        btnSua = taoStyledButton("Cập nhật", mauBtnSua);
+        btnSua.setEnabled(false); // Initially disabled
+        
         btnTimKiem = taoStyledButton("Tìm Kiếm", mauBtnTimKiem);
+        btnRefresh = taoStyledButton("Làm mới", mauBtnRefresh);
 
         pnl.add(btnSua);
         pnl.add(btnTimKiem);
+        pnl.add(btnRefresh);
         return pnl;
     }
 
@@ -193,8 +290,16 @@ public class view_TrangThaiPhong extends JPanel {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btn.addMouseListener(new MouseAdapter() {
-            @Override public void mouseEntered(MouseEvent e) { btn.setBackground(toiMau(bg, 0.1f)); }
-            @Override public void mouseExited(MouseEvent e) { btn.setBackground(bg); }
+            @Override public void mouseEntered(MouseEvent e) { 
+                if (btn.isEnabled()) {
+                    btn.setBackground(toiMau(bg, 0.1f)); 
+                }
+            }
+            @Override public void mouseExited(MouseEvent e) { 
+                if (btn.isEnabled()) {
+                    btn.setBackground(bg); 
+                }
+            }
         });
         return btn;
     }
@@ -205,9 +310,54 @@ public class view_TrangThaiPhong extends JPanel {
         int b = Math.max(0, Math.round(c.getBlue() * (1 - frac)));
         return new Color(r, g, b);
     }
-
-    // private void themDuLieuMau() {
-    //     model.addRow(new Object[]{"PH001", "Phòng đơn không view", "2", "Standard Room", "Trống"});
-    //     model.addRow(new Object[]{"PH002", "Phòng Deluxe có giường cỡ King", "3", "King Room", "Đã đặt"});
-    // }
+    
+    private void capNhatTrangThaiPhong() {
+        int selectedRow = tblPhong.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn phòng cần cập nhật!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String maPhong = model.getValueAt(selectedRow, 0).toString();
+        String trangThaiHienTai = model.getValueAt(selectedRow, 4).toString();
+        
+        // Use controller's available status options for consistency
+        String[] options = controller.getAvailableStatusOptions();
+        String trangThaiMoi = (String) JOptionPane.showInputDialog(
+            this,
+            "Chọn trạng thái mới cho phòng " + model.getValueAt(selectedRow, 1) + ":",
+            "Cập nhật trạng thái phòng",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            trangThaiHienTai
+        );
+        
+        if (trangThaiMoi != null && !trangThaiMoi.equals(trangThaiHienTai)) {
+            // Validate status before updating
+            if (controller.isValidStatus(trangThaiMoi)) {
+                boolean success = controller.capNhatTrangThaiPhong(maPhong, trangThaiMoi);
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Cập nhật trạng thái phòng thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cập nhật trạng thái phòng thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Trạng thái không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    // Getter methods for controller access
+    public DefaultTableModel getTableModel() {
+        return model;
+    }
+    
+    public JTable getTable() {
+        return tblPhong;
+    }
+    
+    public ctl_TrangThaiPhong getController() {
+        return controller;
+    }
 }

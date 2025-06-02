@@ -4,10 +4,11 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import VIEW.view_main;
+import CONTROLLER.APP.CLIENT.ctl_TraPhong;
 
 import java.awt.*;
 import java.util.Vector;
+import VIEW.view_main;
 
 public class view_TraPhong extends JPanel {
     private JTable table;
@@ -19,34 +20,42 @@ public class view_TraPhong extends JPanel {
     private Color mauNen = new Color(236, 240, 241);
     private Color mauNhan = new Color(230, 126, 34);
     private DefaultTableModel tableModel;
-    view_main vMain;
+    private view_main vMain;
 
-    public view_TraPhong(view_main vMain) {
-
+    public view_TraPhong(view_main vMain) {  // Sửa lại tham số từ view_main_whain thành view_main
         setLayout(new BorderLayout());
-        setBackground(mauNen);
+        setBackground(mauNen);  // Sửa mauMen thành mauNen (theo code gốc)
         this.vMain = vMain;
-
+    
         // Header panel
         JPanel headerPanel = taoHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
-
+    
         // Main content panel
-        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));  // Sửa lại tham số
         contentPanel.setBackground(mauNen);
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));  // Sửa lại cách gọi
+    
         // Left panel (table with filter)
-        JPanel leftPanel = taoTablePanel();
+        JPanel leftPanel = taoTablePanel();  // Sửa JPanel_leftPanel thành JPanel leftPanel
         contentPanel.add(leftPanel, BorderLayout.CENTER);
-
+    
         // Right panel (detail view)
-        JPanel rightPanel = taoDetailPanel();
+        JPanel rightPanel = taoDetailPanel();  // Sửa JPanel_rightPanel thành JPanel rightPanel
         contentPanel.add(rightPanel, BorderLayout.EAST);
-
+    
         add(contentPanel, BorderLayout.CENTER);
+        
+        // Thêm controller - đây là cách đúng
+        new ctl_TraPhong(this, vMain);  // Sửa lại dấu ` thành dấu '
     }
-
+    public void refreshData() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+        branchComboBox.removeAllItems();
+        branchComboBox.addItem("Tất cả");
+        detailArea.setText("Chọn một phòng để xem thông tin chi tiết...");
+    }
     private JPanel taoHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(mauPhu);
@@ -74,17 +83,9 @@ public class view_TraPhong extends JPanel {
         filterPanel.add(lblFilter);
 
         branchComboBox = new JComboBox<>();
-        branchComboBox.addItem("Tất cả");
-        // Sample branches (replace with actual branch data from your database)
-        branchComboBox.addItem("Chi nhánh 1");
-        branchComboBox.addItem("Chi nhánh 2");
-        branchComboBox.addItem("Chi nhánh 3");
         branchComboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         branchComboBox.setPreferredSize(new Dimension(200, 30));
         filterPanel.add(branchComboBox);
-
-        // Add filter action listener
-        branchComboBox.addActionListener(e -> filterTableByBranch());
 
         tablePanel.add(filterPanel, BorderLayout.NORTH);
 
@@ -153,18 +154,6 @@ public class view_TraPhong extends JPanel {
         tablePanel.add(buttonPanel, BorderLayout.SOUTH);
 
         return tablePanel;
-    }
-
-    private void filterTableByBranch() {
-        String selectedBranch = (String) branchComboBox.getSelectedItem();
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
-
-        if (!selectedBranch.equals("Tất cả")) {
-            sorter.setRowFilter(RowFilter.regexFilter(selectedBranch, 2)); // Filter on "Chi nhánh" column (index 2)
-        } else {
-            sorter.setRowFilter(null); // Show all rows
-        }
     }
 
     private JPanel taoDetailPanel() {
@@ -281,4 +270,30 @@ public class view_TraPhong extends JPanel {
         int blue = Math.max(0, (int) (color.getBlue() * (1 - fraction)));
         return new Color(red, green, blue);
     }
+
+    // Getter methods for controller to access components
+    public JTable getTable() {
+        return table;
+    }
+
+    public JTextArea getDetailArea() {
+        return detailArea;
+    }
+
+    public JButton getBtnXem() {
+        return btnXem;
+    }
+
+    public JButton getBtnTraPhong() {
+        return btnTraPhong;
+    }
+
+    public JComboBox<String> getBranchComboBox() {
+        return branchComboBox;
+    }
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+    
 }
