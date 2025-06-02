@@ -29,7 +29,7 @@ public class LoaiPhongDAO {
                     rs.getString("tenLoaiPhong"),
                     rs.getInt   ("soLuongToiDa"),
                     rs.getString("moTa"),
-                    rs.getDouble("giaTien")
+                    rs.getDouble("giaPhong")
                 );
                 listLOAIPHONG.put(lp.getMaLoaiPhong(), lp);
             }
@@ -95,6 +95,15 @@ public class LoaiPhongDAO {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public LoaiPhong getLoaiPhongByTen(String tenLoaiPhong) {
+        for (LoaiPhong lp : listLOAIPHONG.values()) {
+            if (lp.getTenLoaiPhong().equals(tenLoaiPhong)) {
+                return lp;
+            }
+        }
+        return null; // Không tìm thấy loại phòng
     }
 
     public static void main(String[] args) {

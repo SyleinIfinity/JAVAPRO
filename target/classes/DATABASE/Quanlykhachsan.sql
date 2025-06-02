@@ -100,7 +100,7 @@ CREATE TABLE DatPhong
     dichVuSuDung varchar(100),
     ngayThuePhong DATETIME NOT NULL,
     ngayTraPhong DATETIME NOT NULL,
-    trangThai NVARCHAR(20) CHECK (trangThai IN (N'Đã đặt', N'Hoàn thành', N'Hủy')) NOT NULL,
+    trangThai NVARCHAR(20) DEFAULT N'Hoàn thành',
 	--check (check_in_date >= getdate()),
 	--check (check_out_date <= getdate()),
 	-- check (ngayThuePhong < ngayTraPhong),
@@ -132,8 +132,8 @@ INSERT INTO NguoiDung (maNguoiDung, tenNguoiDung, ngaySinh, SDT, email, matKhau,
 VALUES 
     ('ND001', N'Nguyễn Văn A', '1990-05-12', '0912345678', '23115053122114@sv.ute.udn.vn', '123456', 0, 'VT001'),
     ('ND002', N'Lê Thị B', '1995-07-20', '0987654321', '23115053122111@sv.ute.udn.vn', '123456', 0, 'VT002'),
-    ('ND003', N'Trần Văn C', '1988-03-10', '0901122334', '23115053122123@sv.ute.udn.vn', '123456', 0, 'VT003'),
-    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', '23115053122124@sv.ute.udn.vn', 'pass123', 0, 'VT003'),
+    ('ND003', N'Trần Văn C', '1988-03-10', '0901122334', '23115053122123@sv.ute.udn.vn', '123456', 500000000, 'VT003'),
+    ('ND004', N'Phạm Thị D', '2000-08-08', '0933445566', '23115053122124@sv.ute.udn.vn', 'pass123', 500000000, 'VT003'),
     ('ND005', N'Hồ Minh E', '1992-11-11', '0977556677', '23115053122120@sv.ute.udn.vn', 'qwerty', 0, 'VT002');
 
 go
@@ -176,10 +176,10 @@ VALUES
 GO
 INSERT INTO LoaiPhong (maLoaiPhong, tenLoaiPhong, soLuongToiDa, moTa, giaPhong)
 VALUES 
-    ('LP001', N'Phòng đơn', 1, N'Phòng dành cho 1 người', 300000),
-    ('LP002', N'Phòng đôi', 2, N'Phòng dành cho 2 người', 500000),
-    ('LP003', N'Phòng gia đình', 4, N'Phòng rộng cho gia đình', 800000),
-    ('LP004', N'Suite', 2, N'Phòng cao cấp', 1500000);
+    ('LP001', N'Phòng đơn', 1, N'Phòng dành cho 1 người', 30000),
+    ('LP002', N'Phòng đôi', 2, N'Phòng dành cho 2 người', 50000),
+    ('LP003', N'Phòng gia đình', 4, N'Phòng rộng cho gia đình', 80000),
+    ('LP004', N'Suite', 2, N'Phòng cao cấp', 150000);
 GO
 INSERT INTO Phong (maPhong, soPhong, maLoaiPhong, soTang, maChiNhanh, trangThai)
 VALUES 
@@ -187,7 +187,12 @@ VALUES
     ('P002', '102', 'LP002', 1, 'CN001', N'Có người ở'),
     ('P003', '201', 'LP003', 2, 'CN002', N'Đã đặt trước'),
     ('P004', '202', 'LP004', 2, 'CN002', N'Trống'),
-    ('P005', '301', 'LP002', 3, 'CN003', N'Bảo trì');
+    ('P005', '301', 'LP002', 3, 'CN003', N'Bảo trì'),
+    ('P006', '102', 'LP001', 1, 'CN001', N'Trống'),
+    ('P007', '104', 'LP002', 1, 'CN001', N'Trống'),
+    ('P008', '202', 'LP003', 2, 'CN002', N'Trống'),
+    ('P009', '203', 'LP004', 2, 'CN002', N'Trống'),
+    ('P010', '302', 'LP002', 3, 'CN003', N'Trống');
 GO
 INSERT INTO DatPhong (maDatPhong, maNguoiDung, maPhong, soNguoi, dichVuSuDung, ngayThuePhong, ngayTraPhong, trangThai)
 VALUES 

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import MODEL.ENTITY.DatPhong;
 import MODEL.ENTITY.Phong;
 import UTILS.CONNECTIONDATA.CONNECTIONSQLSERVER;
 
@@ -43,6 +44,16 @@ public class PhongDAO {
         return listPHONG;
     }
 
+        public HashMap<String, Phong> listPHONGByChiNhanh(String maChiNhanh){
+        HashMap<String, Phong> listPHONG = new HashMap<>();
+        for (Phong p : listPHONG.values()) {
+            if (p.getMaChiNhanh().equals(maChiNhanh)) {
+                listPHONG.put(p.getMaPhong(), p);
+            }
+        }
+        return listPHONG;
+    }
+
     public Phong getPhong(String maPhong){
         return listPHONG.get(maPhong);
     }
@@ -67,7 +78,7 @@ public class PhongDAO {
 
     public int capNhatPhong(Phong p){
         try {
-            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{Call sp_CapNhatPhong(?,?,?,?,?,?)}");
             stmt.setString(1, p.getMaPhong());
             stmt.setString(2, p.getSoPhong());
             stmt.setString(3, p.getMaLoaiPhong());
@@ -95,7 +106,7 @@ public class PhongDAO {
             return -1;
         }
     }
-    
+
     public static void main(String[] args) {
         PhongDAO pD = new PhongDAO();
     }
